@@ -35,6 +35,12 @@ export default function InsightCard({
         </span>
       </div>
 
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-caption-sm bg-accent-yellow/10 text-accent-yellow px-2 py-0.5 rounded-full font-medium">
+          AI Analysis
+        </span>
+      </div>
+
       <p className="text-body-lg text-neutral-600 mb-3">{narration}</p>
 
       <div className="flex flex-wrap gap-1 mb-3">

@@ -62,17 +62,24 @@
 
 ---
 
-## 🏗️ Minute 5: The Architecture — Technical Credibility (4:00–5:00)
+## 🏗️ Minute 5: The AI Agent — The Real Product (4:00–5:00)
 
-**Goal:** Show you built something real, not a mockup.
+**Goal:** Make them understand the AI IS the product, not a wrapper.
 
-> *"ClearLah is built entirely on CodeBuddy — end to end.*
+> *"Here's what makes ClearLah an AI agent, not an app with AI features.*
 >
-> *Two AI layers power it: a conversational parser that turns natural language into structured health logs, and a pattern detection engine that runs multi-variable correlation across five data pillars — food, lifestyle, skincare, symptoms, and live NEA weather data.*
+> *Most health apps are forms with reminders. ClearLah is a detective that builds a causal model of YOUR body.*
 >
-> *The Hawker Dish database covers 80+ Singapore dishes with allergen profiles and multilingual search. The whole thing runs as a mobile-responsive web app — no download required.*
+> *The AI agent does three things no tracker can do:*
+> - *It understands you in natural language — Singlish, food slang, incomplete sentences*
+> - *It reasons across 5 data dimensions simultaneously — a human can't hold food + sleep + stress + skincare + humidity in their head at once*
+> - *It explains its findings — not raw data, but conclusions: 'Your worst flares happen when 2+ of these line up.'*
 >
-> *And the personal trigger profile each user builds over time? That's the data moat. It gets more accurate every week. No competitor can replicate what took you 30 days to build with ClearLah."*
+> *The pattern engine? Pure TypeScript. But the reasoning layer — the part that says 'This combination matters, here's why, and here's what to do about it' — that's the AI agent.*
+>
+> *And the most important thing: the agent gets smarter. Every day you log, your personal model improves. That's the data moat no competitor can ever copy — because they'd need to live your life to build it.*
+>
+> *Built entirely on CodeBuddy. Solo. 7 days. That's the power of coding with AI."*
 
 ---
 
@@ -114,7 +121,7 @@
 
 | Question | Your Answer |
 |---|---|
-| *"Isn't this just a symptom tracker? What's the AI actually doing?"* | "The AI does two things no tracker does: it parses natural language into structured data, and it runs multi-variable correlation — detecting that it's not shellfish alone, but shellfish + humidity + poor sleep combined that causes your flare. That inference is genuinely AI-hard." |
+| *"Isn't this just a symptom tracker? What's the AI actually doing?"* | "Three things a tracker can't: it understands Singlish and food slang (no forms, no dropdowns), it reasons across 5 data dimensions simultaneously to find combinations no human can spot, and it explains its conclusions in plain English. The pattern engine finds correlations — the AI agent tells you what they mean and what to do. That's the difference between a spreadsheet and a detective." |
 | *"What's your data moat? Competitors can copy your features."* | "They can copy features. They can't copy a user's 90-day personal trigger profile. The longer you use ClearLah, the more accurate it becomes — and that's irreplaceable." |
 | *"What about medical liability?"* | "ClearLah is a patient-reported data tool, not a diagnostic tool. Every report is clearly labelled 'not a medical diagnosis.' We empower users to have better conversations with their doctors — we don't replace doctors." |
 | *"Why hasn't anyone built this for Singapore already?"* | "Most health apps are built in the US or Europe — they don't know what Laksa is, and they've never experienced 85% humidity in January. ClearLah is built by a Singaporean, for Singaporeans, with local data from day one." |

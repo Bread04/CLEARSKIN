@@ -12,7 +12,7 @@
 ---
 
 ## Short Blurb *(one-liner)*
-> ClearLah is Singapore's first AI-powered trigger detection agent that helps eczema, allergy, and intolerance sufferers finally identify what's causing their flares — by connecting the dots across food, lifestyle, skincare, and live Singapore weather data.
+> ClearLah is an AI health detective agent that thinks like a doctor — it connects the dots across food, lifestyle, skincare, and Singapore weather data to tell eczema and allergy sufferers exactly what's triggering their flares.
 
 ---
 
@@ -77,17 +77,18 @@ Output Layer
   Doctor Report (PDF/link) | High Risk Day Banner
 ```
 
-**Prompt-Driven AI Generation:**
+**Prompt-Driven AI Agent — The ClearLah Detective:**
 
-ClearLah uses CodeBuddy AI in two key ways:
+ClearLah's AI agent is the core intelligence, not an add-on. It performs three AI-native tasks no rule-based system can do:
 
-1. **Conversational log parser** — user types *"Had laksa, quite stressed from work, skin super itchy tonight"* and the AI extracts and structures:
-   - Food = laksa
-   - Stress = high (work)
-   - Symptom = skin irritation (high severity)
+1. **Natural Language Understanding** — user types *"Had laksa, quite stressed from work, skin super itchy tonight"* and the AI extracts structured condition-specific data across 5 pillars, understanding Singlish, food slang, and context that keyword matching would miss.
 
-2. **Pattern detection engine** — after 7+ days of logs, AI analyses cross-pillar correlations and generates plain-English insights like:
-   > *"Your flares are most likely when humidity exceeds 85% AND you've eaten shellfish within 8 hours AND slept less than 6 hours — any 2 of these 3 together significantly increases your flare risk."*
+2. **Multi-Variable Correlation Reasoning** — after 7+ days of logs, the AI analyses cross-pillar patterns and generates plain-English detective-style insights like:
+   > *"Your worst flares happen when 2+ of these line up: humidity > 85%, shellfish within 8 hours, less than 6 hours sleep. This pattern appeared on 9 of 14 logged days (74% confidence). On high-humidity days, maybe swap your laksa for chicken rice, lah."*
+
+3. **Personalised Risk Assessment** — the AI cross-references each user's trigger profile against the 80+ hawker dish database to compute individual risk scores, turning generic allergen data into personal safety intelligence.
+
+The key difference from a symptom tracker: **ClearLah's AI agent doesn't just record data — it builds a causal model of YOUR body.** Every day you log, the agent gets smarter. No competitor can replicate what your agent learned about you.
 
 **Business Value:**
 
@@ -132,14 +133,15 @@ The core competitive moat is the **personal trigger profile** — each user's da
 
 ## Product Sharing *(How CodeBuddy was used)*
 
-ClearLah was built entirely on CodeBuddy. CodeBuddy powered:
+ClearLah was built entirely on CodeBuddy. CodeBuddy powered every layer:
 
-- **The conversational AI logging interface** — natural language to structured log data
-- **The AI pattern detection engine** — multi-variable correlation across 5 data pillars
-- **The Hawker Dish Risk Scorer** — personalised risk scoring against user trigger profiles
-- **The full web application** — from architecture design to frontend and backend code generation
+- **The AI Agent Brain** — natural language understanding that parses Singlish, food slang, and health context into structured trigger data
+- **The AI Detective Engine** — multi-variable correlation reasoning across 5 data pillars that surfaces what no human could manually compute
+- **The AI Narrator** — transforms raw statistics into plain-English, Singlish-inflected insights users actually understand
+- **The Hawker Dish Risk Scorer** — personalised AI risk assessment matching each user's trigger profile against 80+ Singapore dishes
+- **The full web application** — architecture, frontend, backend, and deployment generated through conversational collaboration with CodeBuddy
 
-CodeBuddy dramatically accelerated development, enabling a solo builder to ship a production-quality AI agent in 7 days. The conversational interface and AI inference layer — which would normally require weeks of ML engineering — were built through natural-language collaboration with CodeBuddy.
+The AI agent is not a feature of ClearLah — the AI agent IS ClearLah. Removing it would leave behind a form with no brain. CodeBuddy enabled a solo builder to ship a fully reasoning AI agent in 7 days — a task that would normally require a team of ML engineers, backend developers, and frontend designers.
 
 ---
 

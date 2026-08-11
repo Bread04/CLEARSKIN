@@ -373,7 +373,9 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 {msg.content}
               </div>
             ) : (
-              <div key={msg.id} className="bubble-ai skeleton h-16 w-3/4" />
+              <div key={msg.id} className="bubble-ai skeleton h-20 w-3/4 flex items-center justify-center">
+                <span className="text-caption-sm text-neutral-400">AI analysing…</span>
+              </div>
             )
           ) : (
             <div key={msg.id} className="flex justify-end">
