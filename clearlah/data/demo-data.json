@@ -1,0 +1,298 @@
+{
+  "user": {
+    "id": "00000000-0000-0000-0000-000000000001",
+    "email": "demo@clearlah.ai",
+    "created_at": "2026-07-25T00:00:00+08:00",
+    "onboarding_complete": true
+  },
+  "profile": {
+    "user_id": "00000000-0000-0000-0000-000000000001",
+    "tracking_for": "myself",
+    "conditions": ["eczema"],
+    "disclaimer_acknowledged": true,
+    "trigger_cache": {
+      "computed_at": "2026-08-07T20:00:00+08:00",
+      "top_triggers": [
+        {
+          "factor": "shellfish",
+          "correlation": 0.82,
+          "occurrences": 8,
+          "condition": "eczema"
+        },
+        {
+          "factor": "humidity > 80%",
+          "correlation": 0.75,
+          "occurrences": 9,
+          "condition": "eczema"
+        },
+        {
+          "factor": "sleep < 6h",
+          "correlation": 0.68,
+          "occurrences": 5,
+          "condition": "eczema"
+        },
+        {
+          "factor": "shellfish + humidity > 85%",
+          "correlation": 0.88,
+          "occurrences": 7,
+          "condition": "eczema"
+        },
+        {
+          "factor": "dairy",
+          "correlation": 0.42,
+          "occurrences": 4,
+          "condition": "eczema"
+        }
+      ],
+      "days_since_high_risk": 1,
+      "pattern_summary": "Shellfish + high humidity is your strongest trigger pair — flares followed within hours on 7 of 8 days. Sleep deprivation (<6h) independently linked to worse skin on all 5 occurrences."
+    },
+    "singlish_unlocked": true,
+    "onboarding_step": 3,
+    "known_allergens": ["shellfish", "dairy"],
+    "daily_skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream",
+    "streak": 14,
+    "streak_last_date": "2026-08-07",
+    "updated_at": "2026-08-07T23:30:00+08:00"
+  },
+  "logs": [
+    {
+      "id": "00000000-0000-0000-0001-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-07-25",
+      "food": {
+        "items": [
+          { "name": "Chicken Rice", "dish_id": "hawker-chicken-rice-00000001", "meal": "lunch" },
+          { "name": "Mee Soto", "dish_id": "hawker-mee-soto-00000012", "meal": "dinner" }
+        ],
+        "notes": "First day tracking"
+      },
+      "lifestyle": { "sleep_hours": 7, "stress_level": 3, "stress_type": "work", "exercise_minutes": 30 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream",
+      "symptoms": { "skin": 4, "gut": null, "respiratory": null, "notes": "Mild itchiness, nothing major" },
+      "weather_snapshot": { "temp": 31.2, "humidity": 78, "psi": 42, "uv": 8, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-07-25T18:00:00+08:00" },
+      "created_at": "2026-07-25T18:30:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-0002-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-07-26",
+      "food": {
+        "items": [
+          { "name": "Nasi Lemak", "dish_id": "hawker-nasi-lemak-00000003", "meal": "lunch" },
+          { "name": "Hokkien Mee", "dish_id": "hawker-hokkien-mee-00000005", "meal": "dinner" }
+        ],
+        "notes": null
+      },
+      "lifestyle": { "sleep_hours": 6.5, "stress_level": 4, "stress_type": "work", "exercise_minutes": 0 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream",
+      "symptoms": { "skin": 7, "gut": null, "respiratory": null, "notes": "Flare started after hokkien mee - shellfish?" },
+      "weather_snapshot": { "temp": 30.8, "humidity": 88, "psi": 55, "uv": 7, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-07-26T18:00:00+08:00" },
+      "created_at": "2026-07-26T19:15:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-0003-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-07-27",
+      "food": {
+        "items": [
+          { "name": "Fishball Noodles", "dish_id": "hawker-fishball-noodles-00000008", "meal": "lunch" },
+          { "name": "Roti Prata", "dish_id": "hawker-roti-prata-00000009", "meal": "dinner" }
+        ],
+        "notes": null
+      },
+      "lifestyle": { "sleep_hours": 7.5, "stress_level": 3, "stress_type": "work", "exercise_minutes": 45 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream, La Roche-Posay Cicaplast",
+      "symptoms": { "skin": 3, "gut": null, "respiratory": null, "notes": "Much better today. Added cicaplast." },
+      "weather_snapshot": { "temp": 32.1, "humidity": 65, "psi": 38, "uv": 10, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-07-27T18:00:00+08:00" },
+      "created_at": "2026-07-27T20:00:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-0004-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-07-28",
+      "food": {
+        "items": [
+          { "name": "Laksa", "dish_id": "hawker-laksa-00000002", "meal": "lunch" },
+          { "name": "Satay", "dish_id": "hawker-satay-00000011", "meal": "dinner" }
+        ],
+        "notes": "Laksa was amazing but worried about the prawns"
+      },
+      "lifestyle": { "sleep_hours": 5.5, "stress_level": 5, "stress_type": "work", "exercise_minutes": 0 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream",
+      "symptoms": { "skin": 9, "gut": null, "respiratory": null, "notes": "Worst flare this week. Shellfish + poor sleep?" },
+      "weather_snapshot": { "temp": 29.5, "humidity": 92, "psi": 62, "uv": 6, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-07-28T18:00:00+08:00" },
+      "created_at": "2026-07-28T21:45:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-0005-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-07-29",
+      "food": {
+        "items": [
+          { "name": "Yong Tau Foo", "dish_id": "hawker-yong-tau-foo-00000015", "meal": "lunch" },
+          { "name": "Char Kway Teow", "dish_id": "hawker-char-kway-teow-00000004", "meal": "dinner" }
+        ],
+        "notes": "Tried avoiding shellfish today"
+      },
+      "lifestyle": { "sleep_hours": 7, "stress_level": 3, "stress_type": "work", "exercise_minutes": 20 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream, La Roche-Posay Cicaplast",
+      "symptoms": { "skin": 5, "gut": null, "respiratory": null, "notes": "Calming down. Char kway teow had cockles - mild itch 2 hrs later." },
+      "weather_snapshot": { "temp": 31.7, "humidity": 72, "psi": 48, "uv": 9, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-07-29T18:00:00+08:00" },
+      "created_at": "2026-07-29T18:30:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-0006-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-07-30",
+      "food": {
+        "items": [
+          { "name": "Chicken Rice", "dish_id": "hawker-chicken-rice-00000001", "meal": "lunch" },
+          { "name": "Bak Chor Mee", "dish_id": "hawker-bak-chor-mee-00000010", "meal": "dinner" }
+        ],
+        "notes": null
+      },
+      "lifestyle": { "sleep_hours": 6, "stress_level": 4, "stress_type": "financial", "exercise_minutes": 0 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream",
+      "symptoms": { "skin": 6, "gut": null, "respiratory": null, "notes": "Flare returning. Low sleep + high stress again." },
+      "weather_snapshot": { "temp": 30.3, "humidity": 84, "psi": 52, "uv": 8, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-07-30T18:00:00+08:00" },
+      "created_at": "2026-07-30T19:00:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-0007-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-07-31",
+      "food": {
+        "items": [
+          { "name": "Nasi Lemak", "dish_id": "hawker-nasi-lemak-00000003", "meal": "lunch" },
+          { "name": "Sambal Stingray", "dish_id": "hawker-sambal-stingray-00000013", "meal": "dinner" }
+        ],
+        "notes": "Friday night indulgence"
+      },
+      "lifestyle": { "sleep_hours": 5, "stress_level": 4, "stress_type": "work", "exercise_minutes": 0 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream",
+      "symptoms": { "skin": 8, "gut": 4, "respiratory": null, "notes": "Bad flare. Stingray = shellfish. Stomach upset too." },
+      "weather_snapshot": { "temp": 29.1, "humidity": 91, "psi": 68, "uv": 5, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-07-31T18:00:00+08:00" },
+      "created_at": "2026-07-31T22:00:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-0008-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-08-01",
+      "food": {
+        "items": [
+          { "name": "Chicken Rice", "dish_id": "hawker-chicken-rice-00000001", "meal": "lunch" },
+          { "name": "Mee Soto", "dish_id": "hawker-mee-soto-00000012", "meal": "dinner" }
+        ],
+        "notes": "Playing it safe today"
+      },
+      "lifestyle": { "sleep_hours": 7, "stress_level": 2, "stress_type": null, "exercise_minutes": 60 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream, La Roche-Posay Cicaplast",
+      "symptoms": { "skin": 4, "gut": null, "respiratory": null, "notes": "Calming down - no shellfish, good sleep." },
+      "weather_snapshot": { "temp": 30.5, "humidity": 74, "psi": 45, "uv": 8, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-08-01T18:00:00+08:00" },
+      "created_at": "2026-08-01T19:30:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-0009-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-08-02",
+      "food": {
+        "items": [
+          { "name": "Hokkien Mee", "dish_id": "hawker-hokkien-mee-00000005", "meal": "lunch" },
+          { "name": "Chilli Crab", "dish_id": "hawker-chilli-crab-00000014", "meal": "dinner" }
+        ],
+        "notes": "Family dinner - hard to say no to chilli crab"
+      },
+      "lifestyle": { "sleep_hours": 6.5, "stress_level": 2, "stress_type": null, "exercise_minutes": 30 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream",
+      "symptoms": { "skin": 8, "gut": null, "respiratory": null, "notes": "Knew it - chilli crab = flare within 4 hours." },
+      "weather_snapshot": { "temp": 28.9, "humidity": 90, "psi": 58, "uv": 6, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-08-02T18:00:00+08:00" },
+      "created_at": "2026-08-02T21:00:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-000a-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-08-03",
+      "food": {
+        "items": [
+          { "name": "Fishball Noodles", "dish_id": "hawker-fishball-noodles-00000008", "meal": "lunch" },
+          { "name": "Chicken Rice", "dish_id": "hawker-chicken-rice-00000001", "meal": "dinner" }
+        ],
+        "notes": "Recovery day"
+      },
+      "lifestyle": { "sleep_hours": 8, "stress_level": 2, "stress_type": null, "exercise_minutes": 40 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream, La Roche-Posay Cicaplast",
+      "symptoms": { "skin": 3, "gut": null, "respiratory": null, "notes": "Great sleep = much better skin. Pattern emerging." },
+      "weather_snapshot": { "temp": 31.8, "humidity": 68, "psi": 40, "uv": 10, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-08-03T18:00:00+08:00" },
+      "created_at": "2026-08-03T18:45:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-000b-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-08-04",
+      "food": {
+        "items": [
+          { "name": "Laksa", "dish_id": "hawker-laksa-00000002", "meal": "lunch" },
+          { "name": "Roti Prata", "dish_id": "hawker-roti-prata-00000009", "meal": "dinner" }
+        ],
+        "notes": "Laksa craving. Dairy from prata too."
+      },
+      "lifestyle": { "sleep_hours": 5, "stress_level": 5, "stress_type": "work", "exercise_minutes": 0 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream",
+      "symptoms": { "skin": 9, "gut": 5, "respiratory": null, "notes": "Shellfish + no sleep + stress = worst combo. Gut upset too." },
+      "weather_snapshot": { "temp": 29.7, "humidity": 89, "psi": 60, "uv": 7, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-08-04T18:00:00+08:00" },
+      "created_at": "2026-08-04T22:30:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-000c-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-08-05",
+      "food": {
+        "items": [
+          { "name": "Yong Tau Foo", "dish_id": "hawker-yong-tau-foo-00000015", "meal": "lunch" },
+          { "name": "Chicken Rice", "dish_id": "hawker-chicken-rice-00000001", "meal": "dinner" }
+        ],
+        "notes": "Avoiding shellfish entirely"
+      },
+      "lifestyle": { "sleep_hours": 7.5, "stress_level": 3, "stress_type": "work", "exercise_minutes": 25 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream, La Roche-Posay Cicaplast",
+      "symptoms": { "skin": 4, "gut": 2, "respiratory": null, "notes": "Improving. Gut still recovering from yesterday." },
+      "weather_snapshot": { "temp": 32.4, "humidity": 62, "psi": 35, "uv": 11, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-08-05T18:00:00+08:00" },
+      "created_at": "2026-08-05T19:00:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-000d-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-08-06",
+      "food": {
+        "items": [
+          { "name": "Char Kway Teow", "dish_id": "hawker-char-kway-teow-00000004", "meal": "lunch" },
+          { "name": "Satay", "dish_id": "hawker-satay-00000011", "meal": "dinner" }
+        ],
+        "notes": "Cockles in char kway teow - small amount of shellfish"
+      },
+      "lifestyle": { "sleep_hours": 6, "stress_level": 4, "stress_type": "relationship", "exercise_minutes": 15 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream",
+      "symptoms": { "skin": 7, "gut": null, "respiratory": null, "notes": "Mild flare. Even small shellfish amounts trigger when humidity is high." },
+      "weather_snapshot": { "temp": 29.3, "humidity": 86, "psi": 55, "uv": 7, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-08-06T18:00:00+08:00" },
+      "created_at": "2026-08-06T19:45:00+08:00"
+    },
+    {
+      "id": "00000000-0000-0000-000e-000000000000",
+      "user_id": "00000000-0000-0000-0000-000000000001",
+      "logged_at": "2026-08-07",
+      "food": {
+        "items": [
+          { "name": "Chicken Rice", "dish_id": "hawker-chicken-rice-00000001", "meal": "lunch" },
+          { "name": "Bak Kut Teh", "dish_id": "hawker-bak-kut-teh-00000007", "meal": "dinner" }
+        ],
+        "notes": "No shellfish. Feeling good."
+      },
+      "lifestyle": { "sleep_hours": 7, "stress_level": 2, "stress_type": null, "exercise_minutes": 45 },
+      "skincare": "Cetaphil Gentle Skin Cleanser, CeraVe Moisturising Cream, La Roche-Posay Cicaplast",
+      "symptoms": { "skin": 2, "gut": null, "respiratory": null, "notes": "Best day in weeks. No shellfish + moderate humidity + good sleep." },
+      "weather_snapshot": { "temp": 31.4, "humidity": 70, "psi": 42, "uv": 9, "source": "mock", "simulated": true, "simulated_fields": ["temp", "humidity", "psi", "uv"], "fetched_at": "2026-08-07T18:00:00+08:00" },
+      "created_at": "2026-08-07T20:15:00+08:00"
+    }
+  ]
+}

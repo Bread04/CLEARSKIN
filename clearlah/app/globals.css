@@ -1,0 +1,270 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Custom Properties (motion tokens) ──────────────────────────────── */
+:root {
+  --duration-micro: 120ms;
+  --duration-ui: 180ms;
+  --duration-modal: 250ms;
+  --duration-slow: 400ms;
+
+  --ease-ui: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-decel: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Shimmer gradient for skeleton loading */
+  --shimmer-gradient: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+}
+
+/* ─── Reduced Motion ──────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Remove shimmer gradient from skeleton — leaves a clean neutral block */
+  .skeleton {
+    background-image: none !important;
+    background-size: auto !important;
+  }
+}
+
+/* ─── Base Styles ─────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent horizontal overflow on mobile */
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-neutral-50 text-neutral-800;
+    /* Safe area insets for iOS notch/home indicator */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Focus ring — accessible, using sage colour */
+  *:focus-visible {
+    outline: 2px solid theme("colors.primary-sage");
+    outline-offset: 2px;
+  }
+
+  /* Remove default tap highlight on mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ─── Component Styles ────────────────────────────────────────────────────── */
+@layer components {
+  /* ── Skeleton Loading ──────────────────────────────────────────────────── */
+  .skeleton {
+    @apply bg-neutral-200 rounded overflow-hidden relative;
+    background-image: var(--shimmer-gradient);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s linear infinite;
+  }
+
+  /* ── Chat Bubbles ──────────────────────────────────────────────────────── */
+  .bubble-ai {
+    @apply bg-neutral-100 text-neutral-800 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] text-body-md;
+  }
+
+  .bubble-user {
+    @apply bg-primary-sage text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%] text-body-md;
+  }
+
+  /* ── Card ──────────────────────────────────────────────────────────────── */
+  .card {
+    @apply bg-white rounded-lg shadow-card border border-neutral-200;
+  }
+
+  .card-interactive {
+    @apply card transition-shadow duration-ui hover:shadow-md active:scale-[0.99];
+  }
+
+  /* ── Pill / Badge ──────────────────────────────────────────────────────── */
+  .pill {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-label-sm font-medium;
+  }
+
+  .pill-sage {
+    @apply pill bg-primary-sage-50 text-primary-sage-dark;
+  }
+
+  .pill-terracotta {
+    @apply pill bg-secondary-terracotta-50 text-secondary-terracotta-dark;
+  }
+
+  .pill-warning {
+    @apply pill bg-status-warning-bg text-status-warning;
+  }
+
+  .pill-success {
+    @apply pill bg-status-success-bg text-status-success;
+  }
+
+  /* ── Button ────────────────────────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium rounded-md transition-all;
+    transition-duration: var(--duration-micro);
+    transition-timing-function: var(--ease-ui);
+  }
+
+  .btn-primary {
+    @apply btn px-5 py-2.5 bg-primary-sage text-white hover:bg-primary-sage-dark active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply btn px-5 py-2.5 bg-white text-neutral-700 border border-neutral-200 hover:bg-neutral-100 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply btn px-3 py-2 text-neutral-600 hover:bg-neutral-100 active:scale-[0.98];
+  }
+
+  .btn-danger {
+    @apply btn px-5 py-2.5 bg-status-error text-white hover:bg-red-700 active:scale-[0.98] disabled:opacity-50;
+  }
+
+  /* ── Form Inputs ────────────────────────────────────────────────────────── */
+  .input {
+    @apply w-full px-3 py-2.5 rounded-md border border-neutral-200 bg-white text-neutral-800 text-body-md
+           placeholder:text-neutral-400
+           focus:outline-none focus:ring-2 focus:ring-primary-sage focus:border-transparent
+           disabled:bg-neutral-100 disabled:cursor-not-allowed
+           transition-colors duration-ui;
+  }
+
+  .input-error {
+    @apply input border-status-error focus:ring-status-error;
+  }
+
+  /* ── Demo Mode Badge ───────────────────────────────────────────────────── */
+  .demo-badge {
+    @apply fixed top-3 right-3 z-50 pill bg-accent-sunshine text-neutral-800 shadow-md font-semibold text-xs;
+  }
+
+  /* ── Severity Dot ──────────────────────────────────────────────────────── */
+  .severity-dot {
+    @apply w-2 h-2 rounded-full inline-block;
+  }
+}
+
+/* ─── Keyframes (shimmer for skeleton) ────────────────────────────────────── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ─── Utility Overrides ────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Safe bottom padding for fixed bottom bars (accounts for iOS home indicator) */
+  .pb-safe {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  /* Smooth scroll for anchor navigation */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* Note: .sr-only is a Tailwind built-in utility — use `sr-only` class directly */
+}
+
+/* ─── Keyframes for custom animations ─────────────────────────────────────── */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Utility classes for custom animations ────────────────────────────────── */
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fade-in-up var(--duration-ui) var(--ease-ui) both;
+  }
+
+  .animate-streak-pop {
+    animation: streak-pop var(--duration-micro) var(--ease-spring) both;
+  }
+}
+
+@keyframes streak-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ─── Print Styles ─────────────────────────────────────────────────────── */
+@media print {
+  .no-print,
+  nav,
+  footer,
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
+  .demo-badge {
+    display: none !important;
+  }
+
+  body {
+    color: #1C1C1A !important;
+    background: white !important;
+    font-size: 11pt;
+  }
+
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+
+  .report-section {
+    page-break-inside: avoid;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+    text-align: left;
+  }
+
+  a {
+    color: #1C1C1A !important;
+    text-decoration: none !important;
+  }
+}

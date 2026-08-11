@@ -1,0 +1,142 @@
+​Build a working AI agent on Tencent Cloud’s WorkBuddy or CodeBuddy that solves a real Singapore business problem. This is the Singapore region of Tencent Cloud’s global AI Agent Championship — and the top 3 teams fly to the global finals in Shenzhen.
+
+AI Tinkerers Singapore - one of SG’s most applied builders community, is opening up the floor to junior folks - students, junior developers - & senior folks to participate in an Agent Development Challenge with Tencent.
+
+​Open to Singapore-based builders. Come solo or bring a team of up to 3. Founder, engineer, PM, or operator — if you can ship, you’re welcome.
+
+
+From the time to register (anytime between 20 Jul to 14 August, the hackathon begins. Submissions are allowed anytime between then to 14 August 6pm. Submissions after then will not be allowed.)
+
+20 Jul – 14 Aug	Registration & AI Agent Project Submission
+14 Aug 6pm	Online Review to select and announce the Top 8 teams
+22 Aug	In-person demo day to compete for Top 3 projects.
+September	Regional Top 3 teams proceed to the Global Grand Final to compete for the champion.
+
+How judging works
+​Community judges score your submission and demo-day pitch on three things:
+
+​Real-world pain point — solves a genuine local problem, and could be replicated.
+​Structured process design — clear workflow, thoughtful prompts, and real learnings on turning a business process into an agent.
+​Quantifiable impact — measurable outcomes: time saved, efficiency gained, problem solved.
+
+
+Prizes
+​Prizes-
+​1st: SGD 3,000 + trip to the Shenzhen global finals
+​2nd: SGD 2,000 + trip to the Shenzhen global finals
+​3rd: SGD 1,000 + trip to the Shenzhen global finals
+​Bonus: Most Creative Use of WorkBuddy, and Most Creative Use of CodeBuddy
+​Global finals travel is funded by Tencent Cloud.
+
+​An AI agent that tackles a real, local scenario. Pick your product, pick your topic, and ship something that actually works.
+
+​Choose ONE product:
+
+​WorkBuddy (primary focus) — Tencent Cloud’s AI agent for productivity and business workflows; great for business and non-technical builders.
+​CodeBuddy — Tencent Cloud’s AI coding assistant; great for developers building agents in code.
+​You get 2,000 free credits for your chosen product, issued upfront once you register.
+
+The Singapore 2026 Challenge invites developers, indie makers, product managers, enterprise tech teams, early-stage startup teams, outstanding students, and others to build end-to-end AI agents with CodeBuddy and WorkBuddy. Participants are encouraged to solve real-world business challenges and transform industry know-how into practical AI capabilities.
+
+Product	Positioning
+CodeBuddy	AI coding assistant that rapidly generates code and applications through conversational interaction.
+WorkBuddy	An AI-native office agent designed to intelligently manage documents, spreadsheets, PPTs, and schedules across all scenarios.
+I. Challenge
+Agent Development Challenge：Build an end-to-end AI Agent powered by CodeBuddy and/or WorkBuddy.
+
+Challenge Topics
+Topics	Description
+Productivity Agent	Use AI to reshape office work, document handling, knowledge management and team collaboration — Boosting individual and team productivity with AI.
+Business Agent	Use AI to help enterprises, SMEs, indie developers and solopreneurs run day-to-day operations, marketing and customer service —Empowering businesses with AI.
+Life Agent	Build AI tools across daily routines to enhance well-being and unlock personal potential —Optimizing lifestyle and wellness with AI.
+Examples
+Track	Sample Demo Ideas
+Productivity	“MeetingMind — automatically integrates with meeting apps, then generates multilingual minutes, action items and follow-up emails after each meeting.
+InboxZero Agent — automatically classifies emails, drafts replies, and files away contracts and invoices for you.
+DocSync — pulls scattered project info from Notion, Google Docs and Slack into a single structured weekly project report.”
+Business	“F&B Manager Agent — handles restaurant menu updates, low-stock alerts, food-delivery platform sync, and customer review replies.
+Local Marketing Agent — generates multilingual marketing content and pushes it across multiple platforms.”
+Life	FinWhisperer — transforms complex financial knowledge and real-time market news into personalized, easy-to-learn investing lessons.
+II. Challenge Timeline
+Date	Phases
+20 Jul – 14 Aug	Registration & AI Agent Project Submission
+14 Aug 6pm	Submission Cutoff & Online Judging to select and announce the Top 8 teams
+Late Aug	Regional offline roadshow to compete for Top 3 projects.
+September	Regional Top 3 teams proceed to the Global Grand Final to compete for the champion.
+III. How to Participate
+3.1 Eligibility
+Open to individuals and teams (maximum of 3 members per team).
+Participants must register a Tencent Cloud account and activate the UIN for the relevant product(s).
+Project must be built on at least one of CodeBuddy or WorkBuddy.
+3.2 Step-by-Step Guide
+Step 1 Register
+Visit the official 
+AI Tinkerers Hackathon Page
+ and click “Register”.
+Step 2 Build Your Agent
+Pick a Direction: Choose one of the three product agent directions (Productivity, Business, Life)
+Pick the Product where you’ll build your agent: CodeBuddy OR WorkBuddy.
+Go build!
+Prepare your project description: project name, feature description, screenshots and / or a demo screen recording.
+Step 3 Submit
+On the “My Project” page, click “Submit Project”.
+Fill in project details: name, direction, product used, and your project description.
+Further details are mentioned under “Submission Checklist”
+Submission deadline: 14 August 6pm.
+
+3.3 Project Requirements
+Basic Requirements
+The project must be original and built on at least one of the products CodeBuddy or WorkBuddy.
+A complete project description plus screenshots or a demo recording are required.
+Submission Checklist
+Submission Item	Description
+Project title	The name of your AI Agent project.
+Project Image	Image of your AI Agent Project (for potential showcase).
+Short blurb	A one-line statement of project application or the value it delivers.
+Project Description	- Project Overview: Target Scenarios, Users, and Value Proposition
+- Real-World Scenario Insights: Source of Pain Points, Target Audience, and Core Problems Solved
+- Comprehensive Solution Design: Technical Architecture, and Prompt-Driven AI Generation Business Value
+- Quantifiable Metrics or Defined Impact
+Demo video	A 3 to 5 minute video covering: project overview, core Agent features and usage, plus a short reflection on your build approach and any development-tool tips.
+Product Sharing	Sharing of how you used CodeBuddy / WorkBuddy in your project and experiences working with it.
+Project link (optional, bonus)	A live URL or demo link for your project.
+Pitch Day Requirements
+Pitch deck (8-minute presentation + 5-minute Q&A).
+A live-runnable demo, with a screen recording as backup.
+Project brief: scenario description, technical architecture and business value.
+IV. Judging Criteria
+4.1 Judging Dimensions
+Dimension	Weight	Explanation
+AI innovation	30%	Scenario Insight & Depth of AI Utilization
+Technical Excellence	20%	Engineering Implementation, Mastery of AI Tools, and Functional Completeness & Stability
+User Experience & Demo	25%	How smooth the demo is, thoughtfulness of interaction design and general user-friendliness.
+Business Value & Viability	25%	How well the project solves a real problem and its potential for commercial roll-out.
+4.2 Judging Process
+Preliminary round: We’ll review all projects; the Top 8 finalists are announced prior to demo day.
+Pitch round: 8-minute presentation + 5-minute Q&A, scored by the judging panel.
+Grand Final: the Top 3 from Singapore head to Shenzhen to compete for the global champion.
+V. Reward System
+5.1 Participant Benefits
+Reward Tier	What You Can Win	Who Qualifies
+Submission Reward	2,000 Credits on CodeBuddy Overseas Personal Edition guaranteed upon approved submission.	All participants whose projects are submitted and pass review.
+Regional Reward	Official certificate, a professionally packaged case study, and exposure on the Tencent Cloud official website.	Top 8 teams advance to the Singapore demo-day.
+Regional Top 3	Direct entry to the Grand Final in Shenzhen. Includes a Tencent Headquarters Tour in Shenzhen — flights, hotel and meals all covered.	Regional Top 3 teams.
+Grand Final Awards	Champion ¥50,000 cash, First runner-up ¥30,000 cash, Second runner-up ¥20,000 cash.	Top 3 of the Global Grand Final.
+VI. FAQ
+Q1: I don’t know how to code — can I still take part?
+Yes! Both CodeBuddy and WorkBuddy let you generate code and applications through natural-language conversations, so no coding background is needed to enter.
+
+Q2: Can I take part on my own?
+Yes. You can enter as an individual or form a team (up to 3 members per team).
+
+Q3: Can I submit multiple projects across the three directions?
+Yes. You’re welcome to enter more than one direction, and to submit more than one project per direction.
+
+Q4: Can I edit my projects after submitting?
+Yes. You can sign in to the website and update any submitted projects at any time before the submission deadline.
+
+Q5: Is the pitch round held online or in person?
+The format will be confirmed on the event website. Once you are shortlisted in the Top 10, we will notify you in advance of the exact format, timing and logistics.
+
+Q6: Must my projects use Tencent Cloud products?
+Yes. Every project must be built on at least one of CodeBuddy or WorkBuddy, and must include proof of usage — otherwise it will not proceed to scoring.
