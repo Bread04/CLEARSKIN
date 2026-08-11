@@ -70,7 +70,7 @@ export async function GET(request: Request) {
       .from("user_profiles")
       .upsert(
         { user_id: userId, trigger_cache: triggerCache, updated_at: new Date().toISOString() },
-      { onConflict: "user_id", ignoreDuplicates: true }
+      { onConflict: "user_id", ignoreDuplicates: false }
     );
 
     return NextResponse.json({

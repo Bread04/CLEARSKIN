@@ -18,8 +18,8 @@ export interface InsufficientDataResult {
 
 const MIN_ENTRIES = 7;
 const MAX_RESULTS = 5;
-const MIN_CONFIDENCE = 10;
-const MIN_SEVERITY_DIFF = 1.5;
+const MIN_CONFIDENCE = 5;
+const MIN_SEVERITY_DIFF = 1.0;
 
 function avgSeverity(entries: DbLogEntry[]): number {
   const scores: number[] = [];
@@ -72,7 +72,7 @@ export function detectCorrelations(
       }
     }
 
-    if (groups.withFood.length >= 3 && groups.withoutFood.length >= 3) {
+    if (groups.withFood.length >= 2 && groups.withoutFood.length >= 2) {
       const withAvg = avgSeverity(groups.withFood);
       const withoutAvg = avgSeverity(groups.withoutFood);
       const diff = withAvg - withoutAvg;
