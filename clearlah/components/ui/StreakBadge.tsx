@@ -1,13 +1,15 @@
 interface StreakBadgeProps {
   streak: number;
   className?: string;
+  "aria-live"?: "polite" | "assertive" | "off";
 }
 
-export default function StreakBadge({ streak, className = "" }: StreakBadgeProps) {
+export default function StreakBadge({ streak, className = "", ...rest }: StreakBadgeProps) {
   return (
     <span
       className={`inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-white text-label-sm font-bold ${className}`}
       aria-label={`Streak: ${streak} days`}
+      {...rest}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

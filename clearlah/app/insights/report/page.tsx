@@ -26,10 +26,14 @@ export default async function ReportPage() {
   return (
     <ReportClient
       conditions={profile?.conditions ?? []}
-      topTriggers={topTriggers.map((t) => ({
-        trigger: (t.trigger ?? t.factor ?? "") as string,
-        confidence: (t.confidence ?? t.correlation ?? 0) as number,
-      }))}
+      topTriggers={topTriggers.map((t) => {
+        const raw = (t.confidence ?? t.correlation ?? 0) as number;
+        const confidence = raw <= 1 ? Math.round(raw * 100) : raw;
+        return {
+          trigger: (t.trigger ?? t.factor ?? "") as string,
+          confidence,
+        };
+      })}
       entries={(entries ?? []) as DbLogEntry[]}
     />
   );

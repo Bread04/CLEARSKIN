@@ -12,17 +12,18 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { data } = await supabase
       .from("saved_dishes")
-      .select("dish_id, safety_label, saved_at")
+      .select("dish_id, safety_label, saved_at, hawker_dishes!inner(name_en)")
       .eq("user_id", userId)
       .order("saved_at", { ascending: false });
 
     const dishes = (data ?? []).map((row) => {
       const r = row as Record<string, unknown>;
+      const hawker = (r.hawker_dishes as Record<string, unknown>) ?? {};
       return {
         dish_id: r.dish_id as string,
         safety_label: r.safety_label as string,
         saved_at: r.saved_at as string,
-        dish_name: r.dish_id as string,
+        dish_name: (hawker.name_en as string) ?? (r.dish_id as string),
       };
     });
 

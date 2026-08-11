@@ -30,34 +30,26 @@ export function isHighRiskDay(
   }
 
   const matched: string[] = [];
-  const topTriggers = triggers.slice(0, 3);
+  const topTriggers = triggers.slice(0, 5);
 
   for (const trigger of topTriggers) {
     const label = (trigger.trigger ?? trigger.factor ?? "");
     if (!label) continue;
     const factor = label.toLowerCase();
 
-    if ((factor.includes("humidity") && factor.includes("80")) || factor.includes("85")) {
-      const threshold = factor.includes("85") ? 85 : 80;
-      if (weather.humidity > threshold) {
+    if (factor.includes("humidity")) {
+      const threshold = factor.includes("85") ? 85 : factor.includes("80") ? 80 : 0;
+      if (threshold > 0 && weather.humidity > threshold) {
         matched.push(label);
       }
-    }
-
-    if (factor.includes("temp") || factor.includes("temperature")) {
+    } else if (factor.includes("temp") || factor.includes("temperature")) {
       if (weather.temp > 32) {
         matched.push(label);
       }
-    }
-
-    if (factor.includes("psi")) {
+    } else if (factor.includes("psi")) {
       if (weather.psi > 100) {
         matched.push(label);
       }
-    }
-
-    if (factor.includes("sleep") || factor.includes("stress")) {
-      matched.push(label);
     }
   }
 

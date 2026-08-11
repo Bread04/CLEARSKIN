@@ -36,7 +36,7 @@ export default function InsightCard({
       </div>
 
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-caption-sm bg-accent-yellow/10 text-accent-yellow px-2 py-0.5 rounded-full font-medium">
+        <span className="text-caption-sm bg-accent-sunshine/20 text-amber-800 px-2 py-0.5 rounded-full font-medium">
           AI Analysis
         </span>
       </div>
@@ -51,7 +51,7 @@ export default function InsightCard({
         type="button"
         onClick={() => setExpanded(!expanded)}
         aria-expanded={expanded}
-        className="text-body-sm text-primary-sage hover:text-primary-sage-dark underline transition-colors"
+        className="text-body-sm text-primary-sage hover:text-primary-sage-dark underline transition-colors min-h-[44px] inline-flex items-center"
       >
         {expanded ? "Hide evidence" : "See evidence"}
       </button>

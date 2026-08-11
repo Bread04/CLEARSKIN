@@ -14,8 +14,8 @@ const config: Config = {
         // Primary
         "primary-sage": "#5B7F6E",
         "primary-sage-light": "#7FA392",
-        "primary-sage-dark": "#3D6052",
-        "primary-sage-50": "#EEF3F0",
+        "primary-sage-dark": "#3D6B57",
+        "primary-sage-50": "#EAF0ED",
         "primary-sage-100": "#D5E4DC",
         "primary-sage-200": "#ACCABA",
 
@@ -23,7 +23,7 @@ const config: Config = {
         "secondary-terracotta": "#C0583A",
         "secondary-terracotta-light": "#D4785E",
         "secondary-terracotta-dark": "#9A3E26",
-        "secondary-terracotta-50": "#FBF0EC",
+        "secondary-terracotta-50": "#F5EAE6",
         "secondary-terracotta-100": "#F4D4C8",
 
         // Accent
@@ -31,17 +31,25 @@ const config: Config = {
         "accent-sky": "#5BA3C9",
         "accent-lavender": "#9B7EC8",
 
-        // Neutral stack
-        "neutral-50": "#FAFAF9",
-        "neutral-100": "#F5F4F2",
-        "neutral-200": "#E8E6E1",
-        "neutral-300": "#D1CEC7",
-        "neutral-400": "#A8A39A",
-        "neutral-500": "#7D786F",
-        "neutral-600": "#595450",
-        "neutral-700": "#3D3A36",
-        "neutral-800": "#27251F",
-        "neutral-900": "#18160F",
+        // Neutral stack (DESIGN.md spec)
+        "neutral-50": "#F8F7F4",
+        "neutral-100": "#EFEDE8",
+        "neutral-200": "#E4E2DD",
+        "neutral-300": "#D4D2CC",
+        "neutral-400": "#A8A49E",
+        "neutral-500": "#7A7A74",
+        "neutral-600": "#595652",
+        "neutral-700": "#3D3D39",
+        "neutral-800": "#272623",
+        "neutral-900": "#1C1C1A",
+
+        // Risk tokens (DESIGN.md spec)
+        "risk-high": "#C0583A",
+        "risk-medium": "#B07D2A",
+        "risk-low": "#5B7F6E",
+
+        // Surface
+        "surface-glass": "rgba(248,247,244,0.90)",
 
         // Status colours
         "status-success": "#3D9970",
@@ -71,15 +79,26 @@ const config: Config = {
         sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
       },
       fontSize: {
-        // 9 typography variants
+        // DESIGN.md scale
+        "display": ["2rem", { lineHeight: "1.2", fontWeight: "700" }],
+        "h1": ["1.75rem", { lineHeight: "1.25", fontWeight: "700" }],
+        "h2": ["1.375rem", { lineHeight: "1.3", fontWeight: "600" }],
+        "h3": ["1.125rem", { lineHeight: "1.35", fontWeight: "600" }],
+        "body-lg": ["1rem", { lineHeight: "1.6", fontWeight: "400" }],
+        "body": ["0.9375rem", { lineHeight: "1.55", fontWeight: "400" }],
+        "body-sm": ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }],
+        "caption": ["0.75rem", { lineHeight: "1.4", fontWeight: "400" }],
+        "caption-sm": ["0.6875rem", { lineHeight: "1.2", fontWeight: "400" }],
+        "label": ["0.75rem", { lineHeight: "1.0", fontWeight: "600", letterSpacing: "0.06em" }],
+        "numeric": ["2.5rem", { lineHeight: "1.0", fontWeight: "700", letterSpacing: "-0.02em" }],
+
+        // Legacy aliases (for existing components)
         "display-lg": ["2.25rem", { lineHeight: "2.5rem", fontWeight: "700", letterSpacing: "-0.02em" }],
         "display-md": ["1.875rem", { lineHeight: "2.25rem", fontWeight: "700", letterSpacing: "-0.015em" }],
         "heading-xl": ["1.5rem", { lineHeight: "2rem", fontWeight: "600", letterSpacing: "-0.01em" }],
         "heading-lg": ["1.25rem", { lineHeight: "1.75rem", fontWeight: "600", letterSpacing: "-0.005em" }],
         "heading-md": ["1.125rem", { lineHeight: "1.75rem", fontWeight: "600" }],
-        "body-lg": ["1rem", { lineHeight: "1.625rem", fontWeight: "400" }],
         "body-md": ["0.875rem", { lineHeight: "1.5rem", fontWeight: "400" }],
-        "body-sm": ["0.8125rem", { lineHeight: "1.375rem", fontWeight: "400" }],
         "label-sm": ["0.75rem", { lineHeight: "1rem", fontWeight: "500", letterSpacing: "0.01em" }],
       },
 

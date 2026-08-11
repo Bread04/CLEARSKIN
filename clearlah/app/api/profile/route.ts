@@ -8,6 +8,33 @@ import type { TrackingFor } from "@/lib/types/database";
 const VALID_TRACKING: TrackingFor[] = ["myself", "my_child", "someone_else"];
 const VALID_CONDITIONS: Condition[] = ["eczema", "ibs", "food_allergy", "asthma", "other"];
 
+export async function GET() {
+  try {
+    const userId = await resolveApiUserId();
+    const supabase = await createClient();
+
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("*")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    return NextResponse.json({ success: true, profile: profile ?? {} });
+  } catch (e) {
+    if (e instanceof UnauthenticatedError) {
+      return NextResponse.json(
+        { success: false, error: "Authentication required" },
+        { status: 401 }
+      );
+    }
+    if (e instanceof Error && "digest" in e) throw e;
+    return NextResponse.json(
+      { success: false, error: "Something went wrong" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     let body: {

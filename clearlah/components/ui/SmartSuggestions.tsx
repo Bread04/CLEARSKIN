@@ -31,7 +31,7 @@ export default function SmartSuggestions({
             key={s.name}
             type="button"
             onClick={() => onSelect(s)}
-            className="pill-sage inline-flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity min-h-[32px]"
+            className="pill-sage inline-flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity min-h-[44px]"
             aria-label={`Add ${s.name} from past logs`}
           >
             <span aria-hidden="true">🔥</span>

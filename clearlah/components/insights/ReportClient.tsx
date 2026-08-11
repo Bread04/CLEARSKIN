@@ -59,7 +59,7 @@ export default function ReportClient({ conditions, topTriggers, entries }: Repor
                 <div className="flex items-center gap-2">
                   <span className="text-body-md text-neutral-800">{t.trigger}</span>
                 </div>
-                <span className="text-body-md font-semibold text-neutral-800">{Math.round(t.confidence * 100)}% confidence</span>
+                <span className="text-body-md font-semibold text-neutral-800">{Math.round(t.confidence)}% confidence</span>
               </div>
             ))}
             {topTriggers.length === 0 && (

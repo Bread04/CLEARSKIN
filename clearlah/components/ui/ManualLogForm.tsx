@@ -176,8 +176,8 @@ export default function ManualLogForm({
                   aria-label={`Add ${dish.name_en}`}
                 >
                   <span className="font-medium text-neutral-800">{dish.name_en}</span>
-                  {dish.name_ms && <span className="text-neutral-400 ml-1">/ {dish.name_ms}</span>}
-                  {dish.name_zh && <span className="text-neutral-400 ml-1">/ {dish.name_zh}</span>}
+                  {dish.name_ms && <span className="text-neutral-400 ml-1" lang="ms">/ {dish.name_ms}</span>}
+                  {dish.name_zh && <span className="text-neutral-400 ml-1" lang="zh-Hans">/ {dish.name_zh}</span>}
                 </button>
               ))}
             </div>

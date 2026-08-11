@@ -31,7 +31,7 @@ function getGreeting(props: ChatInterfaceProps): string {
 
   const formal = `${timePrefix}! Tell me how your day has been — what did you eat, how are you feeling?`;
   const casual = `${timePrefix}! How was today?`;
-  const singlish = `${timePrefix}! Eh, how was today ah? Just lah tell me lah!`;
+  const singlish = `${timePrefix}! Eh, how was today ah? Just tell me lah!`;
 
   if (props.singlishUnlocked && props.logCount >= 3) return singlish;
   if (props.logCount >= 3) return casual;

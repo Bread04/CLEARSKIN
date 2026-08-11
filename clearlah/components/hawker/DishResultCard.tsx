@@ -59,7 +59,9 @@ export default function DishResultCard({
           <h3 className="text-h3 text-neutral-800">{nameEn}</h3>
           {(nameMs || nameZh) && (
             <p className="text-caption text-neutral-500">
-              {[nameMs, nameZh].filter(Boolean).join(" · ")}
+              {nameMs && <span lang="ms">{nameMs}</span>}
+              {nameMs && nameZh && " · "}
+              {nameZh && <span lang="zh-Hans">{nameZh}</span>}
             </p>
           )}
         </div>

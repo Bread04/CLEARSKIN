@@ -40,7 +40,7 @@ export default async function LandingPage() {
       )}
 
       <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-sage rounded-2xl mb-4 shadow-card">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-sage to-primary-sage-dark rounded-2xl mb-4 shadow-card motion-safe:animate-celebration-bounce">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -62,12 +62,12 @@ export default async function LandingPage() {
 
       <div className="grid grid-cols-1 gap-3 w-full max-w-sm mb-10">
         {[
-          { icon: "💬", label: "AI-powered daily log — just describe your day" },
-          { icon: "🔍", label: "Spot your personal triggers automatically" },
-          { icon: "🍜", label: "Singapore hawker food safety guide" },
-          { icon: "📈", label: "Insights to share with your doctor" },
+          { icon: "💬", label: "AI-powered daily log — just describe your day", color: "border-l-4 border-l-primary-sage" },
+          { icon: "🔍", label: "Spot your personal triggers automatically", color: "border-l-4 border-l-accent-lavender" },
+          { icon: "🍜", label: "Singapore hawker food safety guide", color: "border-l-4 border-l-accent-sunshine" },
+          { icon: "📈", label: "Insights to share with your doctor", color: "border-l-4 border-l-accent-sky" },
         ].map((feat) => (
-          <div key={feat.label} className="flex items-center gap-3 card px-4 py-3">
+          <div key={feat.label} className={`flex items-center gap-3 card px-4 py-3 ${feat.color}`}>
             <span className="text-xl" aria-hidden="true">
               {feat.icon}
             </span>

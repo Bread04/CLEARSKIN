@@ -31,7 +31,7 @@ export default function HawkerPage() {
   const [saving, setSaving] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/profile", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })
+    fetch("/api/profile")
       .then((r) => r.json().catch(() => ({})))
       .then((d) => {
         if (d.profile?.known_allergens) setKnownAllergens(d.profile.known_allergens);
@@ -81,9 +81,15 @@ export default function HawkerPage() {
   }, [query, search]);
 
   const computeRisk = (dish: DishResult): { level: RiskLevel; reason: string } => {
-    const triggerTriggers: string[] = (triggerCache as { top_triggers?: Array<{ trigger: string; confidence: number }> })?.top_triggers
-      ?.filter((t) => t.confidence >= 50)
-      ?.map((t) => t.trigger.toLowerCase()) ?? [];
+    const topTriggers = ((triggerCache as Record<string, unknown>)?.top_triggers as Array<Record<string, unknown>>) ?? [];
+    const triggerTriggers: string[] = topTriggers
+      .filter((t) => {
+        const raw = (t.confidence ?? t.correlation ?? 0) as number;
+        const c = raw <= 1 ? raw * 100 : raw;
+        return c >= 50;
+      })
+      .map((t) => String(t.trigger ?? t.factor ?? "")).filter(Boolean)
+      .map((s) => s.toLowerCase());
 
     const highOverlap = dish.allergens.filter((a) =>
       knownAllergens.some((ka) => ka.toLowerCase() === a.toLowerCase())

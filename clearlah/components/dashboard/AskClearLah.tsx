@@ -130,7 +130,7 @@ export default function AskClearLah() {
             type="button"
             onClick={() => handleAsk(s)}
             disabled={isLoading}
-            className="text-body-sm text-primary-sage bg-primary-sage-50 hover:bg-primary-sage-100 px-3 py-1 rounded-full transition-colors disabled:opacity-50"
+            className="text-body-sm text-primary-sage bg-primary-sage-50 hover:bg-primary-sage-100 px-3 py-1.5 rounded-full transition-colors disabled:opacity-50 min-h-[44px] inline-flex items-center"
           >
             {s}
           </button>

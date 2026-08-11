@@ -7,12 +7,12 @@ interface MilestoneModalProps {
   onDismiss: () => void;
 }
 
-const MILESTONE_MESSAGES: Record<number, string> = {
-  3: "3 days in a row! You're building a habit.",
-  7: "One week of tracking! Your first insights are near.",
-  14: "Two weeks strong — patterns are taking shape.",
-  21: "Three weeks! This is becoming second nature.",
-  30: "A full month! Your health detective work is paying off.",
+const MILESTONE_MESSAGES: Record<number, { message: string; emojis: string[] }> = {
+  3: { message: "3 days in a row! You're building a habit.", emojis: ["🌱", "✨", "💪"] },
+  7: { message: "One week of tracking! Your first insights are near.", emojis: ["📊", "🔍", "🎯"] },
+  14: { message: "Two weeks strong — patterns are taking shape.", emojis: ["🔥", "🧩", "💚"] },
+  21: { message: "Three weeks! This is becoming second nature.", emojis: ["🏆", "🌟", "🎉"] },
+  30: { message: "A full month! Your health detective work is paying off.", emojis: ["🕵️", "💎", "👑"] },
 };
 
 export default function MilestoneModal({
@@ -47,18 +47,28 @@ export default function MilestoneModal({
     return () => document.removeEventListener("keydown", handleKey);
   }, [onDismiss]);
 
+  const milestoneData = MILESTONE_MESSAGES[milestone] ?? {
+    message: `${milestone} days — amazing work!`,
+    emojis: ["🎉", "🔥", "💪"],
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 motion-safe:animate-fade-in">
       <div
         role="dialog"
         aria-modal="true"
         aria-label={`${milestone} day streak milestone`}
-        className="card rounded-xl p-8 max-w-sm mx-4 text-center motion-safe:animate-fade-in-up"
+        className="card rounded-xl p-8 max-w-sm mx-4 text-center motion-safe:animate-fade-in-up border-t-4 border-t-secondary"
       >
-        <p className="text-numeric mb-2">🔥 {milestone}</p>
-        <p className="text-h3 text-neutral-800 mb-1">Day Streak</p>
+        <div className="flex justify-center gap-3 mb-3 text-2xl" aria-hidden="true">
+          {milestoneData.emojis.map((e, i) => (
+            <span key={i} className="motion-safe:animate-celebration-bounce" style={{ animationDelay: `${i * 150}ms` }}>{e}</span>
+          ))}
+        </div>
+        <p className="text-numeric text-secondary mb-2">{milestone}</p>
+        <p className="text-h3 text-neutral-800 mb-1">Day Streak 🔥</p>
         <p className="text-body-md text-neutral-600 mb-6">
-          {MILESTONE_MESSAGES[milestone] || `${milestone} days — amazing work!`}
+          {milestoneData.message}
         </p>
         <button
           ref={closeRef}

@@ -113,7 +113,7 @@ export default function DashboardClient({
         </div>
 
         (
-          <div className="flex items-center justify-between bg-accent-yellow/5 border border-accent-yellow/20 rounded-lg px-4 py-2">
+          <div className="flex items-center justify-between bg-accent-sunshine/10 border border-accent-sunshine/30 rounded-lg px-4 py-2">
           <span className="text-body-sm text-neutral-600">
             {demoToday ? (
               <>Day: <span className="font-semibold text-neutral-800">{demoToday}</span>
@@ -125,7 +125,7 @@ export default function DashboardClient({
           <button
             type="button"
             onClick={handleSkipDay}
-            className="btn-ghost text-body-sm text-primary-sage font-medium rounded-full px-3 py-1 flex items-center gap-1"
+            className="btn-ghost text-body-sm text-primary-sage font-medium rounded-full px-3 py-1 flex items-center gap-1 min-h-[44px]"
           >
             Next Day
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" aria-hidden="true">

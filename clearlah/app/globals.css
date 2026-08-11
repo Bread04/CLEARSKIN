@@ -89,7 +89,11 @@
 
   /* ── Card ──────────────────────────────────────────────────────────────── */
   .card {
-    @apply bg-white rounded-lg shadow-card border border-neutral-200;
+    @apply bg-neutral-50 rounded-lg;
+  }
+
+  .card-on-white {
+    @apply bg-white rounded-lg border border-neutral-300;
   }
 
   .card-interactive {
@@ -125,15 +129,15 @@
   }
 
   .btn-primary {
-    @apply btn px-5 py-2.5 bg-primary-sage text-white hover:bg-primary-sage-dark active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply btn px-5 py-2.5 bg-primary-sage text-white hover:bg-primary-sage-dark active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed rounded-full;
   }
 
   .btn-secondary {
-    @apply btn px-5 py-2.5 bg-white text-neutral-700 border border-neutral-200 hover:bg-neutral-100 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply btn px-5 py-2.5 bg-transparent text-primary-sage border border-primary-sage hover:bg-primary-sage-50 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed rounded-full;
   }
 
   .btn-ghost {
-    @apply btn px-3 py-2 text-neutral-600 hover:bg-neutral-100 active:scale-[0.98];
+    @apply btn px-3 py-2 text-neutral-700 hover:bg-neutral-100 active:scale-[0.98] rounded-full;
   }
 
   .btn-danger {
