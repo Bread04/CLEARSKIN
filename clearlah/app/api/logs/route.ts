@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     }
 
     const { log, weather_snapshot } = body;
-    const demoDate = isDemoMode() && typeof body.demo_date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(body.demo_date)
+    const demoDate = typeof body.demo_date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(body.demo_date)
       ? body.demo_date
       : null;
     const today = demoDate ?? new Date().toISOString().split("T")[0];

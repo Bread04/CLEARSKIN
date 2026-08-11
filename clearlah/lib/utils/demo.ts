@@ -97,12 +97,11 @@ export function getAnonymousUserId(): string {
 }
 
 /**
- * Returns the number of days to offset from today in demo mode.
+ * Returns the number of days to offset from today.
  * Stored in a cookie so both server and client can read it.
- * Returns 0 outside demo mode or if not set.
+ * Returns 0 if not set.
  */
 export function getDemoDayOffset(): number {
-  if (!isDemoMode()) return 0;
   try {
     const raw = getCookie(DEMO_DAY_OFFSET_KEY);
     const n = parseInt(raw ?? "0", 10);
@@ -131,22 +130,20 @@ export function getDemoToday(): string {
 }
 
 /**
- * Increments the demo day offset by 1 and returns the new Date.
- * Only affects demo mode. Writes to cookie so server components can read it.
+ * Increments the day offset by 1 and returns the new Date.
+ * Writes to cookie so server components can read it.
  */
 export function advanceDemoDay(): Date {
-  if (!isDemoMode()) return new Date();
   const next = getDemoDayOffset() + 1;
   setCookie(DEMO_DAY_OFFSET_KEY, String(next));
   return getDemoDate();
 }
 
 /**
- * Returns the demo date string to send as part of the log save request.
- * Only returns a value in demo mode when an offset is active.
+ * Returns the date string to send as part of the log save request.
+ * Returns null when offset is 0.
  */
 export function getDemoDateForSave(): string | null {
-  if (!isDemoMode()) return null;
   const offset = getDemoDayOffset();
   return offset > 0 ? getDemoToday() : null;
 }

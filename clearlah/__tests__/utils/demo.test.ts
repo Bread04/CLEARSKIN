@@ -4,9 +4,8 @@ const originalEnv = process.env;
 
 beforeEach(() => {
   process.env = { ...originalEnv };
-  // @ts-expect-error: clear cookie for isolation
   if (typeof document !== "undefined") {
-    document.cookie = "clearlah_demo_day_offset=; Path=/; Max-Age=0";
+    try { document.cookie = "clearlah_demo_day_offset=; Path=/; Max-Age=0"; } catch { /* cookie write not supported in test env */ }
   }
 });
 

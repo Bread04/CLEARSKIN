@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { requireOnboardedUserId } from "@/lib/utils/user-server";
 import { isHighRiskDay } from "@/lib/utils/trigger-match";
-import { isDemoMode } from "@/lib/utils/demo";
 import { cookies } from "next/headers";
 import DashboardClient from "@/components/dashboard/DashboardClient";
 
@@ -15,9 +14,10 @@ export default async function DashboardPage() {
     .eq("user_id", userId)
     .maybeSingle();
 
-  const demoOffset = isDemoMode()
-    ? parseInt((await cookies()).get("clearlah_demo_day_offset")?.value ?? "0", 10) || 0
-    : 0;
+  const demoOffset = parseInt(
+    (await cookies()).get("clearlah_demo_day_offset")?.value ?? "0",
+    10
+  ) || 0;
   const baseDate = new Date();
   if (demoOffset > 0) baseDate.setDate(baseDate.getDate() + demoOffset);
   const today = baseDate.toISOString().split("T")[0];
