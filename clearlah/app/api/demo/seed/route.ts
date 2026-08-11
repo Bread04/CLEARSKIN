@@ -84,12 +84,78 @@ export async function POST(): Promise<
     return errorResponse(message, 500);
   }
 
+  // Shift all dates so the most recent log entry is 1 day before today.
+  // This keeps the demo data perpetually current regardless of when it's seeded.
+  const latestLogDate = fixture.logs
+    .map((l) => typeof l.logged_at === "string" ? new Date(l.logged_at) : new Date(0))
+    .reduce((max, d) => (d > max ? d : max), new Date(0));
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const dayShift = Math.round(
+    (yesterday.getTime() - latestLogDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  function shiftDate(dateStr: string | null | undefined): string | null {
+    if (!dateStr || typeof dateStr !== "string") return null;
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    d.setDate(d.getDate() + dayShift);
+    return d.toISOString().split("T")[0];
+  }
+
+  function shiftTimestamp(tsStr: string | null | undefined): string | null {
+    if (!tsStr || typeof tsStr !== "string") return null;
+    const d = new Date(tsStr);
+    if (isNaN(d.getTime())) return tsStr;
+    d.setDate(d.getDate() + dayShift);
+    return d.toISOString();
+  }
+
+  if (dayShift !== 0) {
+    for (const log of fixture.logs) {
+      if (typeof log.logged_at === "string") {
+        log.logged_at = shiftDate(log.logged_at)!;
+      }
+      if (typeof log.created_at === "string") {
+        log.created_at = shiftTimestamp(log.created_at)!;
+      }
+      if (log.weather_snapshot && typeof log.weather_snapshot === "object") {
+        const ws = log.weather_snapshot as Record<string, unknown>;
+        if (typeof ws.fetched_at === "string") {
+          ws.fetched_at = shiftTimestamp(ws.fetched_at)!;
+        }
+      }
+    }
+
+    const profile = fixture.profile as Record<string, unknown>;
+    if (typeof profile.streak_last_date === "string") {
+      profile.streak_last_date = shiftDate(profile.streak_last_date);
+    }
+    if (typeof profile.updated_at === "string") {
+      profile.updated_at = shiftTimestamp(profile.updated_at)!;
+    }
+    const tc = profile.trigger_cache as Record<string, unknown> | null;
+    if (tc && typeof tc.computed_at === "string") {
+      tc.computed_at = shiftTimestamp(tc.computed_at)!;
+    }
+  }
+
   try {
     const supabase = await createClient();
 
+    // Clear existing demo data before re-seeding
+    await supabase.from("log_entries").delete().eq("user_id", fixture.user.id);
+    await supabase.from("saved_dishes").delete().eq("user_id", fixture.user.id);
+    await supabase.from("user_profiles").delete().eq("user_id", fixture.user.id);
+    await supabase.from("users").delete().eq("id", fixture.user.id);
+
     const { error: userErr } = await supabase
       .from("users")
-      .upsert(fixture.user, { onConflict: "id" });
+      .insert(fixture.user);
 
     if (userErr) {
       console.error("[demo/seed] users upsert failed:", userErr);
@@ -98,18 +164,16 @@ export async function POST(): Promise<
 
     const { error: profileErr } = await supabase
       .from("user_profiles")
-      .upsert(fixture.profile, { onConflict: "user_id" });
+      .insert(fixture.profile);
 
     if (profileErr) {
-      console.error("[demo/seed] user_profiles upsert failed:", profileErr);
+      console.error("[demo/seed] user_profiles insert failed:", profileErr);
       return errorResponse(`Failed to seed user_profiles table: ${profileErr.message}`, 500);
     }
 
     const { error: logsErr } = await supabase
       .from("log_entries")
-      .upsert(fixture.logs, {
-        onConflict: "user_id, logged_at",
-      });
+      .insert(fixture.logs);
 
     if (logsErr) {
       console.error("[demo/seed] log_entries upsert failed:", logsErr);

@@ -64,7 +64,7 @@ INSERT INTO hawker_dishes (name_en, name_ms, name_zh, aliases, allergens, catego
 VALUES
   ('Xiao Long Bao', 'Xiao Long Bao', '小笼包', ARRAY['xlb', 'soup dumpling', 'steamed dumpling'], ARRAY['gluten', 'pork'], 'chinese_restaurant', 20, 'restaurant'),
   ('Fried Rice with Pork Chop', 'Nasi Goreng Pork Chop', '排骨蛋炒饭', ARRAY['dtf fried rice', 'pork chop rice'], ARRAY['gluten', 'eggs', 'pork'], 'chinese_restaurant', 18, 'restaurant'),
-  ('Steamed Chicken Soup', 'Sup Ayam Kukus', '鸡汤', ARRAY['chicken soup dtf'], ARRAY[], 'chinese_restaurant', 12, 'restaurant')
+  ('Steamed Chicken Soup', 'Sup Ayam Kukus', '鸡汤', ARRAY['chicken soup dtf'], ARRAY[]::text[], 'chinese_restaurant', 12, 'restaurant')
 ON CONFLICT (name_en) DO NOTHING;
 
 -- Hai Di Lao (chinese_restaurant)
@@ -133,7 +133,7 @@ ON CONFLICT (name_en) DO NOTHING;
 INSERT INTO hawker_dishes (name_en, name_ms, name_zh, aliases, allergens, category, popularity_rank, food_type)
 VALUES
   ('Fish and Chips', 'Fish and Chips', '炸鱼薯条', ARRAY['fish n chips', 'battered fish'], ARRAY['gluten', 'fish', 'eggs'], 'western', 16, 'international'),
-  ('Grilled Chicken Breast', 'Dada Ayam Panggang', '烤鸡胸', ARRAY['chicken breast', 'grilled chicken'], ARRAY[], 'western', 12, 'international'),
+  ('Grilled Chicken Breast', 'Dada Ayam Panggang', '烤鸡胸', ARRAY['chicken breast', 'grilled chicken'], ARRAY[]::text[], 'western', 12, 'international'),
   ('Sirloin Steak', 'Steak Sirloin', '西冷牛排', ARRAY['steak', 'beef steak'], ARRAY['beef'], 'western', 14, 'international'),
   ('Club Sandwich', 'Club Sandwich', '俱乐部三明治', ARRAY['triple decker', 'chicken sandwich'], ARRAY['gluten', 'dairy', 'eggs'], 'western', 10, 'international'),
   ('Mushroom Soup', 'Sup Cendawan', '蘑菇汤', ARRAY['cream of mushroom', 'mushroom soup'], ARRAY['dairy'], 'western', 8, 'international')
