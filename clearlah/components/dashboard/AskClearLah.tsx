@@ -3,9 +3,9 @@
 import { useState, useRef, useCallback } from "react";
 
 const SUGGESTIONS = [
+  "Why is today high risk for me?",
   "Can I eat laksa today?",
   "What triggered my last flare?",
-  "Is today a high-risk day for me?",
   "Which hawker dishes should I avoid?",
 ] as const;
 

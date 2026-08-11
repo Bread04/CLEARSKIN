@@ -27,9 +27,10 @@ function buildAskSystemPrompt(
   logCount: number,
   triggerSummary: string,
   weatherSummary: string,
-  recentFoods: string
+  recentFoods: string,
+  detailedEvidence: string
 ): string {
-  return `You are ClearLah's AI health detective — a warm, knowledgeable assistant for Singaporeans managing chronic health conditions.
+  return `You are ClearLah's AI health detective — a warm, knowledgeable assistant for Singaporeans managing chronic health conditions. You have access to the user's actual log data and can cite specific days, scores, and patterns.
 
 USER PROFILE:
 - Conditions: ${conditions.length > 0 ? conditions.join(", ") : "not specified"}
@@ -39,6 +40,9 @@ USER PROFILE:
 THEIR TRIGGER PATTERNS (from ${logCount} days of data):
 ${triggerSummary || "Not enough data yet — encourage the user to keep logging."}
 
+DETAILED LOG EVIDENCE (for answering "why" or "explain" questions):
+${detailedEvidence || "No detailed logs available yet."}
+
 TODAY'S WEATHER IN SINGAPORE:
 ${weatherSummary}
 
@@ -47,8 +51,10 @@ ${recentFoods || "No food data available yet."}
 
 RULES:
 - Be specific and personal — reference their actual data, not generic advice.
+- When answering "why" questions, cite specific dates, severity scores, and the exact mechanism (e.g. "On Aug 7, you ate laksa and your skin score hit 8/10 by evening — that's a 6-8 hour delay, which is why food diaries miss it").
 - If they ask about a specific hawker dish, mention relevant allergens and whether it appears in their trigger patterns.
-- If they ask "is today a good day for X?", cross-reference weather + their triggers.
+- If they ask "is today a good day for X?", cross-reference weather + their triggers and cite the evidence.
+- ALWAYS mention the TIME DELAY when discussing food triggers — help users understand that flares often come hours after eating, not immediately.
 - Use gentle Singlish where natural (lah, sia, can, cannot) but keep it professional.
 - NEVER make medical claims or diagnoses. Frame everything as patterns and observations.
 - If you don't have enough data to answer confidently, say so honestly and encourage more logging.
@@ -113,13 +119,28 @@ export async function POST(request: Request) {
       .slice(0, 15)
       .join(", ");
 
+    const detailedEvidence = logEntries
+      .slice(0, 14)
+      .map((e) => {
+        const date = new Date(e.logged_at).toLocaleDateString("en-SG", { day: "numeric", month: "short" });
+        const foods = e.food.items.map((i) => i.name).join(", ") || "nothing logged";
+        const skinScore = e.symptoms.skin ? `skin ${e.symptoms.skin}/10` : "";
+        const humidity = e.weather_snapshot ? `humidity ${e.weather_snapshot.humidity}%` : "";
+        const sleep = e.lifestyle.sleep_hours ? `sleep ${e.lifestyle.sleep_hours}h` : "";
+        const stress = e.lifestyle.stress_level ? `stress ${e.lifestyle.stress_level}/5` : "";
+        const relevant = [skinScore, humidity, sleep, stress].filter(Boolean).join(", ");
+        return `${date}: ate [${foods}]${relevant ? ` | ${relevant}` : ""}`;
+      })
+      .join("\n");
+
     const systemPrompt = buildAskSystemPrompt(
       conditions,
       allergens,
       logCount,
       triggerSummary,
       weatherSummary,
-      recentFoods
+      recentFoods,
+      detailedEvidence
     );
 
     const controller = new AbortController();

@@ -49,6 +49,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
   const [questionMode, setQuestionMode] = useState<QuestionMode>("none");
   const [questionSkipped, setQuestionSkipped] = useState(false);
   const [parsedLog, setParsedLog] = useState<ParsedLog | null>(null);
+  const [lastUserMessage, setLastUserMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -224,6 +225,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
     setMessages((prev) => [...prev, userMessage]);
     setInputValue("");
+    setLastUserMessage(text);
     setIsLoading(true);
 
     // Progressive question mode: route to profile API
@@ -408,6 +410,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
           <PreFillCard
             parsedLog={parsedLog}
             conditions={props.conditions}
+            userMessage={lastUserMessage}
             onConfirm={handlePreFillConfirm}
           />
         )}

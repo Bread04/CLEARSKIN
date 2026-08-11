@@ -79,16 +79,15 @@ Output Layer
 
 **Prompt-Driven AI Agent — The ClearLah Detective:**
 
-ClearLah's AI agent is the core intelligence, not an add-on. It performs three AI-native tasks no rule-based system can do:
+ClearLah's AI agent is the core intelligence, not an add-on. It performs AI-native tasks no rule-based system can do:
 
-1. **Natural Language Understanding** — user types *"Had laksa, quite stressed from work, skin super itchy tonight"* and the AI extracts structured condition-specific data across 5 pillars, understanding Singlish, food slang, and context that keyword matching would miss.
+1. **Natural Language Understanding** — user types *"Had laksa, quite stressed from work, skin super itchy tonight"* and the AI extracts structured condition-specific data across 5 pillars, understanding Singlish, food slang, and context that keyword matching would miss. The AI then asks *"Did I get this right?"* — and learns from corrections, improving accuracy over time.
 
-2. **Multi-Variable Correlation Reasoning** — after 7+ days of logs, the AI analyses cross-pillar patterns and generates plain-English detective-style insights like:
-   > *"Your worst flares happen when 2+ of these line up: humidity > 85%, shellfish within 8 hours, less than 6 hours sleep. This pattern appeared on 9 of 14 logged days (74% confidence). On high-humidity days, maybe swap your laksa for chicken rice, lah."*
+2. **Temporal Pattern Reasoning** — the AI detects that food triggers often have 6-12 hour delays (*"Your flares show up 6-8 hours after eating shellfish — that time lag is exactly why food diaries never caught this"*). This temporal reasoning separates ClearLah from every symptom tracker that only looks at same-day correlations.
 
-3. **Personalised Risk Assessment** — the AI cross-references each user's trigger profile against the 80+ hawker dish database to compute individual risk scores, turning generic allergen data into personal safety intelligence.
+3. **Multi-Variable Correlation with Explainability** — after 7+ days of logs, the AI analyses cross-pillar patterns and can answer *"Why is today high risk for me?"* by citing specific dates, severity scores, and the mechanism: *"On Aug 7, you ate laksa and your skin hit 8/10 by evening. Today's humidity matches that day's pattern at 88%. That combination appeared on 9 of your 14 log days."*
 
-4. **"Ask ClearLah" — the Conversational Agent** — users can ask free-text questions like *"Can I eat laksa today?"* or *"What triggered my last flare?"* and the AI agent cross-references their personal log history, trigger patterns, current NEA weather data, and hawker dish database to give a specific, personalised answer. This is the agent's most visible moment — a user talking to their own health detective and getting an answer only their data could produce.
+4. **"Ask ClearLah" Conversational Agent** — users ask free-text questions like *"Can I eat laksa today?"* and the AI cross-references their 14-day detailed log history, trigger patterns, current NEA weather, and hawker dish database to give a specific, personalised answer backed by cited evidence. The agent cites actual dates from the user's history — not generic advice.
 
 The key difference from a symptom tracker: **ClearLah's AI agent doesn't just record data — it builds a causal model of YOUR body.** Every day you log, the agent gets smarter. No competitor can replicate what your agent learned about you.
 

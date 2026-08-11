@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import type { ParseLogRequest, ParsedLog, ParseLogResponse } from "@/lib/types/database";
+import { createClient } from "@/lib/supabase/server";
+import { resolveApiUserId } from "@/lib/utils/user-server";
 import { UnauthenticatedError } from "@/lib/utils/demo";
 
 const AI_TIMEOUT_MS = 8000;
@@ -196,8 +198,41 @@ export async function POST(request: Request): Promise<NextResponse<ParseLogRespo
 
     const systemPrompt = buildSystemPrompt(conditions, knownAllergens);
 
+    let fewShotExamples = "";
+    try {
+      const supabase = await createClient();
+      const uid = await resolveApiUserId();
+      const { data: profile } = await supabase
+        .from("user_profiles")
+        .select("ai_feedback_log")
+        .eq("user_id", uid)
+        .maybeSingle();
+
+      const feedbackLog = (profile?.ai_feedback_log as Array<{
+        message: string;
+        parsed: Record<string, unknown>;
+        rating: string;
+        corrections: Record<string, unknown> | null;
+      }> | null) ?? [];
+
+      const corrections = feedbackLog
+        .filter((f) => f.rating === "inaccurate" && f.corrections)
+        .slice(0, 3);
+
+      if (corrections.length > 0) {
+        fewShotExamples = "\n\nRECENT CORRECTIONS (learn from these):\n" +
+          corrections.map((c) =>
+            `User said: "${c.message}"\nI parsed: ${JSON.stringify(c.parsed)}\nCorrected to: ${JSON.stringify(c.corrections)}`
+          ).join("\n\n");
+      }
+    } catch {
+      // not blocking — AI works fine without feedback history
+    }
+
+    const finalSystemPrompt = systemPrompt + fewShotExamples;
+
     const startTime = Date.now();
-    const aiResult = await callCodeBuddyAI(systemPrompt, message);
+    const aiResult = await callCodeBuddyAI(finalSystemPrompt, message);
     const duration = Date.now() - startTime;
 
     if (aiResult) {
