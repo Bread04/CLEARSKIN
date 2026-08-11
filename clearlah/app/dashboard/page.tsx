@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { requireOnboardedUserId } from "@/lib/utils/user-server";
 import { isHighRiskDay } from "@/lib/utils/trigger-match";
+import { isDemoMode } from "@/lib/utils/demo";
+import { cookies } from "next/headers";
 import DashboardClient from "@/components/dashboard/DashboardClient";
 
 export default async function DashboardPage() {
@@ -13,8 +15,15 @@ export default async function DashboardPage() {
     .eq("user_id", userId)
     .maybeSingle();
 
-  const today = new Date().toISOString().split("T")[0];
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+  const demoOffset = isDemoMode()
+    ? parseInt((await cookies()).get("clearlah_demo_day_offset")?.value ?? "0", 10) || 0
+    : 0;
+  const baseDate = new Date();
+  if (demoOffset > 0) baseDate.setDate(baseDate.getDate() + demoOffset);
+  const today = baseDate.toISOString().split("T")[0];
+  const yesterdayDate = new Date(today + "T00:00:00");
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yesterday = yesterdayDate.toISOString().split("T")[0];
 
   let streak = profile?.streak ?? 0;
   if (profile?.streak_last_date && profile.streak_last_date < yesterday) {

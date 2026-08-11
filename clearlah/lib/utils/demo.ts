@@ -11,6 +11,21 @@ import {
 
 export const DEMO_USER_ID = "00000000-0000-0000-0000-000000000001";
 
+const DEMO_DAY_OFFSET_KEY = "clearlah_demo_day_offset";
+
+function getCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(
+    new RegExp(`(?:^|;\\s*)${name}=([^;]*)`)
+  );
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function setCookie(name: string, value: string): void {
+  if (typeof document === "undefined") return;
+  document.cookie = `${name}=${value}; Path=/; Max-Age=86400; SameSite=Lax`;
+}
+
 /**
  * Typed error for unauthenticated API route calls.
  * API routes should catch this and return a 401, not let it bubble as a 500.
@@ -79,4 +94,59 @@ export function getAnonymousUserId(): string {
   const id = isValidAnonId(legacy) ? legacy : crypto.randomUUID();
   writeAnonCookie(id);
   return id;
+}
+
+/**
+ * Returns the number of days to offset from today in demo mode.
+ * Stored in a cookie so both server and client can read it.
+ * Returns 0 outside demo mode or if not set.
+ */
+export function getDemoDayOffset(): number {
+  if (!isDemoMode()) return 0;
+  try {
+    const raw = getCookie(DEMO_DAY_OFFSET_KEY);
+    const n = parseInt(raw ?? "0", 10);
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  } catch { return 0; }
+}
+
+/**
+ * Returns a Date object representing the simulated "today" in demo mode.
+ * Falls back to the real Date when not in demo mode.
+ */
+export function getDemoDate(): Date {
+  const offset = getDemoDayOffset();
+  if (offset <= 0) return new Date();
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  return d;
+}
+
+/**
+ * Returns "YYYY-MM-DD" for the simulated today in demo mode.
+ * Falls back to the real today when not in demo mode.
+ */
+export function getDemoToday(): string {
+  return getDemoDate().toISOString().split("T")[0];
+}
+
+/**
+ * Increments the demo day offset by 1 and returns the new Date.
+ * Only affects demo mode. Writes to cookie so server components can read it.
+ */
+export function advanceDemoDay(): Date {
+  if (!isDemoMode()) return new Date();
+  const next = getDemoDayOffset() + 1;
+  setCookie(DEMO_DAY_OFFSET_KEY, String(next));
+  return getDemoDate();
+}
+
+/**
+ * Returns the demo date string to send as part of the log save request.
+ * Only returns a value in demo mode when an offset is active.
+ */
+export function getDemoDateForSave(): string | null {
+  if (!isDemoMode()) return null;
+  const offset = getDemoDayOffset();
+  return offset > 0 ? getDemoToday() : null;
 }

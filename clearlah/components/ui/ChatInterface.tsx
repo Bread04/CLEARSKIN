@@ -5,7 +5,7 @@ import type { ParsedLog } from "@/lib/types/database";
 import LocationPermissionBubble from "@/components/ui/LocationPermissionBubble";
 import ProgressiveQuestionBubble from "@/components/ui/ProgressiveQuestionBubble";
 import PreFillCard from "@/components/ui/PreFillCard";
-import { isDemoMode } from "@/lib/utils/demo";
+import { isDemoMode, getDemoDateForSave } from "@/lib/utils/demo";
 
 interface ChatMessage {
   id: string;
@@ -165,13 +165,17 @@ export default function ChatInterface(props: ChatInterfaceProps) {
       const weatherRes = await fetch("/api/weather");
       const weatherSnapshot = await weatherRes.json();
 
+      const saveBody: Record<string, unknown> = {
+        log: logData,
+        weather_snapshot: weatherSnapshot,
+      };
+      const demoDate = getDemoDateForSave();
+      if (demoDate) saveBody.demo_date = demoDate;
+
       const saveRes = await fetch("/api/logs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          log: logData,
-          weather_snapshot: weatherSnapshot,
-        }),
+        body: JSON.stringify(saveBody),
       });
 
       if (saveRes.ok) {

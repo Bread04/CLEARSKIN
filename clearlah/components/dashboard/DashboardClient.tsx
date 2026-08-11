@@ -7,6 +7,7 @@ import BuildingPicture from "@/components/dashboard/BuildingPicture";
 import HighRiskDayAlert from "@/components/dashboard/HighRiskDayAlert";
 import AskClearLah from "@/components/dashboard/AskClearLah";
 import MilestoneModal from "@/components/ui/MilestoneModal";
+import { isDemoMode, getDemoDayOffset, advanceDemoDay } from "@/lib/utils/demo";
 
 interface DashboardClientProps {
   streak: number;
@@ -59,6 +60,19 @@ export default function DashboardClient({
     }
   };
 
+  const handleSkipDay = () => {
+    advanceDemoDay();
+    window.location.reload();
+  };
+
+  const demoOffset = getDemoDayOffset();
+  const demoToday = (() => {
+    if (!isDemoMode()) return null;
+    const d = new Date();
+    d.setDate(d.getDate() + demoOffset);
+    return d.toLocaleDateString("en-SG", { weekday: "short", day: "numeric", month: "short" });
+  })();
+
   if (logCount === 0) {
     return (
       <main className="min-h-screen bg-neutral-50 px-6 py-10">
@@ -92,6 +106,26 @@ export default function DashboardClient({
           <h1 className="text-h2 text-neutral-900">ClearLah</h1>
           <StreakBadge streak={streak} aria-live="polite" />
         </div>
+
+        {isDemoMode() && (
+          <div className="flex items-center justify-between bg-accent-yellow/5 border border-accent-yellow/20 rounded-lg px-4 py-2">
+            <span className="text-body-sm text-neutral-600">
+              Demo Day: <span className="font-semibold text-neutral-800">{demoToday}</span>
+              {demoOffset > 0 && <span className="text-caption-sm text-neutral-400 ml-1">(+{demoOffset}d)</span>}
+            </span>
+            <button
+              type="button"
+              onClick={handleSkipDay}
+              className="btn-ghost text-body-sm text-primary-sage font-medium rounded-full px-3 py-1 flex items-center gap-1"
+            >
+              Next Day
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {highRiskActive && !dismissed && (
           <HighRiskDayAlert

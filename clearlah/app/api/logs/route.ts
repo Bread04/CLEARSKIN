@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { UnauthenticatedError } from "@/lib/utils/demo";
+import { UnauthenticatedError, isDemoMode } from "@/lib/utils/demo";
 import { resolveApiUserId } from "@/lib/utils/user-server";
 import type {
   ParsedLog,
@@ -12,6 +12,7 @@ interface SaveLogRequest {
   log: ParsedLog;
   weather_snapshot: WeatherSnapshot;
   user_id?: string;
+  demo_date?: string;
 }
 
 export async function POST(request: Request) {
@@ -38,7 +39,10 @@ export async function POST(request: Request) {
     }
 
     const { log, weather_snapshot } = body;
-    const today = new Date().toISOString().split("T")[0];
+    const demoDate = isDemoMode() && typeof body.demo_date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(body.demo_date)
+      ? body.demo_date
+      : null;
+    const today = demoDate ?? new Date().toISOString().split("T")[0];
 
     const entry = {
       user_id: userId,
@@ -73,9 +77,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split("T")[0];
+    const yesterdayDate = new Date(today + "T00:00:00");
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+    const yesterdayStr = yesterdayDate.toISOString().split("T")[0];
 
     const { data: profile } = await supabase
       .from("user_profiles")
