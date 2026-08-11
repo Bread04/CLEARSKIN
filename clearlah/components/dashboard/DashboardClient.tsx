@@ -65,13 +65,18 @@ export default function DashboardClient({
     window.location.reload();
   };
 
-  const demoOffset = getDemoDayOffset();
-  const demoToday = (() => {
-    if (demoOffset <= 0) return null;
-    const d = new Date();
-    d.setDate(d.getDate() + demoOffset);
-    return d.toLocaleDateString("en-SG", { weekday: "short", day: "numeric", month: "short" });
-  })();
+  const [demoOffset, setDemoOffset] = useState(0);
+  const [demoToday, setDemoToday] = useState<string | null>(null);
+
+  useEffect(() => {
+    const offset = getDemoDayOffset();
+    setDemoOffset(offset);
+    if (offset > 0) {
+      const d = new Date();
+      d.setDate(d.getDate() + offset);
+      setDemoToday(d.toLocaleDateString("en-SG", { weekday: "short", day: "numeric", month: "short" }));
+    }
+  }, []);
 
   if (logCount === 0) {
     return (
