@@ -54,14 +54,16 @@ Singaporeans suffering from eczema, food allergies, IBS, and asthma spend months
 | 2 | Conversational AI logging ("tell me how you feel today") | P0 |
 | 3 | Daily log dashboard — 5 pillars: Food + Lifestyle + Skincare + Symptoms + Weather | P0 |
 | 4 | Auto NEA weather integration (with mock fallback) | P0 |
-| 5 | AI multi-variable pattern detection engine | P0 |
+| 5 | AI multi-variable pattern detection engine with temporal reasoning | P0 |
 | 6 | Hawker Dish Risk Scorer (80+ dishes, multilingual search) | P0 |
 | 7 | Progressive insights from Day 1 | P0 |
 | 8 | Medical disclaimer throughout UI | P0 |
 | 9 | Pre-seeded demo account (14 days realistic data) | P0 |
-| 10 | "High Risk Day" proactive alert | P1 |
-| 11 | Doctor-ready trigger summary report | P1 |
-| 12 | Smart meal suggestions + logging streak | P1 |
+| 10 | "Ask ClearLah" conversational agent — free-text Q&A with personal evidence | P0 |
+| 11 | AI feedback learning — thumbs up/down on parse accuracy, few-shot improvement | P0 |
+| 12 | "High Risk Day" proactive alert | P1 |
+| 13 | Doctor-ready trigger summary report | P1 |
+| 14 | Smart meal suggestions + logging streak | P1 |
 
 ### ❌ OUT OF SCOPE (Post-hackathon)
 - Native mobile app (iOS/Android)
@@ -249,11 +251,11 @@ User requests report
 |---|---|---|
 | 0:00–0:30 | Personal story | "I have eczema. I spent 3 years guessing my triggers. ClearLah found them in 3 weeks." |
 | 0:30–1:00 | Onboarding | Select eczema + self-tracking; grant location; see personalised dashboard |
-| 1:00–2:00 | Conversational log | Type "Had laksa, stressed from work, skin itchy tonight" — watch AI auto-fill |
-| 2:00–3:00 | AI Insights | Show multi-variable insight from pre-seeded 14-day demo data |
-| 3:00–4:00 | Hawker Decoder | Type "Laksa" / "拉沙" — see allergens + personal risk score + High Risk Day alert |
+| 1:00–2:00 | Conversational log | Type "Had laksa, stressed from work, skin itchy tonight" — watch AI auto-fill, then give feedback |
+| 2:00–3:00 | AI Insights | Show multi-variable insight with temporal reasoning from pre-seeded 14-day demo data |
+| 3:00–4:00 | Ask ClearLah + Hawker Decoder | Type "Why is today high risk for me?" — AI cites specific dates and evidence. Then type "Laksa" / "拉沙" — see allergens + personal risk score |
 | 4:00–4:40 | Doctor report | Generate and show PDF export with disclaimer |
-| 4:40–5:00 | Close | "Built for Singapore. Replicable across SEA. Your personal health detective — lah." |
+| 4:40–5:00 | Close | "Built for Singapore. Replicable across SEA. Your personal AI health detective — lah." |
 
 > **Rule:** First 90 seconds must stand alone as a complete pitch if judges are pressed for time.
 
@@ -278,8 +280,8 @@ User requests report
 
 | Dimension | Weight | How ClearLah scores | Key proof point |
 |---|---|---|---|
-| AI Innovation | 30% | 9/10 | Conversational AI parser + multi-variable correlation across 5 pillars + NEA auto-integration |
-| Technical Excellence | 20% | 8/10 | Live API, conversational NLP, clean architecture on CodeBuddy |
+| AI Innovation | 30% | 9.5/10 | Conversational AI parser + temporal reasoning + feedback learning + Ask ClearLah agent that cites personal evidence + multi-variable correlation across 5 pillars + NEA auto-integration |
+| Technical Excellence | 20% | 8.5/10 | 4 AI endpoints working as a system (parse → feedback → learn → ask), clean architecture, deterministic fallbacks |
 | User Experience & Demo | 25% | 9.5/10 | Personal story opener, conversational logging, Hawker Decoder wow-moment |
 | Business Value & Viability | 25% | 9/10 | 1 in 5 SG residents affected; personal data moat; replicable SEA model; freemium + clinic partnerships |
 

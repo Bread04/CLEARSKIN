@@ -21,9 +21,15 @@ Next.js 14 App Router. The browser owns UI state only. All external calls (AI, w
 **Rule:** Next.js 14+ App Router is the one codebase. No separate Express/FastAPI server. All API surface lives under `app/api/`.
 
 ### AD-2 — AI Layer
-**Binds:** How conversational parsing and pattern narration are invoked.
+**Binds:** How conversational parsing, pattern narration, free-form Q&A, and feedback learning are invoked.
 **Prevents:** API keys leaking to the browser; AI calls made directly from client components.
-**Rule:** CodeBuddy AI API is called exclusively from Next.js API routes (`/api/ai/parse-log`, `/api/ai/narrate-insights`). Client components call these routes — never the CodeBuddy API directly.
+**Rule:** CodeBuddy AI API is called exclusively from Next.js API routes (`/api/ai/parse-log`, `/api/ai/narrate-insights`, `/api/ai/ask`, `/api/ai/feedback`). Client components call these routes — never the CodeBuddy API directly.
+
+The AI agent has four distinct capabilities:
+1. **Parse** (`/api/ai/parse-log`): Natural language → structured log entry. Learns from user corrections via feedback few-shot examples.
+2. **Narrate** (`/api/ai/narrate-insights`): Correlation results → plain-English insight cards with temporal reasoning (detects delayed food reactions).
+3. **Ask** (`/api/ai/ask`): Free-text Q&A that cross-references personal logs, trigger patterns, live NEA weather, and hawker DB. Cites specific dates and evidence.
+4. **Feedback** (`/api/ai/feedback`): Thumbs up/down on AI parsing accuracy. Corrections stored and fed back as few-shot learning examples to improve future parses.
 
 ### AD-3 — Data Store
 **Binds:** Where all user logs, profiles, trigger data, and hawker saves are persisted.
@@ -35,7 +41,9 @@ Next.js 14 App Router. The browser owns UI state only. All external calls (AI, w
 ### AD-4 — Pattern Detection
 **Binds:** How trigger correlations are computed and surfaced.
 **Prevents:** Unpredictable AI-only correlation quality; demo failure if AI is slow or unavailable.
-**Rule:** A JavaScript correlation engine (`lib/pattern-engine.ts`) computes frequency analysis across all 5 pillars and produces a structured `CorrelationResult[]`. CodeBuddy AI narrates these results into plain English. If AI is unavailable, the computed results are displayed as-is using a template fallback. AI never receives raw logs for pattern finding — only pre-computed results for narration.
+**Rule:** A JavaScript correlation engine (`lib/pattern-engine.ts`) computes frequency analysis across all 5 pillars and produces a structured `CorrelationResult[]`. CodeBuddy AI narrates these results into plain English with **temporal reasoning** (detecting delayed food reactions, not just same-day correlations). If AI is unavailable, the computed results are displayed as-is using a template fallback. AI never receives raw logs for pattern finding — only pre-computed results for narration.
+
+**Feedback loop:** `/api/ai/feedback` stores user corrections on AI parse accuracy. `/api/ai/parse-log` reads recent inaccurate corrections and includes them as few-shot examples in subsequent system prompts. This means the AI agent **learns and improves** for each individual user over time.
 
 **Minimum data threshold:** The pattern engine requires a minimum of **7 `LogEntry` rows** before producing `CorrelationResult[]`. Below this threshold, the engine returns `{ insufficient_data: true, days_logged: N, days_remaining: 7 - N }`. The UI renders a streak/progress state ("X more days to unlock your trigger report") — never an error.
 
@@ -56,13 +64,17 @@ Next.js 14 App Router. The browser owns UI state only. All external calls (AI, w
 ```
 Browser (React Client Components)
     └── calls → Next.js API Routes only
-                    ├── /api/ai/*        → CodeBuddy AI API
-                    ├── /api/weather     → NEA API | Mock
-                    └── /api/*           → Supabase (via server SDK)
+                    ├── /api/ai/parse-log    → CodeBuddy AI API (+ feedback few-shot learning)
+                    ├── /api/ai/narrate-insights → CodeBuddy AI API (temporal reasoning prompt)
+                    ├── /api/ai/ask          → CodeBuddy AI API (cross-references logs + weather + hawker DB)
+                    ├── /api/ai/feedback     → Supabase (stores corrections for parse-log learning)
+                    ├── /api/weather         → NEA API | Mock
+                    └── /api/*               → Supabase (via server SDK)
 
 lib/pattern-engine.ts (pure TS, no I/O)
     └── called by → /api/insights/correlate
     └── output →   CorrelationResult[]  → /api/ai/narrate-insights
+                                       → /api/ai/ask (detailed evidence)
 
 demo-data.json (static fixture)
     └── loaded by → /api/demo/seed  (POST, idempotent)
@@ -159,6 +171,7 @@ type WeatherSnapshot = {
 - **Styling:** Tailwind CSS
 - **Supabase client:** `@supabase/supabase-js` v2
 - **DB tables:** `users`, `log_entries`, `user_profiles`, `hawker_dishes`, `saved_dishes`
+- **user_profiles extended fields:** `ai_feedback_log` (jsonb array — user corrections for AI parse learning)
 - **Hawker DB:** 80+ dishes seeded via `supabase/seed.sql`, each with allergen tags and multilingual aliases (EN / Malay / Chinese)
 - **Demo fixture:** `data/demo-data.json` — 14 days of realistic log entries for a demo eczema user
 

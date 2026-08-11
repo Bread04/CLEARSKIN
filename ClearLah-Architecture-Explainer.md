@@ -12,7 +12,9 @@ ClearLah is a personal eczema trigger tracker for Singapore. It helps users disc
 The architecture is designed around three constraints:
 1. **7 days to build** — every decision favours speed and reliability over sophistication
 2. **Live demo on Day 7** — the system must not fail publicly; every external dependency has a fallback
-3. **Built on CodeBuddy AI** — AI is a first-class citizen, not an afterthought
+3. **Built on CodeBuddy AI** — AI is a first-class citizen: the AI agent parses, reasons, learns from feedback, explains with evidence, and answers free-form questions
+
+The AI agent is not a feature layer — it **is** the product. Four AI endpoints work together as an intelligent system: parsing natural language logs, narrating pattern insights with temporal reasoning, learning from user corrections via feedback, and answering free-text questions by cross-referencing personal data, live weather, and hawker dish knowledge.
 
 ---
 
@@ -94,7 +96,7 @@ sequenceDiagram
     UI->>U: "Log saved ✓"
 ```
 
-**Key design choice:** AI parses the free-text input into a structured form, but the user always confirms before saving. AI is a convenience layer, not an autonomous actor.
+**Key design choice:** AI parses the free-text input into a structured form, and the user confirms accuracy with thumbs-up/down feedback. Corrections are stored and fed back as few-shot examples — the AI agent **learns** from every user interaction and improves over time.
 
 ---
 
@@ -194,6 +196,71 @@ The client always gets a `WeatherSnapshot` — it never knows whether the data i
 
 ---
 
+### 6. Ask ClearLah — Conversational Agent Q&A
+
+User asks free-text questions; the AI cross-references personal data, triggers, weather, and hawker knowledge:
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant UI as React UI (AskClearLah card)
+    participant Ask as /api/ai/ask
+    participant DB as Supabase
+    participant Engine as pattern-engine.ts
+    participant Weather as /api/weather
+    participant CB as CodeBuddy AI
+
+    U->>UI: Types "Can I eat laksa today?"
+    UI->>Ask: POST {question: "Can I eat laksa today?"}
+    Ask->>DB: Fetch 30 log entries + profile + triggers
+    Ask->>Engine: detectCorrelations(logEntries)
+    Ask->>Weather: Fetch live NEA weather
+    par Build system prompt
+        Ask->>Ask: Compile: conditions, allergens, trigger patterns,<br/>14-day detailed evidence (dates + scores + weather),<br/>today's weather, recent foods
+    end
+    Ask->>CB: System prompt with full context + user question
+    CB-->>Ask: Personalised answer citing specific dates and mechanisms
+    Ask-->>UI: {answer: "Today's humidity is 88%..."}
+    UI->>U: Shows answer card with cited evidence
+```
+
+**Key design choice:** The AI receives the user's actual 14-day log data (dates, foods, symptom scores, weather) so it can cite specific evidence rather than giving generic advice. This is what makes the agent feel intelligent — it references the user's real history.
+
+---
+
+### 7. AI Feedback Learning Loop
+
+Every AI parse is rated; corrections feed back into future prompts:
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant PreFill as PreFillCard
+    participant Feedback as /api/ai/feedback
+    participant DB as Supabase
+    participant Parse as /api/ai/parse-log
+    participant CB as CodeBuddy AI
+
+    Note over U,CB: Day 1 — User logs food, AI parses incorrectly
+    U->>PreFill: AI says "chicken rice" but user ate "laksa"
+    PreFill->>U: Shows parsed result with "Fix it" button
+    U->>PreFill: Taps "Fix it", corrects to "laksa"
+    PreFill->>Feedback: POST {rating: "inaccurate", corrections: {...}}
+    Feedback->>DB: Store correction in user_profiles.ai_feedback_log
+
+    Note over U,CB: Day 5 — User logs similar meal
+    U->>Parse: "Had laksa again today"
+    Parse->>DB: Fetch recent inaccurate corrections
+    DB-->>Parse: [{message: "had laksa", corrections: {food: ["laksa"]}}]
+    Parse->>CB: System prompt includes few-shot correction examples
+    CB-->>Parse: Correctly parses "laksa"
+    Parse-->>U: Accurate pre-fill — AI has learned
+```
+
+**Key design choice:** Feedback is non-blocking — if the feedback API fails, the log save still proceeds. The AI improves passively over time, never breaking the core logging flow.
+
+---
+
 ## Data Model
 
 ```mermaid
@@ -264,8 +331,10 @@ clearlah/
 │   │   └── export/               # PDF export
 │   ├── api/
 │   │   ├── ai/
-│   │   │   ├── parse-log/        # POST — free-text → structured LogEntry
-│   │   │   └── narrate-insights/ # POST — CorrelationResult[] → insight text
+│   │   │   ├── parse-log/        # POST — free-text → structured LogEntry (with feedback few-shot learning)
+│   │   │   ├── narrate-insights/ # POST — CorrelationResult[] → insight text (with temporal reasoning)
+│   │   │   ├── ask/              # POST — free-text Q&A cross-referencing logs + weather + hawker DB
+│   │   │   └── feedback/         # POST — stores user corrections for AI learning
 │   │   ├── weather/              # GET — NEA proxy with mock fallback
 │   │   ├── logs/                 # GET/POST — log CRUD
 │   │   ├── insights/
@@ -307,11 +376,12 @@ clearlah/
 
 | Risk | Mitigation |
 |---|---|
-| CodeBuddy AI is slow during demo | Pattern engine produces results independently; AI narration has a template fallback |
+| CodeBuddy AI is slow during demo | Pattern engine produces results independently; AI narration has a template fallback; Ask endpoint returns friendly degradation message |
 | NEA API is unavailable | `USE_MOCK_WEATHER=true` env flag — flip it before the demo |
 | Supabase free tier rate limits | Demo uses a single demo user; load is minimal |
-| AI parses log entry incorrectly | User always sees and confirms the pre-filled form before saving |
+| AI parses log entry incorrectly | User always sees and confirms the pre-filled form before saving; feedback learning improves accuracy over time |
 | Demo data is corrupted | `/api/demo/seed` is idempotent — reset takes 2 seconds |
+| AI answers feel generic, not personal | Ask endpoint pushes 14-day detailed evidence (dates, scores, weather) so AI cites specific user history |
 
 ---
 

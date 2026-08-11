@@ -2,7 +2,7 @@
 
 > Track your triggers. Live with less flare.
 
-AI-powered symptom and trigger tracking for Singaporeans living with eczema, IBS, food allergies, and asthma.
+ClearLah is an **AI health detective agent** for Singaporeans living with eczema, IBS, food allergies, and asthma. The AI agent parses natural language logs, detects trigger patterns with temporal reasoning, learns from user feedback, and answers free-form questions by cross-referencing personal data against live NEA weather and 80+ hawker dishes — all citing specific evidence from your own history.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=REPO_URL_HERE)
 
@@ -92,7 +92,7 @@ curl -X POST http://localhost:3000/api/demo/seed
 - **Framework**: Next.js 14 (App Router, TypeScript strict mode)
 - **Styling**: Tailwind CSS with ClearLah design token system
 - **Database**: Supabase (PostgreSQL + Row Level Security)
-- **AI**: CodeBuddy LLM API for conversational log parsing and insight narration
+- **AI**: CodeBuddy LLM API — 4 AI agent endpoints: `/api/ai/parse-log` (NL parsing with feedback learning), `/api/ai/narrate-insights` (temporal reasoning), `/api/ai/ask` (conversational agent Q&A), `/api/ai/feedback` (correction learning loop)
 - **Deployment**: Vercel
 
 ---
@@ -102,9 +102,22 @@ curl -X POST http://localhost:3000/api/demo/seed
 ```
 clearlah/
 ├── app/                   # Next.js App Router pages & API routes
-│   ├── api/               # API routes (weather, demo seed, AI)
-│   ├── dashboard/         # Dashboard page
-│   └── layout.tsx         # Root layout (Inter font, demo badge)
+│   ├── api/               # API routes
+│   │   ├── ai/
+│   │   │   ├── parse-log/      # POST — natural language → structured log (with feedback learning)
+│   │   │   ├── narrate-insights/ # POST — correlations → plain-English insights (temporal reasoning)
+│   │   │   ├── ask/            # POST — free-text Q&A (cross-references logs + weather + hawker DB)
+│   │   │   └── feedback/       # POST — stores user corrections for AI learning
+│   │   ├── weather/       # Singapore weather (NEA API + mock fallback)
+│   │   ├── demo/seed/     # POST — seed 14 days of demo data (idempotent)
+│   │   ├── hawker/        # GET/POST/DELETE — hawker dish search + food guide
+│   │   ├── insights/      # GET — trigger pattern detection
+│   │   └── logs/          # GET/POST — daily log CRUD
+│   ├── dashboard/         # Dashboard page (streak, weather, Ask ClearLah, High Risk Day)
+│   ├── log/               # Conversational daily log entry
+│   ├── insights/          # Trigger insights + pattern cards
+│   ├── hawker/            # Hawker food safety checker
+│   └── onboarding/        # Onboarding (steps 1–3)
 ├── components/            # Shared React components
 ├── lib/
 │   ├── supabase/          # Supabase client helpers (server.ts, client.ts)

@@ -24,8 +24,9 @@ status: complete
 | E4  | Dashboard & Streak System                | 5       | P1       |
 | E5  | Insights, Pattern Engine & Doctor Report | 6       | P1       |
 | E6  | Hawker Food Safety Checker               | 5       | P1       |
+| E7  | AI Agent Intelligence Showcase           | 3       | P0       |
 
-**Total: 6 epics, 32 user stories**
+**Total: 7 epics, 35 user stories**
 
 ---
 
@@ -780,6 +781,72 @@ status: complete
 - [ ] No Supabase client credentials exposed to browser (NFR9)
 
 **FR Covered:** FR28 | **NFR Covered:** NFR9
+
+---
+
+## E7 — AI Agent Intelligence Showcase
+
+**Goal:** Elevate ClearLah's AI from a parser/narrator utility into a genuinely intelligent agent that reasons temporally, learns from feedback, and answers free-form questions with cited personal evidence. These capabilities directly target the "AI Innovation" (30%) and "Technical Excellence" (20%) judging criteria.
+
+**Definition of Done:** Ask ClearLah answers questions citing specific dates and evidence; AI feedback learning stores corrections and improves future parses; temporal reasoning detects delayed food reactions in narration.
+
+---
+
+### E7-S1 — Ask ClearLah Conversational Agent
+
+**As a** user with an established trigger profile,
+**I want** to ask free-text questions like "Can I eat laksa today?" or "Why is today high risk?" and get personalised answers backed by my own data,
+**so that** the AI agent feels like a personal health detective, not a form with AI features.
+
+**Acceptance Criteria:**
+- [x] `app/api/ai/ask/route.ts` handles POST with `{ question: string }`
+- [x] Fetches user's recent 30 log entries, trigger correlations via pattern engine, current NEA weather
+- [x] Builds rich system prompt with: user profile, trigger patterns, 14-day detailed evidence (dates + foods + symptom scores + weather + sleep + stress), today's weather, recent foods
+- [x] AI instructed to cite specific dates and mechanisms when answering "why" questions
+- [x] AI instructed to mention time delay when discussing food triggers (temporal reasoning)
+- [x] `AskClearLah` dashboard component with suggestion chips, input field, "AI detective thinking…" loading state, and answer card
+- [x] Suggestion chips include "Why is today high risk for me?", "Can I eat laksa today?", "What triggered my last flare?", "Which hawker dishes should I avoid?"
+- [x] Graceful fallback when AI unavailable: friendly degradation message
+- [x] TypeScript compilation passes with zero errors
+
+**FR Covered:** NEW | **NFR Covered:** NFR9
+
+---
+
+### E7-S2 — AI Feedback Learning Loop
+
+**As a** user who has logged a day,
+**I want** to tell the AI whether its parsing was accurate and have it learn from my corrections,
+**so that** the AI agent improves its understanding of my language and food habits over time.
+
+**Acceptance Criteria:**
+- [x] `PreFillCard` shows three buttons: "Looks right — save" (thumbs up), "Fix it" (opens full form), "Not quite" (opens full form)
+- [x] `app/api/ai/feedback/route.ts` stores corrections in `user_profiles.ai_feedback_log` (max 20 entries)
+- [x] Feedback entry includes: original message, parsed result, rating (accurate/inaccurate), corrections if any, timestamp
+- [x] `app/api/ai/parse-log/route.ts` fetches recent corrections and includes them as few-shot examples in system prompt
+- [x] Maximum 3 inaccurate corrections used as few-shot examples (to avoid prompt bloat)
+- [x] Feedback is non-blocking — log save always proceeds even if feedback API fails
+- [x] After feedback: thank-you message shown ("Thanks! This helps me learn your patterns." / "Got it — I'll do better next time.")
+- [x] "AI Analysis" badge on InsightCard makes AI attribution visible
+
+**FR Covered:** NEW | **NFR Covered:** NFR9
+
+---
+
+### E7-S3 — Temporal Reasoning in AI Narration
+
+**As a** user reviewing my insights,
+**I want** the AI to detect and explain delayed food reactions (6-12 hour lag),
+**so that** I understand why food diaries previously failed to catch my triggers and the AI's intelligence is clearly demonstrated.
+
+**Acceptance Criteria:**
+- [x] `app/api/ai/narrate-insights/route.ts` system prompt instructs AI to look for delayed reactions
+- [x] AI narration includes temporal mechanism: "Your flares show up 6-8 hours after eating — that time lag is why food diaries never caught this"
+- [x] `app/api/ai/ask/route.ts` system prompt includes temporal reasoning instruction for Q&A
+- [x] AI narration prompt updated to produce confident, specific 2-3 sentence explanations with mechanism, evidence, and actionable takeaway
+- [x] Singlish sparingly used only for takeaway sentences
+
+**FR Covered:** NEW
 
 ---
 

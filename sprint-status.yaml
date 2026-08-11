@@ -103,3 +103,10 @@ development_status:
   6-4-my-food-guide-section: done
   6-5-hawker-save-remove-api-routes: done
   epic-6-retrospective: optional
+
+  # ── Epic 7: AI Agent Intelligence Showcase ────────────────────────────────
+  epic-7: done
+  7-1-ask-clearlah-conversational-agent: done
+  7-2-ai-feedback-learning-loop: done
+  7-3-temporal-reasoning-in-ai-narration: done
+  epic-7-retrospective: optional
