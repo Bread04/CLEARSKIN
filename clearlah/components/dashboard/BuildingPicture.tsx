@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProgressRing from "@/components/ui/ProgressRing";
 
 interface BuildingPictureProps {
@@ -20,7 +20,11 @@ export default function BuildingPicture({
   logCount,
   singlishUnlocked,
 }: BuildingPictureProps) {
-  const [messageIndex] = useState(() => Math.floor(Math.random() * STANDARD_MESSAGES.length));
+  const [messageIndex, setMessageIndex] = useState(0);
+
+  useEffect(() => {
+    setMessageIndex(Math.floor(Math.random() * STANDARD_MESSAGES.length));
+  }, []);
 
   if (logCount === 0) {
     return (
