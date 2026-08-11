@@ -2,7 +2,7 @@
 
 > Track your triggers. Live with less flare.
 
-ClearLah is an **AI health detective agent** for Singaporeans living with eczema, IBS, food allergies, and asthma. The AI agent parses natural language logs, detects trigger patterns with temporal reasoning, learns from user feedback, and answers free-form questions by cross-referencing personal data against live NEA weather and 80+ hawker dishes — all citing specific evidence from your own history.
+ClearLah is an **AI health detective agent** for Singaporeans living with eczema, IBS, food allergies, and asthma. The AI agent parses natural language logs (food, lifestyle habits, symptoms), detects trigger patterns with temporal reasoning, learns from user feedback, and answers free-form questions by cross-referencing personal data against live NEA weather and 147 dishes (hawker centres, restaurant chains, international cuisine) — all citing specific evidence from your own history.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=REPO_URL_HERE)
 
@@ -125,8 +125,8 @@ clearlah/
 │   └── utils/             # Utility functions (demo.ts, cn.ts)
 ├── data/                  # Static data & demo seed JSON
 └── supabase/
-    ├── migrations/        # SQL migration files
-    └── seed.sql           # Hawker dish seed data (85 dishes)
+    ├── migrations/        # SQL migration files (3 migrations)
+    └── seed.sql           # Seed data (147 dishes across 19 categories)
 ```
 
 ---

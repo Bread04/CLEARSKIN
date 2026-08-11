@@ -136,9 +136,9 @@ sequenceDiagram
 
 ---
 
-### 3. Hawker Safety Check
+### 3. Food Safety Check (Hawker + Restaurant + International)
 
-User searches for a dish before ordering.
+User searches for a dish before ordering — covers hawker centres, restaurant chains, and international cuisines.
 
 ```mermaid
 sequenceDiagram
@@ -146,14 +146,14 @@ sequenceDiagram
     participant UI as React UI
     participant DB as Supabase
 
-    U->>UI: Types "char kway teow" (EN/Malay/Chinese)
-    UI->>DB: GET /api/hawker?q=char+kway+teow
-    Note over DB: Fuzzy search across<br/>dish names + multilingual aliases
-    DB-->>UI: {dish, allergens, risk_level}
+    U->>UI: Types "Big Mac" / "Pad Thai" / "Laksa"
+    UI->>DB: GET /api/hawker?q=big+mac
+    Note over DB: Fuzzy search across<br/>147 dishes × 19 categories<br/>× 3 food types (hawker/restaurant/international)
+    DB-->>UI: {dish, allergens, food_type, risk_level}
 
-    UI->>U: Shows allergen card + risk level
+    UI->>U: Shows dish card with food type badge<br/>(Hawker/Restaurant/International) + allergens + risk
     Note over UI: Compares against user's known triggers<br/>(from CorrelationResult cache)
-    UI->>U: "⚠️ Contains shellfish — a confirmed trigger for you"
+    UI->>U: "Contains shellfish — a confirmed trigger for you"
 ```
 
 ---

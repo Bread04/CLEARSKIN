@@ -25,8 +25,9 @@ status: complete
 | E5  | Insights, Pattern Engine & Doctor Report | 6       | P1       |
 | E6  | Hawker Food Safety Checker               | 5       | P1       |
 | E7  | AI Agent Intelligence Showcase           | 3       | P0       |
+| E8  | Lifestyle Habits & Food Expansion        | 2       | P1       |
 
-**Total: 7 epics, 35 user stories**
+**Total: 8 epics, 37 user stories**
 
 ---
 
@@ -845,6 +846,55 @@ status: complete
 - [x] `app/api/ai/ask/route.ts` system prompt includes temporal reasoning instruction for Q&A
 - [x] AI narration prompt updated to produce confident, specific 2-3 sentence explanations with mechanism, evidence, and actionable takeaway
 - [x] Singlish sparingly used only for takeaway sentences
+
+**FR Covered:** NEW
+
+---
+
+## E8 — Lifestyle Habits & Food Database Expansion
+
+**Goal:** Expand ClearLah's tracking beyond basic food logging by (a) capturing 4 additional lifestyle dimensions that affect chronic conditions, and (b) broadening the food database from 85 hawker-only dishes to 147 dishes spanning hawker centres, restaurant chains, and international cuisines.
+
+**Definition of Done:** AI agent extracts exercise, water, caffeine, and alcohol from free text; ManualLogForm and PreFillCard display these fields; food search returns dishes from all 3 food types with type badges.
+
+---
+
+### E8-S1 — Lifestyle Habit Tracking
+
+**As a** user logging my day,
+**I want** the AI agent to extract and track my exercise, water intake, caffeine consumption, and alcohol intake,
+**so that** I can see how these lifestyle factors correlate with my symptoms over time.
+
+**Acceptance Criteria:**
+- [x] `LifestyleLog` type includes: `exercise_minutes`, `water_ml`, `caffeine_cups`, `alcohol_drinks` (all required, nullable)
+- [x] AI parse-log system prompt instructs extraction of all 4 fields with inference hints (e.g., "8 glasses" → 2000ml)
+- [x] Fallback regex parser detects: exercise ("ran 30min"), water ("8 glasses" → 2000ml), caffeine (coffee/tea mentions → 1 cup), alcohol (beer/wine mentions → 1 drink)
+- [x] `POST /api/logs` persists all 7 lifestyle fields to Supabase
+- [x] `ManualLogForm` includes 2×2 grid with number inputs for exercise, water, caffeine, alcohol
+- [x] `PreFillCard` displays exercise, water, caffeine, alcohol rows when detected by AI
+- [x] TypeScript compilation passes with zero errors
+- [x] 129+ tests passing
+
+**FR Covered:** NEW
+
+---
+
+### E8-S2 — Food Database Expansion (Restaurant + International)
+
+**As a** user searching for food safety information,
+**I want** to find dishes from restaurant chains (McDonald's, Din Tai Fung, etc.) and international cuisines (Italian, Japanese, Korean, etc.),
+**so that** I can check allergens and personal risk for any food I encounter, not just hawker centre dishes.
+
+**Acceptance Criteria:**
+- [x] Migration adds `food_type` column to `hawker_dishes` with CHECK: `hawker`, `restaurant`, `international`
+- [x] Category CHECK expanded to 19 types including: `fast_food`, `chinese_restaurant`, `japanese`, `korean`, `italian`, `western`, `thai`, `indian`, `vietnamese`, `mexican`
+- [x] 25 restaurant chain dishes seeded: McDonald's (5), KFC (4), Burger King (2), Subway (2), Din Tai Fung (3), Hai Di Lao (2), Tim Ho Wan (2), Jollibee (2), Shake Shack (1)
+- [x] 37 international cuisine dishes seeded: Italian (6), Japanese (6), Korean (4), Western (5), Thai (4), Indian (4), Vietnamese (3), Mexican (3)
+- [x] Total food database: 85 hawker + 62 new = 147 dishes across 19 categories and 3 food types
+- [x] Hawker search API returns `food_type` in results
+- [x] `DishResultCard` displays food type badge: yellow "Hawker", blue "Restaurant", purple "International"
+- [x] `DbHawkerDish` and `HawkerCategory` types updated with all new categories
+- [x] All tests passing
 
 **FR Covered:** NEW
 

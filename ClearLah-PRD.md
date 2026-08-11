@@ -55,13 +55,14 @@ Singaporeans suffering from eczema, food allergies, IBS, and asthma spend months
 | 3 | Daily log dashboard — 5 pillars: Food + Lifestyle + Skincare + Symptoms + Weather | P0 |
 | 4 | Auto NEA weather integration (with mock fallback) | P0 |
 | 5 | AI multi-variable pattern detection engine with temporal reasoning | P0 |
-| 6 | Hawker Dish Risk Scorer (80+ dishes, multilingual search) | P0 |
+| 6 | Hawker Dish Risk Scorer (147 dishes: hawker + restaurants + international, multilingual search) | P0 |
 | 7 | Progressive insights from Day 1 | P0 |
 | 8 | Medical disclaimer throughout UI | P0 |
 | 9 | Pre-seeded demo account (14 days realistic data) | P0 |
 | 10 | "Ask ClearLah" conversational agent — free-text Q&A with personal evidence | P0 |
 | 11 | AI feedback learning — thumbs up/down on parse accuracy, few-shot improvement | P0 |
-| 12 | "High Risk Day" proactive alert | P1 |
+| 12 | Lifestyle habit tracking — exercise, water intake, caffeine, alcohol (AI-extracted + manual entry) | P1 |
+| 13 | "High Risk Day" proactive alert | P1 |
 | 13 | Doctor-ready trigger summary report | P1 |
 | 14 | Smart meal suggestions + logging streak | P1 |
 

@@ -113,6 +113,10 @@ type LifestyleEntry = {
   sleep_hours: number           // e.g. 6.5
   stress_level: 1 | 2 | 3 | 4 | 5
   stress_type: 'Work' | 'Relationship' | 'Physical' | 'Financial' | 'Other'
+  exercise_minutes: number | null
+  water_ml: number | null
+  caffeine_cups: number | null
+  alcohol_drinks: number | null
 }
 ```
 
@@ -172,7 +176,7 @@ type WeatherSnapshot = {
 - **Supabase client:** `@supabase/supabase-js` v2
 - **DB tables:** `users`, `log_entries`, `user_profiles`, `hawker_dishes`, `saved_dishes`
 - **user_profiles extended fields:** `ai_feedback_log` (jsonb array — user corrections for AI parse learning)
-- **Hawker DB:** 80+ dishes seeded via `supabase/seed.sql`, each with allergen tags and multilingual aliases (EN / Malay / Chinese)
+- **Hawker DB:** 147 dishes seeded across 19 categories and 3 food types (hawker: 85, restaurant chains: 25, international cuisine: 37). Each dish has allergen tags and multilingual aliases (EN / Malay / Chinese). Restaurant chains include McDonald's, KFC, Din Tai Fung, Hai Di Lao, Tim Ho Wan, Jollibee, and more. International covers Italian, Japanese, Korean, Western, Thai, Indian, Vietnamese, Mexican cuisines.
 - **Demo fixture:** `data/demo-data.json` — 14 days of realistic log entries for a demo eczema user
 
 ---

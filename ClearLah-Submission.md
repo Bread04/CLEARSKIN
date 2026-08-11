@@ -45,7 +45,7 @@ ClearLah solves this by acting as a personal AI health detective. Users describe
 | Problem | How ClearLah solves it |
 |---|---|
 | Triggers are multi-variable — food alone doesn't explain flares | Tracks 5 pillars: food, lifestyle, skincare, symptoms, and auto-pulled weather |
-| Hawker food ingredients are opaque | 80+ Singapore hawker dishes pre-loaded with allergen profiles + multilingual search |
+| Hawker food ingredients are opaque | 147 Singapore dishes (hawker + restaurant chains + international cuisine) pre-loaded with allergen profiles + multilingual search |
 | Manual logging is abandoned within days | Conversational AI input — just describe your day in plain English |
 | Singapore's climate is a major trigger factor | NEA API auto-pulls live humidity, PSI, UV, and temperature daily |
 | Sufferers arrive at doctor visits with no data | ClearLah generates a structured patient-reported data summary report |
@@ -140,7 +140,7 @@ ClearLah was built entirely on CodeBuddy. CodeBuddy powered every layer:
 - **The AI Detective Engine** — multi-variable correlation reasoning across 5 data pillars that surfaces what no human could manually compute
 - **The AI Narrator** — transforms raw statistics into plain-English, Singlish-inflected insights users actually understand
 - **Ask ClearLah** — a conversational agent endpoint that lets users ask free-text questions and get answers personalised to their trigger profile, today's weather, and hawker dish safety
-- **The Hawker Dish Risk Scorer** — personalised AI risk assessment matching each user's trigger profile against 80+ Singapore dishes
+- **The Hawker Dish Risk Scorer** — personalised AI risk assessment matching each user's trigger profile against 147 dishes across hawker (85), restaurant chains (25), and international cuisine (37)
 - **The full web application** — architecture, frontend, backend, and deployment generated through conversational collaboration with CodeBuddy
 
 The AI agent is not a feature of ClearLah — the AI agent IS ClearLah. Removing it would leave behind a form with no brain. CodeBuddy enabled a solo builder to ship a fully reasoning AI agent in 7 days — a task that would normally require a team of ML engineers, backend developers, and frontend designers.
