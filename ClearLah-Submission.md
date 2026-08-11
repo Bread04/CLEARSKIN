@@ -88,6 +88,8 @@ ClearLah's AI agent is the core intelligence, not an add-on. It performs three A
 
 3. **Personalised Risk Assessment** — the AI cross-references each user's trigger profile against the 80+ hawker dish database to compute individual risk scores, turning generic allergen data into personal safety intelligence.
 
+4. **"Ask ClearLah" — the Conversational Agent** — users can ask free-text questions like *"Can I eat laksa today?"* or *"What triggered my last flare?"* and the AI agent cross-references their personal log history, trigger patterns, current NEA weather data, and hawker dish database to give a specific, personalised answer. This is the agent's most visible moment — a user talking to their own health detective and getting an answer only their data could produce.
+
 The key difference from a symptom tracker: **ClearLah's AI agent doesn't just record data — it builds a causal model of YOUR body.** Every day you log, the agent gets smarter. No competitor can replicate what your agent learned about you.
 
 **Business Value:**
@@ -124,8 +126,8 @@ The core competitive moat is the **personal trigger profile** — each user's da
 | 1:00–2:00 | Conversational logging — type a natural sentence, watch AI auto-fill |
 | 2:00–3:00 | AI Insights — multi-variable trigger correlation from 14-day demo data |
 | 3:00–4:00 | Hawker Decoder — type "Laksa" / "拉沙", see allergens + personal risk score + High Risk Day alert |
-| 4:00–4:40 | Doctor report — generate PDF with medical disclaimer |
-| 4:40–5:00 | Close — "Built for Singapore. Replicable across SEA. Your personal health detective — lah." |
+| 4:00–4:30 | Ask ClearLah — "Can I eat laksa today?" The AI cross-references personal triggers, weather, and hawker data live |
+| 4:30–5:00 | Doctor report — generate PDF with medical disclaimer + close
 
 > **Rule:** First 90 seconds must stand alone as a complete pitch if judges are pressed for time.
 
@@ -138,6 +140,7 @@ ClearLah was built entirely on CodeBuddy. CodeBuddy powered every layer:
 - **The AI Agent Brain** — natural language understanding that parses Singlish, food slang, and health context into structured trigger data
 - **The AI Detective Engine** — multi-variable correlation reasoning across 5 data pillars that surfaces what no human could manually compute
 - **The AI Narrator** — transforms raw statistics into plain-English, Singlish-inflected insights users actually understand
+- **Ask ClearLah** — a conversational agent endpoint that lets users ask free-text questions and get answers personalised to their trigger profile, today's weather, and hawker dish safety
 - **The Hawker Dish Risk Scorer** — personalised AI risk assessment matching each user's trigger profile against 80+ Singapore dishes
 - **The full web application** — architecture, frontend, backend, and deployment generated through conversational collaboration with CodeBuddy
 

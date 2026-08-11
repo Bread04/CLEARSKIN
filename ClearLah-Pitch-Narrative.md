@@ -58,6 +58,7 @@
 | Hawker Decoder | *"Type any hawker dish — in English, Malay, or Chinese. See exactly what's in it, and your personal risk score."* |
 | AI multi-variable insight | *"This is the moment. Not just 'avoid shellfish' — but 'shellfish + humidity above 85% + less than 6 hours sleep. Any two of these three, you flare.' That's what took me 3 years to figure out. ClearLah surfaces it in 3 weeks."* |
 | High Risk Day alert | *"This morning, ClearLah sent me an alert. Humidity is 88% today. Based on my profile — high risk day. I'll watch what I eat."* |
+| Ask ClearLah | *"Now watch this — I'll ask: 'Can I eat laksa today?' Watch the AI cross-reference my triggers, today's weather, and the hawker database. 'Today's humidity is at 88% — and shellfish at high humidity is one of your strongest triggers. Maybe swap for chicken rice today, lah.' That's an AI agent reasoning, not a form field."* |
 | Doctor report | *"One tap. A structured report I can bring to my dermatologist. Not 'I think it might be prawns' — actual data."* |
 
 ---
@@ -74,6 +75,8 @@
 > - *It understands you in natural language — Singlish, food slang, incomplete sentences*
 > - *It reasons across 5 data dimensions simultaneously — a human can't hold food + sleep + stress + skincare + humidity in their head at once*
 > - *It explains its findings — not raw data, but conclusions: 'Your worst flares happen when 2+ of these line up.'*
+>
+> *And here's the real agent moment: you can ask it anything. 'Can I eat laksa today?' The AI cross-references your personal triggers, live NEA weather, and 80+ hawker dishes — and gives you a real answer, not a generic one. That's an agent reasoning about YOUR body.*
 >
 > *The pattern engine? Pure TypeScript. But the reasoning layer — the part that says 'This combination matters, here's why, and here's what to do about it' — that's the AI agent.*
 >

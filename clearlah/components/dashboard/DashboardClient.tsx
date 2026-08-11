@@ -5,6 +5,7 @@ import StreakBadge from "@/components/ui/StreakBadge";
 import WeatherWidget from "@/components/dashboard/WeatherWidget";
 import BuildingPicture from "@/components/dashboard/BuildingPicture";
 import HighRiskDayAlert from "@/components/dashboard/HighRiskDayAlert";
+import AskClearLah from "@/components/dashboard/AskClearLah";
 import MilestoneModal from "@/components/ui/MilestoneModal";
 
 interface DashboardClientProps {
@@ -115,6 +116,8 @@ export default function DashboardClient({
             Log today
           </a>
         </div>
+
+        <AskClearLah />
       </div>
     </main>
   );
