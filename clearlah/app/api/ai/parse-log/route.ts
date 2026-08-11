@@ -28,6 +28,10 @@ Given a user's free-text description of their day, extract structured data:
 - lifestyle.sleep_hours: number of hours slept (null if not mentioned)
 - lifestyle.stress_level: 1-5 scale (null if not mentioned)
 - lifestyle.stress_type: "work" | "relationship" | "physical" | "financial" | "other" (null if not mentioned)
+- lifestyle.exercise_minutes: minutes of exercise (null if not mentioned; infer from mentions like "ran 30min", "gym", "10k steps")
+- lifestyle.water_ml: ml of water drunk (null if not mentioned; estimate from "8 glasses" ≈ 2000ml, "2 bottles" ≈ 1000ml)
+- lifestyle.caffeine_cups: cups of coffee/tea/energy drinks (null if not mentioned)
+- lifestyle.alcohol_drinks: number of alcoholic drinks (null if not mentioned)
 - skincare: skincare products used today (null if not mentioned)
 - symptoms.skin: 1-10 severity (null if not mentioned or not applicable)
 - symptoms.gut: 1-10 severity
@@ -35,7 +39,7 @@ Given a user's free-text description of their day, extract structured data:
 - summary: one-sentence plain-English summary of the day
 
 Respond ONLY with valid JSON. No markdown, no explanation. Example:
-{"food":{"items":["laksa","teh tarik"],"hawker_dishes":["Laksa"]},"lifestyle":{"sleep_hours":6.5,"stress_level":4,"stress_type":"work"},"skincare":"Cetaphil moisturiser","symptoms":{"skin":7,"gut":null,"respiratory":null},"summary":"Laksa for lunch, stressed from work, skin flaring tonight."}`;
+{"food":{"items":["laksa","teh tarik"],"hawker_dishes":["Laksa"]},"lifestyle":{"sleep_hours":6.5,"stress_level":4,"stress_type":"work","exercise_minutes":30,"water_ml":1500,"caffeine_cups":2,"alcohol_drinks":null},"skincare":"Cetaphil moisturiser","symptoms":{"skin":7,"gut":null,"respiratory":null},"summary":"Laksa for lunch, stressed from work, skin flaring tonight."}`;
 }
 
 function basicFallbackParse(message: string): Partial<ParsedLog> {
@@ -102,9 +106,35 @@ function basicFallbackParse(message: string): Partial<ParsedLog> {
   );
   const skincare = skincareMatch ? skincareMatch.join(", ") : null;
 
+  const exerciseMatch = lower.match(/(?:ran|run|jog|gym|workout|exercise|walked)\s*(?:for\s*)?(\d+)/i);
+  const exerciseMinutes = exerciseMatch ? parseInt(exerciseMatch[1], 10) : null;
+
+  const waterMatch = lower.match(/(?:water|drank)\s*(?:about\s*)?(\d+)\s*(?:glass(?:es)?|cups?|bottles?|ml)/i);
+  let waterMl: number | null = null;
+  if (waterMatch) {
+    const amt = parseInt(waterMatch[1], 10);
+    if (lower.includes("glass")) waterMl = amt * 250;
+    else if (lower.includes("bottle")) waterMl = amt * 500;
+    else waterMl = amt;
+  }
+
+  const caffeineMatch = lower.match(/(?:coffee|tea|kopi|teh|caffeine|espresso|latte)\b/i);
+  const caffeineCups = caffeineMatch ? (lower.match(/(\d+)\s*(?:cups?|shots?)\s*(?:of\s*)?(?:coffee|tea|kopi|teh)/i)?.[1] ? parseInt(lower.match(/(\d+)\s*(?:cups?|shots?)\s*(?:of\s*)?(?:coffee|tea|kopi|teh)/i)![1], 10) : 1) : null;
+
+  const alcoholMatch = lower.match(/(?:beer|wine|cocktail|alcohol|whiskey|soju|sake|pint|drink)\b/i);
+  const alcoholDrinks = alcoholMatch ? (lower.match(/(\d+)\s*(?:drinks?|pints?|glasses?|shots?|bottles?)/i)?.[1] ? parseInt(lower.match(/(\d+)\s*(?:drinks?|pints?|glasses?|shots?|bottles?)/i)![1], 10) : 1) : null;
+
   return {
     food: { items, hawker_dishes: hawkerDishes },
-    lifestyle: { sleep_hours: sleepHours, stress_level: stressLevel, stress_type: stressType },
+    lifestyle: {
+      sleep_hours: sleepHours,
+      stress_level: stressLevel,
+      stress_type: stressType,
+      exercise_minutes: exerciseMinutes,
+      water_ml: waterMl,
+      caffeine_cups: caffeineCups,
+      alcohol_drinks: alcoholDrinks,
+    },
     skincare,
     symptoms: { skin, gut: null, respiratory: null },
     summary: message.trim().slice(0, 120),

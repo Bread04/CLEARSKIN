@@ -8,7 +8,7 @@ function makeLog(date: string, ...foods: string[]): DbLogEntry {
     user_id: "test-user",
     logged_at: date,
     food: { items: foods.map((name) => ({ name })) },
-    lifestyle: { sleep_hours: 7, stress_level: 3, stress_type: null },
+    lifestyle: { sleep_hours: 7, stress_level: 3, stress_type: null, exercise_minutes: null, water_ml: null, caffeine_cups: null, alcohol_drinks: null },
     skincare: null,
     symptoms: { skin: null, gut: null, respiratory: null },
     weather_snapshot: null,

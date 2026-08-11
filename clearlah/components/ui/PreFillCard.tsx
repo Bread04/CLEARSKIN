@@ -124,6 +124,34 @@ export default function PreFillCard({
         </div>
       )}
 
+      {parsedLog.lifestyle.exercise_minutes != null && (
+        <div className="flex items-center gap-2">
+          <span className="text-label-sm font-semibold text-neutral-500 w-16">Exercise</span>
+          <span className="text-body-sm text-neutral-800">{parsedLog.lifestyle.exercise_minutes} min</span>
+        </div>
+      )}
+
+      {parsedLog.lifestyle.water_ml != null && (
+        <div className="flex items-center gap-2">
+          <span className="text-label-sm font-semibold text-neutral-500 w-16">Water</span>
+          <span className="text-body-sm text-neutral-800">{parsedLog.lifestyle.water_ml} ml</span>
+        </div>
+      )}
+
+      {parsedLog.lifestyle.caffeine_cups != null && (
+        <div className="flex items-center gap-2">
+          <span className="text-label-sm font-semibold text-neutral-500 w-16">Caffeine</span>
+          <span className="text-body-sm text-neutral-800">{parsedLog.lifestyle.caffeine_cups} cup{parsedLog.lifestyle.caffeine_cups !== 1 ? "s" : ""}</span>
+        </div>
+      )}
+
+      {parsedLog.lifestyle.alcohol_drinks != null && (
+        <div className="flex items-center gap-2">
+          <span className="text-label-sm font-semibold text-neutral-500 w-16">Alcohol</span>
+          <span className="text-body-sm text-neutral-800">{parsedLog.lifestyle.alcohol_drinks} drink{parsedLog.lifestyle.alcohol_drinks !== 1 ? "s" : ""}</span>
+        </div>
+      )}
+
       {parsedLog.skincare && (
         <div className="flex items-start gap-2">
           <span className="text-label-sm font-semibold text-neutral-500 w-16 flex-shrink-0 pt-0.5">Skincare</span>

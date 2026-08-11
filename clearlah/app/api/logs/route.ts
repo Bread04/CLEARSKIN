@@ -52,6 +52,10 @@ export async function POST(request: Request) {
         sleep_hours: log.lifestyle.sleep_hours,
         stress_level: log.lifestyle.stress_level,
         stress_type: log.lifestyle.stress_type,
+        exercise_minutes: log.lifestyle.exercise_minutes,
+        water_ml: log.lifestyle.water_ml,
+        caffeine_cups: log.lifestyle.caffeine_cups,
+        alcohol_drinks: log.lifestyle.alcohol_drinks,
       },
       skincare: log.skincare,
       symptoms: {

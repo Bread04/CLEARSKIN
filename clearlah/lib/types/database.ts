@@ -65,8 +65,10 @@ export interface LifestyleLog {
   /** 1–5 */
   stress_level: number | null;
   stress_type: "work" | "relationship" | "physical" | "financial" | "other" | null;
-  exercise_minutes?: number | null;
-  water_ml?: number | null;
+  exercise_minutes: number | null;
+  water_ml: number | null;
+  caffeine_cups: number | null;
+  alcohol_drinks: number | null;
 }
 
 export interface SymptomsLog {
@@ -185,7 +187,15 @@ export interface ParseLogRequest {
 
 export interface ParsedLog {
   food: { items: string[]; hawker_dishes: string[] };
-  lifestyle: { sleep_hours: number | null; stress_level: number | null; stress_type: string | null };
+  lifestyle: {
+    sleep_hours: number | null;
+    stress_level: number | null;
+    stress_type: string | null;
+    exercise_minutes: number | null;
+    water_ml: number | null;
+    caffeine_cups: number | null;
+    alcohol_drinks: number | null;
+  };
   skincare: string | null;
   symptoms: { skin: number | null; gut: number | null; respiratory: number | null };
   summary: string;

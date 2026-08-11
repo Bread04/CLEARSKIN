@@ -35,6 +35,10 @@ export default function ManualLogForm({
   const [sleepHours, setSleepHours] = useState<number | null>(initial.lifestyle.sleep_hours);
   const [stressLevel, setStressLevel] = useState<number | null>(initial.lifestyle.stress_level);
   const [stressType, setStressType] = useState<string | null>(initial.lifestyle.stress_type);
+  const [exerciseMinutes, setExerciseMinutes] = useState<number | null>(initial.lifestyle.exercise_minutes ?? null);
+  const [waterMl, setWaterMl] = useState<number | null>(initial.lifestyle.water_ml ?? null);
+  const [caffeineCups, setCaffeineCups] = useState<number | null>(initial.lifestyle.caffeine_cups ?? null);
+  const [alcoholDrinks, setAlcoholDrinks] = useState<number | null>(initial.lifestyle.alcohol_drinks ?? null);
   const [skincare, setSkincare] = useState<string>(initial.skincare || "");
   const [skinSeverity, setSkinSeverity] = useState<number>(initial.symptoms.skin ?? 0);
   const [gutSeverity, setGutSeverity] = useState<number>(initial.symptoms.gut ?? 0);
@@ -100,7 +104,15 @@ export default function ManualLogForm({
     setError(null);
     onConfirm({
       food: { items: foodItems, hawker_dishes: initial.food.hawker_dishes },
-      lifestyle: { sleep_hours: sleepHours, stress_level: stressLevel, stress_type: stressType },
+      lifestyle: {
+        sleep_hours: sleepHours,
+        stress_level: stressLevel,
+        stress_type: stressType,
+        exercise_minutes: exerciseMinutes,
+        water_ml: waterMl,
+        caffeine_cups: caffeineCups,
+        alcohol_drinks: alcoholDrinks,
+      },
       skincare: skincare.trim() || null,
       symptoms: {
         skin: skinSeverity || null,
@@ -109,7 +121,7 @@ export default function ManualLogForm({
       },
       summary: initial.summary,
     });
-  }, [foodItems, sleepHours, stressLevel, stressType, skincare, skinSeverity, gutSeverity, respiratorySeverity, initial, onConfirm]);
+  }, [foodItems, sleepHours, stressLevel, stressType, exerciseMinutes, waterMl, caffeineCups, alcoholDrinks, skincare, skinSeverity, gutSeverity, respiratorySeverity, initial, onConfirm]);
 
   return (
     <div className="space-y-6">
@@ -310,6 +322,48 @@ export default function ManualLogForm({
           className="input resize-none"
           aria-label="Skincare products"
         />
+      </section>
+
+      <section>
+        <h3 className="text-h3 text-neutral-800 mb-3">Daily Habits</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="text-body-sm text-neutral-600 block mb-1">Exercise (min)</label>
+            <input
+              type="number" min={0} max={300}
+              value={exerciseMinutes ?? ""}
+              onChange={(e) => setExerciseMinutes(e.target.value ? parseInt(e.target.value, 10) : null)}
+              placeholder="e.g. 30" className="input" aria-label="Exercise minutes"
+            />
+          </div>
+          <div>
+            <label className="text-body-sm text-neutral-600 block mb-1">Water (ml)</label>
+            <input
+              type="number" min={0} max={5000} step={100}
+              value={waterMl ?? ""}
+              onChange={(e) => setWaterMl(e.target.value ? parseInt(e.target.value, 10) : null)}
+              placeholder="e.g. 2000" className="input" aria-label="Water intake in ml"
+            />
+          </div>
+          <div>
+            <label className="text-body-sm text-neutral-600 block mb-1">Caffeine (cups)</label>
+            <input
+              type="number" min={0} max={20}
+              value={caffeineCups ?? ""}
+              onChange={(e) => setCaffeineCups(e.target.value ? parseInt(e.target.value, 10) : null)}
+              placeholder="e.g. 2" className="input" aria-label="Caffeine cups"
+            />
+          </div>
+          <div>
+            <label className="text-body-sm text-neutral-600 block mb-1">Alcohol (drinks)</label>
+            <input
+              type="number" min={0} max={20}
+              value={alcoholDrinks ?? ""}
+              onChange={(e) => setAlcoholDrinks(e.target.value ? parseInt(e.target.value, 10) : null)}
+              placeholder="e.g. 0" className="input" aria-label="Alcohol drinks"
+            />
+          </div>
+        </div>
       </section>
 
       <section>
