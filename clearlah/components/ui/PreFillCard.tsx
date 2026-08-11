@@ -15,12 +15,27 @@ interface PreFillCardProps {
 }
 
 export default function PreFillCard({
-  parsedLog,
+  parsedLog: raw,
   conditions,
   suggestions,
   userMessage,
   onConfirm,
 }: PreFillCardProps) {
+  const parsedLog: ParsedLog = {
+    food: raw.food ?? { items: [], hawker_dishes: [] },
+    lifestyle: raw.lifestyle ?? {
+      sleep_hours: null,
+      stress_level: null,
+      stress_type: null,
+      exercise_minutes: null,
+      water_ml: null,
+      caffeine_cups: null,
+      alcohol_drinks: null,
+    },
+    skincare: raw.skincare ?? null,
+    symptoms: raw.symptoms ?? { skin: null, gut: null, respiratory: null },
+    summary: raw.summary ?? "",
+  };
   const [showFullForm, setShowFullForm] = useState(false);
   const [feedbackGiven, setFeedbackGiven] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -159,13 +174,13 @@ export default function PreFillCard({
         </div>
       )}
 
-      {(parsedLog.symptoms.skin || parsedLog.symptoms.gut || parsedLog.symptoms.respiratory) && (
+      {(parsedLog.symptoms.skin != null || parsedLog.symptoms.gut != null || parsedLog.symptoms.respiratory != null) && (
         <div className="flex items-start gap-2">
           <span className="text-label-sm font-semibold text-neutral-500 w-16 flex-shrink-0 pt-0.5">{symptomLabel}</span>
           <div className="space-y-0.5">
-            {parsedLog.symptoms.skin && <div className="text-body-sm text-neutral-800">Skin: {parsedLog.symptoms.skin}/10</div>}
-            {parsedLog.symptoms.gut && <div className="text-body-sm text-neutral-800">Gut: {parsedLog.symptoms.gut}/10</div>}
-            {parsedLog.symptoms.respiratory && <div className="text-body-sm text-neutral-800">Respiratory: {parsedLog.symptoms.respiratory}/10</div>}
+            {parsedLog.symptoms.skin != null && <div className="text-body-sm text-neutral-800">Skin: {parsedLog.symptoms.skin}/10</div>}
+            {parsedLog.symptoms.gut != null && <div className="text-body-sm text-neutral-800">Gut: {parsedLog.symptoms.gut}/10</div>}
+            {parsedLog.symptoms.respiratory != null && <div className="text-body-sm text-neutral-800">Respiratory: {parsedLog.symptoms.respiratory}/10</div>}
           </div>
         </div>
       )}
