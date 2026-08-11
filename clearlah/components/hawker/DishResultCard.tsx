@@ -10,12 +10,19 @@ interface DishResultCardProps {
   nameMs: string | null;
   nameZh: string | null;
   allergens: string[];
+  foodType?: string;
   riskLevel: RiskLevel;
   riskReason: string;
   savedLabel?: string | null;
   onSave: (dishId: string, label: string) => void;
   saving: boolean;
 }
+
+const FOOD_TYPE_LABELS: Record<string, { label: string; className: string }> = {
+  hawker: { label: "Hawker", className: "bg-yellow-50 text-yellow-700" },
+  restaurant: { label: "Restaurant", className: "bg-blue-50 text-blue-700" },
+  international: { label: "International", className: "bg-purple-50 text-purple-700" },
+};
 
 const RISK_STYLES: Record<RiskLevel, { bg: string; text: string; label: string }> = {
   high: { bg: "bg-secondary-terracotta-50", text: "text-secondary-terracotta-dark", label: "High Risk" },
@@ -36,6 +43,7 @@ export default function DishResultCard({
   nameMs,
   nameZh,
   allergens,
+  foodType,
   riskLevel,
   riskReason,
   savedLabel,
@@ -63,6 +71,14 @@ export default function DishResultCard({
       {riskReason && riskLevel !== "unknown" && (
         <p className="text-body-sm text-neutral-600 mb-2">{riskReason}</p>
       )}
+
+      <div className="flex flex-wrap gap-1 mb-2">
+        {foodType && FOOD_TYPE_LABELS[foodType] && (
+          <span className={`text-caption px-2 py-0.5 rounded-full ${FOOD_TYPE_LABELS[foodType].className}`}>
+            {FOOD_TYPE_LABELS[foodType].label}
+          </span>
+        )}
+      </div>
 
       <div className="flex flex-wrap gap-1 mb-3">
         {allergens.map((a) => (

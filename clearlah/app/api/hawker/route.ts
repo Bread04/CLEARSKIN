@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     if (!q) {
       const { data } = await supabase
         .from("hawker_dishes")
-        .select("id, name_en, name_ms, name_zh, allergens, category")
+        .select("id, name_en, name_ms, name_zh, allergens, category, food_type")
         .order("popularity_rank", { ascending: true })
         .limit(10);
 
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
     const { data } = await supabase
       .from("hawker_dishes")
-      .select("id, name_en, name_ms, name_zh, allergens, category")
+      .select("id, name_en, name_ms, name_zh, allergens, category, food_type")
       .or(`name_en.ilike.%${q}%,name_ms.ilike.%${q}%,name_zh.ilike.%${q}%`)
       .order("popularity_rank", { ascending: true })
       .limit(10);

@@ -117,7 +117,19 @@ export type HawkerCategory =
   | "dessert"
   | "drinks"
   | "bread_pastry"
-  | "other";
+  | "other"
+  | "fast_food"
+  | "chinese_restaurant"
+  | "japanese"
+  | "korean"
+  | "italian"
+  | "western"
+  | "thai"
+  | "indian"
+  | "vietnamese"
+  | "mexican";
+
+export type FoodType = "hawker" | "restaurant" | "international";
 
 export interface DbHawkerDish {
   id: string;
@@ -129,6 +141,7 @@ export interface DbHawkerDish {
   /** e.g. ["shellfish", "gluten", "eggs", "dairy"] */
   allergens: string[];
   category: HawkerCategory;
+  food_type: FoodType;
   popularity_rank: number;
 }
 

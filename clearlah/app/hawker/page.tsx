@@ -11,6 +11,7 @@ interface DishResult {
   name_zh: string | null;
   allergens: string[];
   category: string;
+  food_type: string;
 }
 
 interface SavedDishRow {
@@ -174,6 +175,7 @@ export default function HawkerPage() {
                   nameMs={dish.name_ms}
                   nameZh={dish.name_zh}
                   allergens={dish.allergens}
+                  foodType={dish.food_type}
                   riskLevel={risk.level}
                   riskReason={risk.reason}
                   savedLabel={getSavedLabel(dish.id)}
