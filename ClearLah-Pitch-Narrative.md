@@ -108,11 +108,21 @@
 
 **Goal:** Leave judges imagining the future, not just the MVP.
 
-> *"Today, ClearLah is a trigger detection agent. But the data we're building — millions of anonymised logs connecting food, lifestyle, climate, and symptoms — that's something bigger.*
+> *"Today, ClearLah is a trigger detection agent. But here's where we're going — and this is the real vision.*
 >
-> *Imagine a world where dermatologists prescribe ClearLah before any allergy test. Where insurance companies reward you for understanding your triggers. Where the NEA sends ClearLah users a high-risk day alert every time the PSI spikes.*
+> *ClearLah v2 adds four new sensors to the detective.*
 >
-> *We're not just building an app. We're building the first personalised health intelligence layer for Singapore's unique environment.*
+> *First: HawkerScan. Point your camera at your food — ClearLah identifies the dish, cross-references your triggers, and shows the risk score before you take a bite. No typing. Just snap and know.*
+>
+> *Second: Voice Log. 'ClearLah, I just ate chicken rice, skin's calm today.' Ten seconds. Zero friction. The app pings you at 9pm: 'How's your skin tonight?' You reply 'a bit itchy, 4 out of 10.' Two words. Streak preserved. Logging becomes a conversation, not a chore.*
+>
+> *Third: ClearCart. ClearLah analyzes your safe meals and generates a weekly grocery list. Integrates with FairPrice. One tap: 'These 3 GrabFood dishes near you are 92%+ safe for your profile.' The agent intervenes BEFORE the trigger — not after the flare.*
+>
+> *Fourth: FlarePrint. Every flare gets GPS-tagged. ClearLah builds your personal heatmap of Singapore. Then, anonymously aggregated — the first-ever Singapore Eczema Trigger Map. 'Your flare pattern matches 47 other users in Geylang — here's the common thread.'*
+>
+> *The arc is clear: v1 detects what happened. v2 prevents what's coming. v3 maps the entire city.*
+>
+> *ClearLah isn't just an app. It's the first personalised health intelligence layer for Singapore's unique environment — and eventually, for every tropical city on Earth.*
 >
 > *ClearLah. Know your triggers. Live without limits, lah."*
 

@@ -13,6 +13,7 @@ interface SaveLogRequest {
   weather_snapshot: WeatherSnapshot;
   user_id?: string;
   demo_date?: string;
+  location?: { lat: number; lng: number; accuracy: number };
 }
 
 export async function POST(request: Request) {
@@ -64,6 +65,7 @@ export async function POST(request: Request) {
         respiratory: log.symptoms.respiratory,
       },
       weather_snapshot,
+      location: body.location || null,
       created_at: new Date().toISOString(),
     };
 

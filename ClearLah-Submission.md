@@ -102,6 +102,17 @@ Commercial pathways:
 
 The core competitive moat is the **personal trigger profile** — each user's data becomes more valuable over time and cannot be replicated by any competitor.
 
+### Future Vision — v2: The Detective's Sensors
+
+ClearLah v2 expands the AI agent from retrospective detection to interceptive prevention through four new data streams:
+
+- **HawkerScan** — camera-based dish identification with instant risk scoring before eating
+- **Voice Log** — ambient check-ins under 15 seconds with emotional tone detection
+- **ClearCart** — AI-generated safe grocery lists with FairPrice/RedMart integration and GrabFood safe dish discovery
+- **FlarePrint** — GPS-tagged flare heatmaps, anonymised to build Singapore's first Eczema Trigger Map
+
+The arc: v1 detects what happened → v2 prevents what's coming → v3 maps the city.
+
 ---
 
 ### 4. Quantifiable Metrics & Defined Impact

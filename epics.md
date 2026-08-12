@@ -26,8 +26,9 @@ status: complete
 | E6  | Hawker Food Safety Checker               | 5       | P1       |
 | E7  | AI Agent Intelligence Showcase           | 3       | P0       |
 | E8  | Lifestyle Habits & Food Expansion        | 2       | P1       |
+| E9  | v2 — The Detective's Sensors             | 4       | P2       |
 
-**Total: 8 epics, 37 user stories**
+**Total: 9 epics, 41 user stories**
 
 ---
 
@@ -895,6 +896,94 @@ status: complete
 - [x] `DishResultCard` displays food type badge: yellow "Hawker", blue "Restaurant", purple "International"
 - [x] `DbHawkerDish` and `HawkerCategory` types updated with all new categories
 - [x] All tests passing
+
+**FR Covered:** NEW
+
+---
+
+## E9 — v2: The Detective's Sensors
+
+**Goal:** Transform ClearLah's AI agent from retrospective detection to interceptive prevention by adding four new data streams: camera-based food identification, frictionless voice logging, safe food commerce integration, and GPS-tagged flare mapping. Each sensor feeds the agent richer data, making the detective smarter.
+
+**Definition of Done:** Camera identifies hawker dishes with risk score overlay; voice input works in under 15 seconds with tone inference; grocery list generates from safe meal history; GPS flare heatmap renders on map component.
+
+---
+
+### E9-S1 — HawkerScan: Camera-to-Log
+
+**As a** user at a hawker centre,
+**I want** to point my camera at my food or the stall signboard and have ClearLah identify the dish, log it, and show my personal risk score,
+**so that** I can make an informed decision before I eat, without typing anything.
+
+**Acceptance Criteria:**
+- [ ] Camera viewfinder opens from Log screen via "Scan dish" button
+- [ ] AI identifies dish from photo (dish recognition) OR OCRs the stall name from signboard
+- [ ] Matched dish cross-referenced against hawker DB + user trigger profile
+- [ ] Risk overlay shown on camera feed: "Laksa — High Risk for you (shellfish + humidity pattern)"
+- [ ] "Log it" button saves dish to today's log entry with photo attachment
+- [ ] Camera permission requested in-context, not during onboarding
+- [ ] Works offline with on-device model for dish recognition; falls back to API when online
+- [ ] Crowd-sourced stall-level data: "3 ClearLah users with shellfish triggers reported flares after eating here"
+
+**FR Covered:** NEW
+
+---
+
+### E9-S2 — Voice Log: Ambient Check-In
+
+**As a** busy user,
+**I want** to log my day by speaking to ClearLah in under 15 seconds and receive an evening check-in prompt,
+**so that** logging friction drops to near-zero and my streak is effortless to maintain.
+
+**Acceptance Criteria:**
+- [ ] "Hey ClearLah" voice activation from Dashboard or Log screen
+- [ ] Speech-to-text processes free-form food/lifestyle/symptom descriptions
+- [ ] Parsed result spoken back for confirmation: "Got it — chicken rice, skin 3/10. Save?"
+- [ ] Evening push notification at user's configured time: "How's your skin tonight?"
+- [ ] One-word or numeric voice reply accepted ("itchy", "4 out of 10")
+- [ ] Emotional tone detection from voice: hesitancy, fatigue → suggests logging stress
+- [ ] Works with screen locked (background audio permission)
+- [ ] All voice data processed on-device where possible; never stored as raw audio
+
+**FR Covered:** NEW
+
+---
+
+### E9-S3 — ClearCart: Safe Food Commerce
+
+**As a** user with established safe food patterns,
+**I want** ClearLah to generate a weekly grocery list of my safe foods and surface safe nearby dishes from food delivery apps,
+**so that** every food decision I make is informed by my trigger profile.
+
+**Acceptance Criteria:**
+- [ ] "My Safe Shop" generates weekly grocery list from last 14 days of safe meals
+- [ ] Integrates with FairPrice/RedMart API for one-tap ordering
+- [ ] "Nearby Safe Dishes" surfaces GrabFood/Foodpanda dishes near user's location with 92%+ safety match
+- [ ] Safety score shown per dish: "Chicken Rice — 96% safe for you"
+- [ ] "Order now" deep-links to delivery app
+- [ ] Grocery list updates automatically as trigger profile evolves
+- [ ] Delivery app integration uses public APIs; no user credentials stored
+
+**FR Covered:** NEW
+
+---
+
+### E9-S4 — FlarePrint: Location Trigger Map
+
+**As a** user who has logged flares across multiple locations,
+**I want** to see my flares mapped across Singapore and understand how my trigger patterns compare to the community,
+**so that** I can identify location-specific triggers and contribute to Singapore's first eczema trigger map.
+
+**Acceptance Criteria:**
+- [ ] Every log entry with symptoms GPS-tagged at time of logging
+- [ ] Personal heatmap renders on interactive Singapore map (Leaflet/MapLibre)
+- [ ] Heatmap colour intensity = flare severity at that location
+- [ ] Tap a hotspot: "3 flares here. Common factors: Geylang Serai, evening, humidity >85%"
+- [ ] Opt-in anonymised aggregation: user's flare data contributes to community map
+- [ ] Community layer: "Your flare pattern matches 47 other users in this area"
+- [ ] "Export my FlarePrint" generates shareable PDF with personal + community overlay
+- [ ] All location data stored locally by default; community sharing requires explicit opt-in
+- [ ] Privacy-preserving: GPS coordinates fuzzed by 200m before community aggregation
 
 **FR Covered:** NEW
 

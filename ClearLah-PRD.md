@@ -302,19 +302,71 @@ User requests report
 
 ---
 
-## 13. Post-Hackathon Roadmap (Pitch Talking Points)
+## 13. v2 Features — The Detective's Sensors
+
+ClearLah v2 transforms the AI agent from retrospective (detecting triggers from past data) to interceptive (preventing triggers before exposure) and collective (mapping trigger patterns across the city). Each feature feeds the agent new data streams, making the detective smarter.
+
+### 13.1 HawkerScan — Snap-to-Log
+
+| Attribute | Detail |
+|---|---|
+| **What** | Point camera at hawker food or stall signboard. ClearLah identifies the dish, logs it, and shows the personal risk score before the user takes a bite. |
+| **Data stream** | Stall-level precision intake — which stall's version of laksa triggers you vs. another's |
+| **AI role** | Computer vision dish identification + OCR stall name → cross-reference hawker DB → personal risk score |
+| **Pitch line** | "Snap your food. Know your risk. Before you eat." |
+
+### 13.2 Voice Log — Ambient Check-In
+
+| Attribute | Detail |
+|---|---|
+| **What** | "Hey ClearLah, I just ate chicken rice, skin's calm today." Done in 10 seconds, zero typing. Evening ping: "How's your skin tonight?" Reply "a bit itchy, 4 out of 10." Streak preserved. |
+| **Data stream** | Frictionless daily compliance — voice takes logging from <3 min to <15 seconds. Also: emotional tone detection from voice patterns. |
+| **AI role** | Speech-to-text → NLU parsing → structured log. Tone analysis for stress inference. Proactive evening check-in prompts. |
+| **Pitch line** | "ClearLah, I just ate..." — logging becomes a conversation, not a chore. |
+
+### 13.3 ClearCart — Safe Food Commerce Layer
+
+| Attribute | Detail |
+|---|---|
+| **What** | ClearLah analyzes your last 14 days of safe meals and generates a weekly grocery list. Integrates with FairPrice/RedMart for one-tap ordering. Surfaces safe nearby GrabFood dishes. |
+| **Data stream** | Intent-to-eat, not just ate. The agent intervenes BEFORE the trigger, not after the flare. |
+| **AI role** | Pattern analysis of safe meals → shopping list generation → commerce API integration → real-time safe dish discovery near user's location |
+| **Pitch line** | "These 3 dishes near you are 92%+ safe for your profile. Order now." |
+
+### 13.4 FlarePrint — Location Trigger Map
+
+| Attribute | Detail |
+|---|---|
+| **What** | Every logged flare gets GPS-tagged. ClearLah builds a personal heatmap of Singapore — where you flare, when, and under what conditions. Anonymously aggregated to publish the first-ever Singapore Eczema Trigger Map. |
+| **Data stream** | Geo + environmental + community cross-referencing. "Your flare pattern matches 47 other users in Geylang — here's the common thread." |
+| **AI role** | Geospatial clustering → environmental correlation → anonymised community pattern matching → public health insights |
+| **Pitch line** | "ClearLah doesn't just map your triggers — it maps the city's." |
+
+### 13.5 The Evolution Arc
+
+| Version | Mode | What the Detective Does |
+|---|---|---|
+| **v1 (now)** | Retrospective | Detects triggers from what you already ate. "Shellfish + humidity = flare." |
+| **v2** | Interceptive | Prevents triggers before exposure. "Don't eat at that stall today — 88% humidity + your shellfish profile." |
+| **v3** | Collective | Maps the entire city. NEA and dermatologists use ClearLah data. Public health infrastructure. |
+
+---
+
+## 14. Post-Hackathon Roadmap
 
 | Phase | Feature | Timeline |
 |---|---|---|
 | v1.1 | Multi-profile support (family accounts) | Month 1 |
 | v1.2 | Passive detection via wearable integration | Month 2–3 |
-| v2.0 | Clinic API — share reports directly with doctors | Month 3–6 |
-| v2.1 | SEA expansion — Malaysia, Indonesia hawker DB | Month 6–12 |
-| v3.0 | Community trigger map (anonymised crowd-sourcing) | Year 1 |
+| v2.0 | HawkerScan (camera-to-log) + Voice Log (ambient check-in) | Month 3–4 |
+| v2.1 | ClearCart (safe food commerce) + FlarePrint (location trigger map) | Month 4–6 |
+| v2.2 | Clinic API — share reports directly with doctors | Month 6–9 |
+| v3.0 | SEA expansion — Malaysia, Indonesia hawker DB | Month 9–12 |
+| v3.1 | Community trigger map (anonymised crowd-sourcing) | Year 1 |
 
 ---
 
-*Document Owner: John (PM Agent) v2.0*
+*Document Owner: John (PM Agent) v3.0*
 *Requirements by: Mary (Analyst Agent)*
-*Enhanced by: Advanced Elicitation — Pre-mortem, Shark Tank, User Focus Group, First Principles, Assumption Audit*
-*Next Step: Hand off to Winston (Architect Agent) for technical architecture design*
+*Enhanced by: Advanced Elicitation — Pre-mortem, Shark Tank, User Focus Group, First Principles, Assumption Audit + Carson (Brainstorming Coach) — v2 Feature Ideation*
+*Next Step: Hand off to Winston (Architect Agent) for v2 technical architecture design*

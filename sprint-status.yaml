@@ -1,5 +1,5 @@
 # generated: 2026-08-08
-# last_updated: "2026-08-11"
+# last_updated: "2026-08-12"
 # project: ClearLah
 # project_key: NOKEY
 # tracking_system: file-system
@@ -41,7 +41,7 @@
 # - Retrospective appends its action items to action_items; sprint-status surfaces open ones
 
 generated: "2026-08-08"
-last_updated: "2026-08-11"
+last_updated: "2026-08-12"
 project: ClearLah
 project_key: NOKEY
 tracking_system: file-system
@@ -116,3 +116,10 @@ development_status:
   8-1-lifestyle-habit-tracking: done
   8-2-food-database-expansion-restaurant-and-international: done
   epic-8-retrospective: done
+
+  # ── Epic 9: v2 — The Detective's Sensors ─────────────────────────────────
+  epic-9: in-progress
+  9-1-hawkerscan-camera-to-log: review
+  9-2-voice-log-ambient-check-in: review
+  9-3-clearcart-safe-food-commerce: review
+  9-4-flareprint-location-trigger-map: review

@@ -66,6 +66,15 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         },
       ]);
 
+      const voiceText = sessionStorage.getItem("clearlah_voice_text");
+      if (voiceText) {
+        sessionStorage.removeItem("clearlah_voice_text");
+        setInputValue(voiceText);
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 600);
+      }
+
       // Determine post-greeting bubbles
       if (!isDemoMode()) {
         if (props.logCount === 0) {
