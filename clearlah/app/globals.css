@@ -160,6 +160,8 @@
   /* ── Demo Mode Badge ───────────────────────────────────────────────────── */
   .demo-badge {
     @apply fixed top-3 right-3 z-50 pill bg-accent-sunshine text-neutral-800 shadow-md font-semibold text-xs;
+    /* Decorative — must never intercept clicks on header actions (Scan dish, Skin check) */
+    pointer-events: none;
   }
 
   /* ── Severity Dot ──────────────────────────────────────────────────────── */
