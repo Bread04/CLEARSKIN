@@ -10,36 +10,36 @@ interface VoiceInputState {
 
 interface VoiceInputOptions {
   onResult: (text: string) => void;
-  wakeWord?: string;
 }
 
-const SpeechRecognitionAPI =
+const SpeechRecognitionAPI: any =
   typeof window !== "undefined"
     ? (window as unknown as Record<string, unknown>).SpeechRecognition ||
       (window as unknown as Record<string, unknown>).webkitSpeechRecognition
     : null;
 
-export function useVoiceInput({ onResult, wakeWord }: VoiceInputOptions) {
+export function useVoiceInput({ onResult }: VoiceInputOptions) {
   const [state, setState] = useState<VoiceInputState>({
     status: "idle",
     transcript: "",
     error: null,
   });
 
-  const recognitionRef = useRef<InstanceType<typeof SpeechRecognitionAPI> | null>(null);
-  const wakeDetectorRef = useRef<{ ctx: AudioContext; analyser: AnalyserNode; stream: MediaStream } | null>(null);
+  const recognitionRef = useRef<any>(null);
   const finalTranscriptRef = useRef("");
-  const wakeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stoppingRef = useRef(false);
+  const onResultRef = useRef(onResult);
+  onResultRef.current = onResult;
 
-  const stopWakeDetection = useCallback(() => {
-    if (wakeTimeoutRef.current) {
-      clearTimeout(wakeTimeoutRef.current);
-      wakeTimeoutRef.current = null;
-    }
-    if (wakeDetectorRef.current) {
-      wakeDetectorRef.current.stream.getTracks().forEach((t) => t.stop());
-      wakeDetectorRef.current.ctx.close();
-      wakeDetectorRef.current = null;
+  const stopListening = useCallback(() => {
+    stoppingRef.current = true;
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch {
+        // already stopped
+      }
+      recognitionRef.current = null;
     }
   }, []);
 
@@ -49,6 +49,9 @@ export function useVoiceInput({ onResult, wakeWord }: VoiceInputOptions) {
       return;
     }
 
+    stoppingRef.current = false;
+    finalTranscriptRef.current = "";
+
     const recognition = new SpeechRecognitionAPI();
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -56,11 +59,10 @@ export function useVoiceInput({ onResult, wakeWord }: VoiceInputOptions) {
 
     recognition.onstart = () => {
       setState({ status: "listening", transcript: "", error: null });
-      finalTranscriptRef.current = "";
     };
 
     recognition.onresult = (event: Event) => {
-      const e = event as { resultIndex: number; results: { isFinal: boolean; 0: { transcript: string } }[][] };
+      const e = event as unknown as { resultIndex: number; results: { isFinal: boolean; 0: { transcript: string } }[] };
       let interim = "";
       for (let i = e.resultIndex; i < e.results.length; i++) {
         const result = e.results[i];
@@ -78,7 +80,7 @@ export function useVoiceInput({ onResult, wakeWord }: VoiceInputOptions) {
     };
 
     recognition.onerror = (event: Event) => {
-      const e = event as { error: string };
+      const e = event as unknown as { error: string };
       if (e.error === "no-speech") {
         setState((s) => ({ ...s, transcript: finalTranscriptRef.current.trim() }));
         return;
@@ -92,59 +94,25 @@ export function useVoiceInput({ onResult, wakeWord }: VoiceInputOptions) {
     };
 
     recognition.onend = () => {
+      const wasStopped = stoppingRef.current;
       const final = finalTranscriptRef.current.trim();
-      if (final) {
+      if (final && !wasStopped) {
         setState({ status: "result", transcript: final, error: null });
-        onResult(final);
-      } else if (state.status === "listening") {
+        onResultRef.current(final);
+      } else if (!final && !wasStopped) {
         setState({ status: "idle", transcript: "", error: null });
       }
     };
 
     recognitionRef.current = recognition;
     recognition.start();
-  }, [onResult, state.status]);
-
-  const stopListening = useCallback(() => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-      recognitionRef.current = null;
-    }
   }, []);
-
-  const startWakeDetection = useCallback(async () => {
-    if (!wakeWord) return;
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const ctx = new AudioContext();
-      const analyser = ctx.createAnalyser();
-      analyser.fftSize = 256;
-      const source = ctx.createMediaStreamSource(stream);
-      source.connect(analyser);
-      wakeDetectorRef.current = { ctx, analyser, stream };
-
-      const buffer = new Uint8Array(analyser.frequencyBinCount);
-      const check = () => {
-        if (!wakeDetectorRef.current) return;
-        analyser.getByteFrequencyData(buffer);
-        const avg = buffer.reduce((a, b) => a + b, 0) / buffer.length;
-        if (avg > 30) {
-          stopWakeDetection();
-          startListening();
-          return;
-        }
-        wakeTimeoutRef.current = setTimeout(check, 200);
-      };
-      check();
-    } catch {
-      // Microphone denied — fall back to button activation
-    }
-  }, [wakeWord, stopWakeDetection, startListening]);
 
   const requestMicAndListen = useCallback(async () => {
     try {
       setState({ status: "idle", transcript: "", error: null });
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((t) => t.stop());
       startListening();
     } catch {
       setState({
@@ -157,23 +125,20 @@ export function useVoiceInput({ onResult, wakeWord }: VoiceInputOptions) {
 
   const reset = useCallback(() => {
     stopListening();
-    stopWakeDetection();
     setState({ status: "idle", transcript: "", error: null });
     finalTranscriptRef.current = "";
-  }, [stopListening, stopWakeDetection]);
+  }, [stopListening]);
 
   useEffect(() => {
     return () => {
       stopListening();
-      stopWakeDetection();
     };
-  }, [stopListening, stopWakeDetection]);
+  }, [stopListening]);
 
   return {
     state,
     startListening: requestMicAndListen,
     stopListening,
-    startWakeDetection,
     reset,
     isSupported: !!SpeechRecognitionAPI,
   };

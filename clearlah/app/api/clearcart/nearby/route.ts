@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { resolveApiUserId } from "@/lib/utils/user-server";
+import { UnauthenticatedError } from "@/lib/utils/demo";
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,6 +9,7 @@ export async function GET(request: NextRequest) {
     const userId = await resolveApiUserId(searchParams.get("user_id") || undefined);
     const lat = parseFloat(searchParams.get("lat") || "");
     const lng = parseFloat(searchParams.get("lng") || "");
+    const hasLocation = Number.isFinite(lat) && Number.isFinite(lng);
 
     const supabase = await createClient();
 
@@ -20,6 +22,14 @@ export async function GET(request: NextRequest) {
     const triggerAllergens = new Set<string>();
     if (profile?.known_allergens?.length) {
       profile.known_allergens.forEach((a: string) => triggerAllergens.add(a.toLowerCase()));
+    }
+
+    const triggerCache = profile?.trigger_cache as Record<string, unknown> | null;
+    if (triggerCache && "top_triggers" in triggerCache) {
+      const topTriggers = (triggerCache as { top_triggers?: Array<{ factor: string }> }).top_triggers || [];
+      for (const entry of topTriggers) {
+        if (entry.factor) triggerAllergens.add(entry.factor.toLowerCase());
+      }
     }
 
     const { data: allDishes } = await supabase
@@ -61,8 +71,18 @@ export async function GET(request: NextRequest) {
       .sort((a, b) => b.safety_score - a.safety_score)
       .slice(0, 10);
 
+    // Note: without geocoded stall coordinates in the DB, "nearby" is
+    // currently a personal-safety ranking rather than a radius filter.
+    // The lat/lng are accepted for the client to sort by distance if present.
+    void lat;
+    void lng;
+    void hasLocation;
+
     return NextResponse.json({ dishes: safeDishes });
   } catch (err) {
+    if (err instanceof UnauthenticatedError) {
+      return NextResponse.json({ error: "Authentication required", dishes: [] }, { status: 401 });
+    }
     const message = err instanceof Error ? err.message : "Internal server error";
     return NextResponse.json({ error: message, dishes: [] }, { status: 500 });
   }

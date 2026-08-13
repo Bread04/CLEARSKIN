@@ -13,7 +13,7 @@ interface IdentifiedDish {
 }
 
 interface HawkerScanProps {
-  onLog: (dish: IdentifiedDish, photoDataUrl: string) => void;
+  onLog: (dish: IdentifiedDish, photoDataUrl: string) => void | Promise<void>;
   onClose: () => void;
 }
 
@@ -60,6 +60,10 @@ export default function HawkerScan({ onLog, onClose }: HawkerScanProps) {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas) return;
+    if (!video.videoWidth || !video.videoHeight) {
+      setError("Camera is still warming up. Try again in a moment.");
+      return;
+    }
 
     const maxDim = 1024;
     let w = video.videoWidth;
@@ -99,6 +103,11 @@ export default function HawkerScan({ onLog, onClose }: HawkerScanProps) {
       }
 
       const result = await res.json();
+      if (!result.dish) {
+        setError(result.message || "Could not identify the dish. Try searching instead.");
+        setCameraState("captured");
+        return;
+      }
       setDish(result.dish);
       setCameraState("result");
     } catch (err) {
@@ -110,7 +119,13 @@ export default function HawkerScan({ onLog, onClose }: HawkerScanProps) {
   const handleLog = useCallback(async () => {
     if (!dish || !capturedImage) return;
     setLogging(true);
-    onLog(dish, capturedImage);
+    try {
+      await onLog(dish, capturedImage);
+    } catch {
+      setError("Could not save your log. Please try again.");
+    } finally {
+      setLogging(false);
+    }
   }, [dish, capturedImage, onLog]);
 
   const retake = useCallback(() => {
@@ -213,7 +228,6 @@ export default function HawkerScan({ onLog, onClose }: HawkerScanProps) {
 
       <video
         ref={videoRef}
-        autoPlay
         playsInline
         muted
         className="flex-1 w-full object-cover"
@@ -232,7 +246,7 @@ export default function HawkerScan({ onLog, onClose }: HawkerScanProps) {
           <button
             type="button"
             onClick={capture}
-            className="w-18 h-18 rounded-full border-4 border-white bg-white/20 hover:bg-white/30 transition-colors flex items-center justify-center"
+            className="w-20 h-20 rounded-full border-4 border-white bg-white/20 hover:bg-white/30 transition-colors flex items-center justify-center"
             aria-label="Capture photo"
           >
             <div className="w-14 h-14 rounded-full bg-white" />

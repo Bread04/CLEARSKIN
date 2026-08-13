@@ -13,7 +13,7 @@ export default function VoiceConfirmation({ items, onConfirm, onEdit, speaking }
   const synthRef = useRef<SpeechSynthesisUtterance | null>(null);
   const [listening, setListening] = useState(false);
   const [voiceResponse, setVoiceResponse] = useState<string | null>(null);
-  const recognitionRef = useRef<InstanceType<typeof SpeechRecognition> | null>(null);
+  const recognitionRef = useRef<any>(null);
 
   const confirmText = `Got it — ${items.join(", ")}. Say yes to save, no to cancel, or edit to fix.`;
 
@@ -39,7 +39,7 @@ export default function VoiceConfirmation({ items, onConfirm, onEdit, speaking }
     if (!speaking) return;
 
     const timer = setTimeout(() => {
-      const SpeechRecognitionAPI =
+      const SpeechRecognitionAPI: any =
         (window as unknown as Record<string, unknown>).SpeechRecognition ||
         (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
 
@@ -51,7 +51,7 @@ export default function VoiceConfirmation({ items, onConfirm, onEdit, speaking }
       recognition.lang = "en-SG";
 
       recognition.onresult = (event: Event) => {
-        const e = event as { results: { 0: { transcript: string } }[][] };
+        const e = event as unknown as { results: { 0: { transcript: string } }[] };
         const text = e.results[0][0].transcript.toLowerCase().trim();
         setVoiceResponse(text);
 

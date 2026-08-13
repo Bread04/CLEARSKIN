@@ -1,14 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { resolveApiUserId } from "@/lib/utils/user-server";
+import { UnauthenticatedError } from "@/lib/utils/demo";
 
 const AI_TIMEOUT_MS = 12000;
 
+function escapeIlike(value: string): string {
+  return value.replace(/[%_\\]/g, (m) => `\\${m}`);
+}
+
 async function matchDishToDb(supabase: Awaited<ReturnType<typeof createClient>>, dishName: string) {
+  const safeName = escapeIlike(dishName);
   const { data: dishes } = await supabase
     .from("hawker_dishes")
     .select("id, name_en, name_ms, name_zh, allergens, category")
-    .or(`name_en.ilike.%${dishName}%,name_ms.ilike.%${dishName}%,name_zh.ilike.%${dishName}%`)
+    .or(`name_en.ilike.%${safeName}%,name_ms.ilike.%${safeName}%,name_zh.ilike.%${safeName}%`)
     .limit(5);
 
   if (!dishes || dishes.length === 0) return null;
@@ -53,10 +59,10 @@ async function computeRisk(
     }
   }
 
-  if (typeof triggerCache === "object" && triggerCache !== null && "correlations" in triggerCache) {
-    const correlations = (triggerCache as { correlations?: Array<{ trigger: string }> }).correlations || [];
-    for (const corr of correlations) {
-      const triggerLower = corr.trigger.toLowerCase();
+  if (typeof triggerCache === "object" && triggerCache !== null && "top_triggers" in triggerCache) {
+    const topTriggers = (triggerCache as { top_triggers?: Array<{ factor: string }> }).top_triggers || [];
+    for (const entry of topTriggers) {
+      const triggerLower = entry.factor.toLowerCase();
       for (const allergen of allergens) {
         if (triggerLower.includes(allergen.toLowerCase()) || allergen.toLowerCase().includes(triggerLower)) {
           if (!matchedTriggers.includes(allergen)) matchedTriggers.push(allergen);
@@ -91,6 +97,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => null);
     if (!body || typeof body.image !== "string") {
       return NextResponse.json({ error: "Image data is required" }, { status: 400 });
+    }
+
+    if (!body.image.startsWith("data:image/")) {
+      return NextResponse.json({ error: "Image must be a data URL (data:image/...)" }, { status: 400 });
+    }
+
+    // Cap payload at ~3MB to avoid forwarding oversized images to the model
+    if (body.image.length > 3_200_000) {
+      return NextResponse.json({ error: "Image is too large. Please use a smaller photo." }, { status: 400 });
     }
 
     const userId = await resolveApiUserId(body.user_id);
@@ -150,18 +165,22 @@ Be specific: prefer "Char Kway Teow" over "fried noodles", "Hainanese Chicken Ri
         signal: controller.signal,
       });
 
-      clearTimeout(timeout);
-
       if (res.ok) {
         const data = await res.json();
         const content = data.choices?.[0]?.message?.content || "";
-        const parsed = JSON.parse(content.trim());
-        dishName = parsed.dish_name || null;
-        confidence = parsed.confidence || 0;
-        source = parsed.source || "fallback";
+        try {
+          const parsed = JSON.parse(content.trim());
+          dishName = parsed.dish_name || null;
+          confidence = parsed.confidence || 0;
+          source = parsed.source || "fallback";
+        } catch {
+          dishName = null;
+        }
       }
     } catch {
-      // AI call failed - continue to return not-found
+      // AI call failed or timed out — fall through to not-found
+    } finally {
+      clearTimeout(timeout);
     }
 
     if (!dishName) {
@@ -206,6 +225,9 @@ Be specific: prefer "Char Kway Teow" over "fried noodles", "Hainanese Chicken Ri
       stall_warnings: [],
     });
   } catch (err) {
+    if (err instanceof UnauthenticatedError) {
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    }
     const message = err instanceof Error ? err.message : "Internal server error";
     return NextResponse.json({ error: message }, { status: 500 });
   }

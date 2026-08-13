@@ -6,7 +6,7 @@ import NearbySafeDishes from "@/components/clearcart/NearbySafeDishes";
 
 interface GroceryItem {
   name: string;
-  category: string;
+  category: "hawker" | "restaurant" | "international";
   frequency: number;
   last_eaten: string;
   safe_score: number;
@@ -41,7 +41,7 @@ export default function ClearCartClient({ logCount }: ClearCartClientProps) {
     }
 
     fetch("/api/clearcart/grocery-list")
-      .then((r) => r.json())
+      .then((r) => (r.ok ? r.json() : { items: [] }))
       .then((data) => {
         setGroceryItems(data.items || []);
       })
@@ -49,7 +49,7 @@ export default function ClearCartClient({ logCount }: ClearCartClientProps) {
       .finally(() => setLoadingGrocery(false));
 
     fetch("/api/clearcart/nearby")
-      .then((r) => r.json())
+      .then((r) => (r.ok ? r.json() : { dishes: [] }))
       .then((data) => {
         setNearbyDishes(data.dishes || []);
       })

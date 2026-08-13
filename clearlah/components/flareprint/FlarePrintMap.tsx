@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 interface Flare {
   lat: number;
@@ -11,6 +11,7 @@ interface Flare {
 }
 
 interface CommunityCell {
+  grid_cell_id: string;
   lat: number;
   lng: number;
   flare_count: number;
@@ -23,67 +24,107 @@ export default function FlarePrintMap() {
   const [showCommunity, setShowCommunity] = useState(false);
   const [days, setDays] = useState(30);
   const [loading, setLoading] = useState(true);
-  const [mapReady, setMapReady] = useState(false);
+
+  const mapRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const flareLayerRef = useRef<any>(null);
+  const communityLayerRef = useRef<any>(null);
 
   useEffect(() => {
     fetch(`/api/flareprint/personal?days=${days}`)
-      .then((r) => r.json())
+      .then((r) => (r.ok ? r.json() : { flares: [] }))
       .then((d) => setFlares(d.flares || []))
       .catch(() => {})
       .finally(() => setLoading(false));
 
     fetch("/api/flareprint/community")
-      .then((r) => r.json())
+      .then((r) => (r.ok ? r.json() : { cells: [] }))
       .then((d) => setCommunityCells(d.cells || []))
       .catch(() => {});
   }, [days]);
 
-  const initMap = useCallback(
-    (el: HTMLDivElement | null) => {
-      if (!el || mapReady || loading) return;
-      setMapReady(true);
+  // Initialize the Leaflet map once after the container mounts and data loads.
+  useEffect(() => {
+    if (loading || flares.length === 0) return;
+    if (mapRef.current) return;
 
-      const L = (window as unknown as Record<string, unknown>).L as Record<string, unknown>;
-      if (!L) return;
+    const L = (window as unknown as { L?: Record<string, any> }).L;
+    if (!L || !containerRef.current) return;
 
-      const map = (L.map as (el: HTMLElement, opts: Record<string, unknown>) => Record<string, unknown>)(el, {
-        center: [1.3521, 103.8198],
-        zoom: 12,
-      });
+    const el = containerRef.current;
+    if (el.hasAttribute("data-leaflet-initialized")) return;
 
-      (L.tileLayer as (url: string, opts: Record<string, unknown>) => Record<string, unknown>)(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        { attribution: "&copy; OpenStreetMap contributors" },
-      ).addTo(map);
+    const map = L.map(el, { center: [1.3521, 103.8198], zoom: 12 });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
 
-      if (flares.length > 0) {
-        const heatData: [number, number, number][] = flares.map((f) => [f.lat, f.lng, f.severity / 10]);
-        if (L.heatLayer) {
-          (L.heatLayer as (data: [number, number, number][], opts: Record<string, unknown>) => Record<string, unknown>)(
-            heatData,
-            { radius: 25, blur: 15, maxZoom: 17 },
-          ).addTo(map);
-        } else {
-          for (const f of flares) {
-            const color = f.severity >= 7 ? "#C0583A" : f.severity >= 4 ? "#E8A020" : "#5B7F6E";
-            (L.circleMarker as (coords: [number, number], opts: Record<string, unknown>) => Record<string, unknown>)([f.lat, f.lng], {
-              radius: f.severity * 1.5,
-              fillColor: color,
-              color: color,
-              weight: 1,
-              opacity: 0.8,
-              fillOpacity: 0.5,
-            })
-              .addTo(map)
-              .bindPopup(`<b>${f.date}</b><br/>Severity: ${f.severity}/10<br/>${f.factors.join(", ")}`);
-          }
-        }
-      }
+    el.setAttribute("data-leaflet-initialized", "true");
+    mapRef.current = map;
+  }, [loading, flares.length]);
 
-      (map as Record<string, unknown>).invalidateSize?.();
-    },
-    [flares, loading, mapReady],
-  );
+  // Draw personal flare markers.
+  useEffect(() => {
+    const L = (window as unknown as { L?: Record<string, any> }).L;
+    const map = mapRef.current;
+    if (!L || !map) return;
+
+    if (flareLayerRef.current) {
+      flareLayerRef.current.remove();
+      flareLayerRef.current = null;
+    }
+
+    if (flares.length === 0) return;
+
+    const group = L.layerGroup();
+    for (const f of flares) {
+      const color = f.severity >= 7 ? "#C0583A" : f.severity >= 4 ? "#E8A020" : "#5B7F6E";
+      L.circleMarker([f.lat, f.lng], {
+        radius: f.severity * 1.5,
+        fillColor: color,
+        color: color,
+        weight: 1,
+        opacity: 0.8,
+        fillOpacity: 0.5,
+      })
+        .addTo(group)
+        .bindPopup(`<b>${f.date}</b><br/>Severity: ${f.severity}/10<br/>${f.factors.join(", ")}`);
+    }
+    group.addTo(map);
+    flareLayerRef.current = group;
+  }, [flares]);
+
+  // Draw community cells when toggled on.
+  useEffect(() => {
+    const L = (window as unknown as { L?: Record<string, any> }).L;
+    const map = mapRef.current;
+    if (!L || !map) return;
+
+    if (communityLayerRef.current) {
+      communityLayerRef.current.remove();
+      communityLayerRef.current = null;
+    }
+
+    if (!showCommunity || communityCells.length === 0) return;
+
+    const group = L.layerGroup();
+    for (const cell of communityCells) {
+      L.circleMarker([cell.lat, cell.lng], {
+        radius: Math.min(20, 4 + cell.flare_count / 2),
+        fillColor: "#C0583A",
+        color: "#C0583A",
+        weight: 1,
+        opacity: 0.35,
+        fillOpacity: 0.25,
+      })
+        .addTo(group)
+        .bindPopup(
+          `<b>${cell.common_triggers.slice(0, 2).join(", ") || "Various triggers"}</b><br/>${cell.flare_count} reported flares`,
+        );
+    }
+    group.addTo(map);
+    communityLayerRef.current = group;
+  }, [showCommunity, communityCells]);
 
   if (loading) {
     return (
@@ -133,7 +174,7 @@ export default function FlarePrintMap() {
             </p>
           </div>
         ) : (
-          <div ref={initMap} className="h-80 w-full" />
+          <div ref={containerRef} className="h-80 w-full" />
         )}
       </div>
 

@@ -7,7 +7,7 @@ interface VoiceToneResult {
 }
 
 export function analyzeVoiceTone(audioData: Float32Array, sampleRate: number): VoiceToneResult {
-  if (audioData.length === 0) {
+  if (audioData.length < 4) {
     return { fatigue_detected: false, stress_likely: false, suggestion: null };
   }
 
@@ -21,11 +21,11 @@ export function analyzeVoiceTone(audioData: Float32Array, sampleRate: number): V
   }
   const zcr = zeroCrossings / audioData.length;
 
-  const blockSize = Math.floor(audioData.length / 4);
-  const rmsBlocks = [];
+  const blockSize = Math.max(1, Math.floor(audioData.length / 4));
+  const rmsBlocks: number[] = [];
   for (let i = 0; i < 4; i++) {
     const slice = audioData.slice(i * blockSize, (i + 1) * blockSize);
-    rmsBlocks.push(Math.sqrt(slice.reduce((s, v) => s + v * v, 0) / slice.length));
+    rmsBlocks.push(slice.length > 0 ? Math.sqrt(slice.reduce((s, v) => s + v * v, 0) / slice.length) : 0);
   }
 
   const laterHalf = (rmsBlocks[2] + rmsBlocks[3]) / 2;
@@ -62,13 +62,19 @@ export function getVoiceToneStream(
       source = ctx.createMediaStreamSource(stream);
       processor = ctx.createScriptProcessor(4096, 1, 1);
 
+      // Zero-gain sink: keeps the analyser node processing without
+      // routing raw microphone audio to the speakers (feedback/echo).
+      const silence = ctx.createGain();
+      silence.gain.value = 0;
+
       processor.onaudioprocess = (e) => {
         const input = e.inputBuffer.getChannelData(0);
         buffer.push(new Float32Array(input));
       };
 
       source.connect(processor);
-      processor.connect(ctx.destination);
+      processor.connect(silence);
+      silence.connect(ctx.destination);
 
       timeout = setTimeout(() => {
         const combined = new Float32Array(buffer.reduce((s, b) => s + b.length, 0));
@@ -95,6 +101,7 @@ export function getVoiceToneStream(
     ctx = null;
     processor = null;
     source = null;
+    buffer.length = 0;
   };
 
   return { start, stop };

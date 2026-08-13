@@ -1,10 +1,55 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import HawkerScan from "@/components/hawker/HawkerScan";
+
+interface IdentifiedDish {
+  dish_id: string;
+  dish_name: string;
+  confidence: number;
+  allergens: string[];
+  risk_score: number;
+  risk_label: "high" | "moderate" | "safe";
+  risk_reason: string;
+}
 
 export default function LogScanButton() {
   const [scanning, setScanning] = useState(false);
+
+  const handleLog = useCallback(async (dish: IdentifiedDish) => {
+    try {
+      const weatherRes = await fetch("/api/weather");
+      const weatherSnapshot = await weatherRes.json();
+
+      const log = {
+        food: {
+          items: [{ name: dish.dish_name }],
+        },
+        lifestyle: {
+          sleep_hours: null,
+          stress_level: null,
+          stress_type: null,
+          exercise_minutes: null,
+          water_ml: null,
+          caffeine_cups: null,
+          alcohol_drinks: null,
+        },
+        skincare: null,
+        symptoms: { skin: null, gut: null, respiratory: null },
+        summary: `Scanned ${dish.dish_name} (${dish.risk_label}).`,
+      };
+
+      await fetch("/api/logs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ log, weather_snapshot: weatherSnapshot }),
+      });
+    } catch {
+      throw new Error("Could not save your log.");
+    } finally {
+      setScanning(false);
+    }
+  }, []);
 
   return (
     <>
@@ -33,9 +78,7 @@ export default function LogScanButton() {
       {scanning && (
         <HawkerScan
           onClose={() => setScanning(false)}
-          onLog={(_dish, _photoDataUrl) => {
-            setScanning(false);
-          }}
+          onLog={handleLog}
         />
       )}
     </>

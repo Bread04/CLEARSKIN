@@ -32,7 +32,7 @@ describe("analyzeSafeMeals", () => {
     ];
     const result = analyzeSafeMeals(entries, []);
     expect(result.meals).toHaveLength(1);
-    expect(result.meals[0].dish_name).toContain("chicken rice");
+    expect(result.meals[0].dish_name.toLowerCase()).toContain("chicken rice");
     expect(result.meals[0].frequency).toBe(3);
     expect(result.meals[0].safe_score).toBeGreaterThan(0);
   });

@@ -8,7 +8,7 @@ export default function FlarePrintClient() {
     <div className="p-4 space-y-4">
       <Script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
       />
       <link
         rel="stylesheet"

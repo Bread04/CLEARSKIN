@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { resolveApiUserId } from "@/lib/utils/user-server";
+import { UnauthenticatedError } from "@/lib/utils/demo";
 
 function fuzzCoordinate(coord: number): number {
   const offset = (Math.random() - 0.5) * 0.0036; // ~200m at equator
@@ -39,17 +40,19 @@ export async function GET(request: NextRequest) {
           e.symptoms?.respiratory ?? 0,
         );
 
+        const weather = e.weather_snapshot as { humidity?: number; psi?: number } | null;
         const factors: string[] = [];
-        if (e.weather_snapshot?.humidity && (e.weather_snapshot as Record<string, unknown>).humidity as number > 85) {
+        if (typeof weather?.humidity === "number" && weather.humidity > 85) {
           factors.push("high humidity");
         }
-        if ((e.weather_snapshot as Record<string, unknown>)?.psi && ((e.weather_snapshot as Record<string, unknown>).psi as number) > 100) {
+        if (typeof weather?.psi === "number" && weather.psi > 100) {
           factors.push("high PSI");
         }
         if (e.food && typeof e.food === "object") {
-          const food = e.food as { hawker_dishes?: string[] };
-          if (food.hawker_dishes?.length) {
-            factors.push(food.hawker_dishes.join(", "));
+          const food = e.food as { items?: Array<{ name?: string }> };
+          const names = (food.items || []).map((i) => i.name).filter(Boolean);
+          if (names.length) {
+            factors.push(names.join(", "));
           }
         }
 
@@ -64,6 +67,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ flares });
   } catch (err) {
+    if (err instanceof UnauthenticatedError) {
+      return NextResponse.json({ error: "Authentication required", flares: [] }, { status: 401 });
+    }
     const message = err instanceof Error ? err.message : "Internal error";
     return NextResponse.json({ error: message, flares: [] }, { status: 500 });
   }
@@ -82,8 +88,22 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient();
 
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("community_sharing")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (!profile?.community_sharing) {
+      return NextResponse.json(
+        { error: "Community sharing is not enabled for this account." },
+        { status: 403 },
+      );
+    }
+
     for (const flare of body.flares) {
-      if (!flare.lat || !flare.lng) continue;
+      if (typeof flare.lat !== "number" || typeof flare.lng !== "number") continue;
+      if (!Number.isFinite(flare.lat) || !Number.isFinite(flare.lng)) continue;
 
       const fuzzedLat = fuzzCoordinate(flare.lat);
       const fuzzedLng = fuzzCoordinate(flare.lng);
@@ -99,7 +119,9 @@ export async function POST(request: NextRequest) {
         const newCount = existing.flare_count + 1;
         const newAvg = (existing.avg_severity * existing.flare_count + (flare.severity || 0)) / newCount;
 
-        const mergedTriggers = [...new Set([...existing.common_triggers, ...(flare.factors || [])])].slice(0, 5);
+        const mergedTriggers = Array.from(
+          new Set([...(existing.common_triggers || []), ...(flare.factors || [])]),
+        ).slice(0, 5);
 
         await supabase
           .from("community_flares")
@@ -122,6 +144,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, contributed: body.flares.length });
   } catch (err) {
+    if (err instanceof UnauthenticatedError) {
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    }
     const message = err instanceof Error ? err.message : "Internal error";
     return NextResponse.json({ error: message }, { status: 500 });
   }

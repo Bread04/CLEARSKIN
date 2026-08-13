@@ -1,14 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function FlarePrintSettings() {
-  const [locationEnabled, setLocationEnabled] = useState(() => {
-    try { return localStorage.getItem("clearlah_location_enabled") === "true"; } catch { return false; }
-  });
-  const [communitySharing, setCommunitySharing] = useState(() => {
-    try { return localStorage.getItem("clearlah_community_sharing") === "true"; } catch { return false; }
-  });
+  const [locationEnabled, setLocationEnabled] = useState(false);
+  const [communitySharing, setCommunitySharing] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/profile")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.profile) {
+          setLocationEnabled(!!d.profile.location_enabled);
+          setCommunitySharing(!!d.profile.community_sharing);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoaded(true));
+  }, []);
+
+  const persist = async (key: "location_enabled" | "community_sharing", value: boolean) => {
+    try {
+      await fetch("/api/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [key]: value }),
+      });
+    } catch {
+      // non-critical — keep local state
+    }
+  };
 
   return (
     <div className="p-4 space-y-6">
@@ -22,8 +44,9 @@ export default function FlarePrintSettings() {
           onClick={() => {
             const next = !locationEnabled;
             setLocationEnabled(next);
-            localStorage.setItem("clearlah_location_enabled", String(next));
+            persist("location_enabled", next);
           }}
+          disabled={!loaded}
           className={`text-body-sm px-4 py-2 rounded-full min-h-[44px] transition-colors ${
             locationEnabled ? "bg-primary-sage text-white" : "bg-neutral-100 text-neutral-600"
           }`}
@@ -42,8 +65,9 @@ export default function FlarePrintSettings() {
           onClick={() => {
             const next = !communitySharing;
             setCommunitySharing(next);
-            localStorage.setItem("clearlah_community_sharing", String(next));
+            persist("community_sharing", next);
           }}
+          disabled={!loaded}
           className={`text-body-sm px-4 py-2 rounded-full min-h-[44px] transition-colors ${
             communitySharing ? "bg-secondary-terracotta text-white" : "bg-neutral-100 text-neutral-600"
           }`}
@@ -66,8 +90,12 @@ export default function FlarePrintSettings() {
           type="button"
           onClick={async () => {
             try {
-              await fetch("/api/logs", { method: "DELETE" });
-              alert("Location data deleted from your records.");
+              const res = await fetch("/api/logs", { method: "DELETE" });
+              if (res.ok) {
+                alert("Location data deleted from your records.");
+              } else {
+                alert("Could not delete data. Try again.");
+              }
             } catch {
               alert("Could not delete data. Try again.");
             }

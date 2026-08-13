@@ -12,9 +12,8 @@ export default function VoiceButton({ onResult, className = "" }: VoiceButtonPro
   const [showPrompt, setShowPrompt] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
-  const { state, startListening, stopListening, reset, isSupported } = useVoiceInput({
+  const { state, startListening, stopListening, isSupported } = useVoiceInput({
     onResult,
-    wakeWord: "Hey ClearLah",
   });
 
   if (!isSupported) return null;

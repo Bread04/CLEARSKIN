@@ -13,26 +13,46 @@ export interface SafeMealAnalysis {
   generated_at: string;
 }
 
+interface LogEntryInput {
+  logged_at: string;
+  food: { items?: Array<string | { name: string }>; hawker_dishes?: string[] } | null;
+  symptoms: { skin?: number | null; gut?: number | null; respiratory?: number | null } | null;
+}
+
+function titleCase(name: string): string {
+  return name
+    .split(" ")
+    .map((w) => (w.length > 0 ? w.charAt(0).toUpperCase() + w.slice(1) : w))
+    .join(" ");
+}
+
+function isValidNumber(n: unknown): n is number {
+  return typeof n === "number" && Number.isFinite(n);
+}
+
 export function analyzeSafeMeals(
-  logEntries: Array<{
-    logged_at: string;
-    food: { items?: string[]; hawker_dishes?: string[] } | null;
-    symptoms: { skin?: number | null; gut?: number | null; respiratory?: number | null } | null;
-  }>,
+  logEntries: LogEntryInput[],
   knownTriggers: string[],
 ): SafeMealAnalysis {
   const triggerSet = new Set(knownTriggers.map((t) => t.toLowerCase()));
   const mealMap = new Map<string, { dates: string[]; scores: number[] }>();
 
   for (const entry of logEntries) {
-    const maxSymptom = Math.max(
-      entry.symptoms?.skin ?? 0,
-      entry.symptoms?.gut ?? 0,
-      entry.symptoms?.respiratory ?? 0,
-    );
+    const skin = isValidNumber(entry.symptoms?.skin) ? (entry.symptoms!.skin as number) : 0;
+    const gut = isValidNumber(entry.symptoms?.gut) ? (entry.symptoms!.gut as number) : 0;
+    const respiratory = isValidNumber(entry.symptoms?.respiratory) ? (entry.symptoms!.respiratory as number) : 0;
+    const maxSymptom = Math.max(skin, gut, respiratory);
 
     const dishes: string[] = [];
-    if (entry.food?.items) dishes.push(...entry.food.items);
+    if (entry.food?.items) {
+      for (const item of entry.food.items) {
+        if (typeof item === "string") {
+          dishes.push(item);
+        } else if (item && typeof item.name === "string") {
+          dishes.push(item.name);
+        }
+      }
+    }
     if (entry.food?.hawker_dishes) dishes.push(...entry.food.hawker_dishes);
 
     for (const dish of dishes) {
@@ -48,21 +68,26 @@ export function analyzeSafeMeals(
 
   const meals: SafeMeal[] = [];
 
-  for (const [dishName, data] of mealMap) {
-    if (data.dates.length < 2) continue;
+  mealMap.forEach((data, dishName) => {
+    if (data.dates.length < 2) return;
 
     const avgSymptom = data.scores.reduce((a, b) => a + b, 0) / data.scores.length;
-    if (avgSymptom > 3) continue;
+    if (avgSymptom > 3) return;
 
     if (triggerSet.has(dishName) || knownTriggers.some((t) => dishName.includes(t.toLowerCase()))) {
-      continue;
+      return;
     }
 
     const sortedDates = [...data.dates].sort();
     const frequency = data.dates.length;
     const lastEaten = sortedDates[sortedDates.length - 1];
-    const recencyBonus = Math.max(0, 10 - (Date.now() - new Date(lastEaten).getTime()) / (86400000 * 7));
-    const safeScore = Math.min(100, Math.round((avgSymptom <= 1 ? 30 : avgSymptom <= 2 ? 20 : 10) + frequency * 5 + recencyBonus));
+    const lastEatenTime = new Date(lastEaten).getTime();
+    const recencyBonus = isValidNumber(lastEatenTime)
+      ? Math.max(0, Math.min(10, 10 - (Date.now() - lastEatenTime) / (86400000 * 7)))
+      : 0;
+
+    const baseScore = avgSymptom <= 1 ? 30 : avgSymptom <= 2 ? 20 : 10;
+    const safeScore = Math.min(100, Math.max(0, Math.round(baseScore + frequency * 5 + recencyBonus)));
 
     let category: SafeMeal["category"] = "hawker";
     const lowerName = dishName.toLowerCase();
@@ -73,20 +98,20 @@ export function analyzeSafeMeals(
     }
 
     meals.push({
-      dish_name: data.dates[0] === sortedDates[0] ? dishName : dishName,
+      dish_name: titleCase(dishName),
       category,
       frequency,
       last_eaten: lastEaten,
       avg_symptom_score: Math.round(avgSymptom * 10) / 10,
       safe_score: safeScore,
     });
-  }
+  });
 
   meals.sort((a, b) => b.safe_score - a.safe_score);
 
   return {
     meals: meals.slice(0, 20),
-    total_days: logEntries.length,
+    total_days: new Set(logEntries.map((e) => e.logged_at)).size,
     generated_at: new Date().toISOString(),
   };
 }
