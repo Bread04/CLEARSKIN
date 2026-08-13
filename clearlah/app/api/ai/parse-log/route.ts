@@ -141,14 +141,49 @@ function basicFallbackParse(message: string): Partial<ParsedLog> {
   };
 }
 
+/**
+ * Normalizes an arbitrary AI response into the full ParsedLog shape so
+ * downstream consumers (PreFillCard, /api/logs) never encounter undefined
+ * nested fields. Missing or mistyped fields fall back to null/empty.
+ */
+function normalizeParsedLog(parsed: Partial<ParsedLog> | null | undefined): ParsedLog {
+  const foodItems = parsed?.food?.items;
+  const hawkerDishes = parsed?.food?.hawker_dishes;
+  const lifestyle = parsed?.lifestyle;
+  const symptoms = parsed?.symptoms;
+
+  return {
+    food: {
+      items: Array.isArray(foodItems) ? foodItems.map((i) => String(i)) : [],
+      hawker_dishes: Array.isArray(hawkerDishes)
+        ? hawkerDishes.map((d) => String(d))
+        : [],
+    },
+    lifestyle: {
+      sleep_hours: typeof lifestyle?.sleep_hours === "number" ? lifestyle.sleep_hours : null,
+      stress_level: typeof lifestyle?.stress_level === "number" ? lifestyle.stress_level : null,
+      stress_type: typeof lifestyle?.stress_type === "string" ? lifestyle.stress_type : null,
+      exercise_minutes: typeof lifestyle?.exercise_minutes === "number" ? lifestyle.exercise_minutes : null,
+      water_ml: typeof lifestyle?.water_ml === "number" ? lifestyle.water_ml : null,
+      caffeine_cups: typeof lifestyle?.caffeine_cups === "number" ? lifestyle.caffeine_cups : null,
+      alcohol_drinks: typeof lifestyle?.alcohol_drinks === "number" ? lifestyle.alcohol_drinks : null,
+    },
+    skincare: typeof parsed?.skincare === "string" ? parsed.skincare : null,
+    symptoms: {
+      skin: typeof symptoms?.skin === "number" ? symptoms.skin : null,
+      gut: typeof symptoms?.gut === "number" ? symptoms.gut : null,
+      respiratory: typeof symptoms?.respiratory === "number" ? symptoms.respiratory : null,
+    },
+    summary: typeof parsed?.summary === "string" ? parsed.summary : "",
+  };
+}
+
 async function callCodeBuddyAI(
   systemPrompt: string,
   userMessage: string
 ): Promise<ParsedLog | null> {
   const apiKey = process.env.CODEBUDDY_API_KEY;
-  if (!apiKey) return null;
-
-  const controller = new AbortController();
+  if (!apiKey) return null;  const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), AI_TIMEOUT_MS);
 
   try {
@@ -185,8 +220,8 @@ async function callCodeBuddyAI(
     const content = body.choices?.[0]?.message?.content;
     if (!content) return null;
 
-    const parsed = JSON.parse(content) as ParsedLog;
-    return parsed;
+    const parsed = JSON.parse(content) as Partial<ParsedLog>;
+    return normalizeParsedLog(parsed);
   } catch (err) {
     clearTimeout(timeout);
     if (err instanceof Error && err.name === "AbortError") {
