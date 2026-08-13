@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import HawkerScan from "@/components/hawker/HawkerScan";
+import { getDemoDateForSave } from "@/lib/utils/demo";
 
 interface IdentifiedDish {
   dish_id: string;
@@ -19,11 +20,12 @@ export default function LogScanButton() {
   const handleLog = useCallback(async (dish: IdentifiedDish) => {
     try {
       const weatherRes = await fetch("/api/weather");
+      if (!weatherRes.ok) throw new Error("Could not fetch weather data.");
       const weatherSnapshot = await weatherRes.json();
 
       const log = {
         food: {
-          items: [{ name: dish.dish_name }],
+          items: [dish.dish_name],
         },
         lifestyle: {
           sleep_hours: null,
@@ -39,11 +41,20 @@ export default function LogScanButton() {
         summary: `Scanned ${dish.dish_name} (${dish.risk_label}).`,
       };
 
-      await fetch("/api/logs", {
+      const saveBody: Record<string, unknown> = {
+        log,
+        weather_snapshot: weatherSnapshot,
+      };
+      const demoDate = getDemoDateForSave();
+      if (demoDate) saveBody.demo_date = demoDate;
+
+      const res = await fetch("/api/logs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ log, weather_snapshot: weatherSnapshot }),
+        body: JSON.stringify(saveBody),
       });
+
+      if (!res.ok) throw new Error("Could not save your log.");
     } catch {
       throw new Error("Could not save your log.");
     } finally {

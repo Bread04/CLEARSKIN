@@ -6,6 +6,7 @@ import {
   type SkinAssessment,
   type SkinSeverity,
 } from "@/lib/skin-check";
+import { getDemoDateForSave } from "@/lib/utils/demo";
 
 interface SkinCheckProps {
   onClose: () => void;
@@ -155,7 +156,7 @@ export default function SkinCheck({ onClose }: SkinCheckProps) {
       const skinScore = assessment.score < 1 ? null : Math.max(1, Math.round(assessment.score));
 
       const log = {
-        food: { items: [] as { name: string }[] },
+        food: { items: [] as string[] },
         lifestyle: {
           sleep_hours: null,
           stress_level: null,
@@ -170,10 +171,17 @@ export default function SkinCheck({ onClose }: SkinCheckProps) {
         summary: `Skin check: ${assessment.summary}`,
       };
 
+      const saveBody: Record<string, unknown> = {
+        log,
+        weather_snapshot: weatherSnapshot,
+      };
+      const demoDate = getDemoDateForSave();
+      if (demoDate) saveBody.demo_date = demoDate;
+
       const res = await fetch("/api/logs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ log, weather_snapshot: weatherSnapshot }),
+        body: JSON.stringify(saveBody),
       });
 
       if (!res.ok) throw new Error("Could not save your log.");
