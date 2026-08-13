@@ -18,9 +18,7 @@ export default function AppShell({ children, streak = 0, highRiskActive = false 
     pathname?.startsWith("/log/") ||
     pathname === "/insights" ||
     pathname === "/hawker" ||
-    pathname === "/clearcart" ||
-    pathname === "/flareprint" ||
-    pathname?.startsWith("/flareprint/");
+    pathname === "/clearcart";
 
   if (!isAppRoute) return <>{children}</>;
 

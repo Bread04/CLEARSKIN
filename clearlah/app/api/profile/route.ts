@@ -45,8 +45,6 @@ export async function POST(request: Request) {
       daily_skincare?: unknown;
       onboarding_step?: unknown;
       singlish_unlocked?: unknown;
-      location_enabled?: unknown;
-      community_sharing?: unknown;
       user_id?: unknown;
     };
     try {
@@ -76,12 +74,9 @@ export async function POST(request: Request) {
     const hasSkincare = typeof body.daily_skincare === "string" || body.daily_skincare === null;
     const hasOnboardingStep = typeof body.onboarding_step === "number";
     const hasSinglish = body.singlish_unlocked === true || body.singlish_unlocked === false;
-    const hasLocationEnabled = body.location_enabled === true || body.location_enabled === false;
-    const hasCommunitySharing = body.community_sharing === true || body.community_sharing === false;
 
     if (!hasTrackingFor && !hasConditions && !hasDisclaimer &&
-        !hasAllergens && !hasSkincare && !hasOnboardingStep && !hasSinglish &&
-        !hasLocationEnabled && !hasCommunitySharing) {
+        !hasAllergens && !hasSkincare && !hasOnboardingStep && !hasSinglish) {
       return NextResponse.json(
         { success: false, error: "Provide tracking_for, conditions, disclaimer_acknowledged, known_allergens, daily_skincare, onboarding_step, or a combination" },
         { status: 400 }
@@ -152,8 +147,6 @@ export async function POST(request: Request) {
       }
     }
     if (hasSinglish) updateData.singlish_unlocked = body.singlish_unlocked as boolean;
-    if (hasLocationEnabled) updateData.location_enabled = body.location_enabled as boolean;
-    if (hasCommunitySharing) updateData.community_sharing = body.community_sharing as boolean;
 
     const supabase = await createClient();
 

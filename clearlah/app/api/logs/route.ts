@@ -13,7 +13,6 @@ interface SaveLogRequest {
   weather_snapshot: WeatherSnapshot;
   user_id?: string;
   demo_date?: string;
-  location?: { lat: number; lng: number; accuracy: number };
 }
 
 export async function POST(request: Request) {
@@ -65,7 +64,6 @@ export async function POST(request: Request) {
         respiratory: log.symptoms.respiratory,
       },
       weather_snapshot,
-      location: body.location || null,
       created_at: new Date().toISOString(),
     };
 
@@ -132,38 +130,3 @@ export async function POST(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
-  try {
-    const userId = await resolveApiUserId();
-
-    const supabase = await createClient();
-
-    const { error } = await supabase
-      .from("log_entries")
-      .update({ location: null })
-      .eq("user_id", userId);
-
-    if (error) {
-      console.error("[ClearLah] DELETE /api/logs location clear failed:", error.message);
-      return NextResponse.json(
-        { success: false, error: "Could not delete location data. Please try again." },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ success: true });
-  } catch (e) {
-    if (e instanceof UnauthenticatedError) {
-      return NextResponse.json(
-        { success: false, error: "Authentication required" },
-        { status: 401 }
-      );
-    }
-    if (e instanceof Error && "digest" in e) throw e;
-    console.error("[ClearLah] DELETE /api/logs unexpected error:", e);
-    return NextResponse.json(
-      { success: false, error: "Something went wrong on our end — try again in a sec?" },
-      { status: 500 }
-    );
-  }
-}
