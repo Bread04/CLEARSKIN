@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 
 interface VoiceButtonProps {
@@ -11,10 +11,19 @@ interface VoiceButtonProps {
 export default function VoiceButton({ onResult, className = "" }: VoiceButtonProps) {
   const [showPrompt, setShowPrompt] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const { state, startListening, stopListening, isSupported } = useVoiceInput({
     onResult,
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Render nothing until mounted to avoid a server/client hydration mismatch
+  // (window.SpeechRecognition is undefined on the server).
+  if (!mounted) return null;
 
   if (!isSupported) return null;
 
@@ -24,7 +33,7 @@ export default function VoiceButton({ onResult, className = "" }: VoiceButtonPro
       return;
     }
     if (state.status === "listening") {
-      stopListening();
+      stopListening(true);
     } else {
       startListening();
     }

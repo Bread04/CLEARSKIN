@@ -42,15 +42,21 @@ export default function HawkerScan({ onLog, onClose }: HawkerScanProps) {
         video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
       });
       streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
       setCameraState("active");
     } catch {
       setError("Camera access denied. Try searching for a dish instead.");
     }
   }, []);
+
+  useEffect(() => {
+    if (cameraState !== "active") return;
+    const video = videoRef.current;
+    const stream = streamRef.current;
+    if (video && stream) {
+      video.srcObject = stream;
+      video.play().catch(() => {});
+    }
+  }, [cameraState]);
 
   useEffect(() => {
     return () => stopCamera();

@@ -12,11 +12,11 @@ interface VoiceInputOptions {
   onResult: (text: string) => void;
 }
 
-const SpeechRecognitionAPI: any =
-  typeof window !== "undefined"
-    ? (window as unknown as Record<string, unknown>).SpeechRecognition ||
-      (window as unknown as Record<string, unknown>).webkitSpeechRecognition
-    : null;
+function getSpeechRecognitionAPI(): any {
+  if (typeof window === "undefined") return null;
+  const w = window as unknown as Record<string, unknown>;
+  return w.SpeechRecognition || w.webkitSpeechRecognition || null;
+}
 
 export function useVoiceInput({ onResult }: VoiceInputOptions) {
   const [state, setState] = useState<VoiceInputState>({
@@ -31,7 +31,7 @@ export function useVoiceInput({ onResult }: VoiceInputOptions) {
   const onResultRef = useRef(onResult);
   onResultRef.current = onResult;
 
-  const stopListening = useCallback(() => {
+  const stopListening = useCallback((commit = false) => {
     stoppingRef.current = true;
     if (recognitionRef.current) {
       try {
@@ -41,11 +41,25 @@ export function useVoiceInput({ onResult }: VoiceInputOptions) {
       }
       recognitionRef.current = null;
     }
+    if (commit) {
+      const final = finalTranscriptRef.current.trim();
+      if (final) {
+        setState({ status: "result", transcript: final, error: null });
+        onResultRef.current(final);
+      } else {
+        setState({ status: "idle", transcript: "", error: null });
+      }
+    }
   }, []);
 
   const startListening = useCallback(() => {
+    const SpeechRecognitionAPI = getSpeechRecognitionAPI();
     if (!SpeechRecognitionAPI) {
-      setState({ status: "error", transcript: "", error: "Voice input not supported in this browser. Try Chrome or Edge." });
+      setState({
+        status: "error",
+        transcript: "",
+        error: "Voice input not supported in this browser. Try Chrome or Edge.",
+      });
       return;
     }
 
@@ -105,23 +119,16 @@ export function useVoiceInput({ onResult }: VoiceInputOptions) {
     };
 
     recognitionRef.current = recognition;
-    recognition.start();
-  }, []);
-
-  const requestMicAndListen = useCallback(async () => {
     try {
-      setState({ status: "idle", transcript: "", error: null });
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach((t) => t.stop());
-      startListening();
+      recognition.start();
     } catch {
       setState({
         status: "error",
         transcript: "",
-        error: "Microphone access denied. You can still type your log.",
+        error: "Couldn't start the microphone. Check permissions and try again.",
       });
     }
-  }, [startListening]);
+  }, []);
 
   const reset = useCallback(() => {
     stopListening();
@@ -137,9 +144,9 @@ export function useVoiceInput({ onResult }: VoiceInputOptions) {
 
   return {
     state,
-    startListening: requestMicAndListen,
+    startListening,
     stopListening,
     reset,
-    isSupported: !!SpeechRecognitionAPI,
+    isSupported: !!getSpeechRecognitionAPI(),
   };
 }
