@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 
     const { data: profile } = await supabase
       .from("user_profiles")
-      .select("trigger_cache")
+      .select("trigger_cache, conditions")
       .eq("user_id", userId)
       .maybeSingle();
 
@@ -60,10 +60,22 @@ export async function GET(request: Request) {
 
     const correlations = result as import("@/lib/pattern-engine").CorrelationResult[];
 
+    // Store the canonical TriggerEntry shape (factor/correlation/occurrences)
+    // so downstream consumers (identify-dish, clearcart, dashboard) don't hit
+    // undefined fields. The pattern engine emits `trigger`, which consumers
+    // expect as `factor`.
+    const conditions = Array.isArray(profile?.conditions) ? profile.conditions : [];
+    const condition = (conditions[0] as string) || "other";
+
     const triggerCache = {
       computed_at: new Date().toISOString(),
       entry_count: entryCount,
-      top_triggers: correlations,
+      top_triggers: correlations.map((c) => ({
+        factor: c.trigger,
+        correlation: c.confidence / 100,
+        occurrences: c.cooccurrence_count,
+        condition,
+      })),
     };
 
     await supabase

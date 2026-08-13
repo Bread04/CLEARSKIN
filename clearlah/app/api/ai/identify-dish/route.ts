@@ -60,9 +60,11 @@ async function computeRisk(
   }
 
   if (typeof triggerCache === "object" && triggerCache !== null && "top_triggers" in triggerCache) {
-    const topTriggers = (triggerCache as { top_triggers?: Array<{ factor: string }> }).top_triggers || [];
+    const topTriggers = (triggerCache as { top_triggers?: Array<{ factor?: string; trigger?: string }> }).top_triggers || [];
     for (const entry of topTriggers) {
-      const triggerLower = entry.factor.toLowerCase();
+      const factor = entry.factor ?? entry.trigger;
+      if (!factor) continue;
+      const triggerLower = factor.toLowerCase();
       for (const allergen of allergens) {
         if (triggerLower.includes(allergen.toLowerCase()) || allergen.toLowerCase().includes(triggerLower)) {
           if (!matchedTriggers.includes(allergen)) matchedTriggers.push(allergen);
