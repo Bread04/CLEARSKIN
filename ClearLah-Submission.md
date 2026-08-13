@@ -12,7 +12,7 @@
 ---
 
 ## Short Blurb *(one-liner)*
-> ClearLah is an AI health detective agent that thinks like a doctor — it connects the dots across food, lifestyle, skincare, and Singapore weather data to tell eczema and allergy sufferers exactly what's triggering their flares.
+> ClearLah is an AI health detective and care navigator — it connects the dots across food, lifestyle, skincare, and Singapore weather data to tell eczema and allergy sufferers exactly what's triggering their flares, and what to do about it.
 
 ---
 
@@ -104,14 +104,15 @@ The core competitive moat is the **personal trigger profile** — each user's da
 
 ### Future Vision — v2: The Detective's Sensors
 
-ClearLah v2 expands the AI agent from retrospective detection to interceptive prevention through four new data streams:
+ClearLah v2 expands the AI agent from retrospective detection to interceptive prevention and care guidance through five new data streams:
 
 - **HawkerScan** — camera-based dish identification with instant risk scoring before eating
 - **Voice Log** — ambient check-ins under 15 seconds with emotional tone detection
 - **ClearCart** — AI-generated safe grocery lists with FairPrice/RedMart integration and GrabFood safe dish discovery
-- **FlarePrint** — GPS-tagged flare heatmaps, anonymised to build Singapore's first Eczema Trigger Map
+- **SkinCheck** — photo-based skin severity tracking (0–10 flare score) with wellness-grade triage that advises seeing a dermatologist when it looks severe
+- **EatClear** — personalised "foods to eat" recommendations, evidence-tiered and filtered against your allergens
 
-The arc: v1 detects what happened → v2 prevents what's coming → v3 maps the city.
+The arc: v1 detects what happened → v2 prevents what's coming and guides your care → v3 becomes a clinical companion (doctor-ready reports and referral handoffs).
 
 ---
 

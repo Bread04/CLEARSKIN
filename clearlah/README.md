@@ -2,7 +2,7 @@
 
 > Track your triggers. Live with less flare.
 
-ClearLah is an **AI health detective agent** for Singaporeans living with eczema, IBS, food allergies, and asthma. The AI agent parses natural language logs (food, lifestyle habits, symptoms), detects trigger patterns with temporal reasoning, learns from user feedback, and answers free-form questions by cross-referencing personal data against live NEA weather and 147 dishes (hawker centres, restaurant chains, international cuisine) — all citing specific evidence from your own history.
+ClearLah is an **AI health detective and care navigator** for Singaporeans living with eczema, IBS, food allergies, and asthma. The AI agent parses natural language logs (food, lifestyle habits, symptoms), detects trigger patterns with temporal reasoning, learns from user feedback, and answers free-form questions by cross-referencing personal data against live NEA weather and 147 dishes (hawker centres, restaurant chains, international cuisine) — all citing specific evidence from your own history. It also **tracks your skin** via photo (SkinCheck — a 0–10 flare score with triage) and recommends **foods to eat** (EatClear), not just what to avoid.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=REPO_URL_HERE)
 
@@ -43,6 +43,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm start` | Start production server (after `npm run build`) |
 | `npm run lint` | Run ESLint across all source files |
 | `npm run type-check` | Run `tsc --noEmit` for strict TypeScript validation |
+| `npm test` | Run the Vitest unit test suite |
 
 ---
 
@@ -92,7 +93,7 @@ curl -X POST http://localhost:3000/api/demo/seed
 - **Framework**: Next.js 14 (App Router, TypeScript strict mode)
 - **Styling**: Tailwind CSS with ClearLah design token system
 - **Database**: Supabase (PostgreSQL + Row Level Security)
-- **AI**: CodeBuddy LLM API — 4 AI agent endpoints: `/api/ai/parse-log` (NL parsing with feedback learning), `/api/ai/narrate-insights` (temporal reasoning), `/api/ai/ask` (conversational agent Q&A), `/api/ai/feedback` (correction learning loop)
+- **AI**: CodeBuddy LLM API — 6 AI agent endpoints: `/api/ai/parse-log` (NL parsing with feedback learning), `/api/ai/narrate-insights` (temporal reasoning), `/api/ai/ask` (conversational agent Q&A), `/api/ai/feedback` (correction learning loop), `/api/ai/identify-dish` (camera dish identification), `/api/ai/assess-skin` (photo skin severity + triage)
 - **Deployment**: Vercel
 
 ---
@@ -107,25 +108,32 @@ clearlah/
 │   │   │   ├── parse-log/      # POST — natural language → structured log (with feedback learning)
 │   │   │   ├── narrate-insights/ # POST — correlations → plain-English insights (temporal reasoning)
 │   │   │   ├── ask/            # POST — free-text Q&A (cross-references logs + weather + hawker DB)
-│   │   │   └── feedback/       # POST — stores user corrections for AI learning
+│   │   │   ├── feedback/       # POST — stores user corrections for AI learning
+│   │   │   ├── identify-dish/  # POST — camera photo → dish + personal risk score
+│   │   │   └── assess-skin/    # POST — skin photo → flare tracking score + triage
 │   │   ├── weather/       # Singapore weather (NEA API + mock fallback)
 │   │   ├── demo/seed/     # POST — seed 14 days of demo data (idempotent)
 │   │   ├── hawker/        # GET/POST/DELETE — hawker dish search + food guide
 │   │   ├── insights/      # GET — trigger pattern detection
 │   │   └── logs/          # GET/POST — daily log CRUD
-│   ├── dashboard/         # Dashboard page (streak, weather, Ask ClearLah, High Risk Day)
+│   ├── dashboard/         # Dashboard page (streak, weather, Ask ClearLah, High Risk Day, Foods to eat)
 │   ├── log/               # Conversational daily log entry
 │   ├── insights/          # Trigger insights + pattern cards
 │   ├── hawker/            # Hawker food safety checker
 │   └── onboarding/        # Onboarding (steps 1–3)
 ├── components/            # Shared React components
+│   ├── hawker/            # HawkerScan camera + LogScanButton
+│   ├── skin/              # SkinCheck photo skin tracking modal
+│   └── ui/                # ChatInterface, VoiceButton, EatClearCard, etc.
 ├── lib/
 │   ├── supabase/          # Supabase client helpers (server.ts, client.ts)
 │   ├── types/             # TypeScript type definitions (database.ts)
+│   ├── eat-clear.ts       # "Foods to eat" recommendations (evidence-tiered, personalised)
+│   ├── skin-check.ts      # Skin severity classification + triage logic
 │   └── utils/             # Utility functions (demo.ts, cn.ts)
 ├── data/                  # Static data & demo seed JSON
 └── supabase/
-    ├── migrations/        # SQL migration files (3 migrations)
+    ├── migrations/        # SQL migration files (5 migrations)
     └── seed.sql           # Seed data (147 dishes across 19 categories)
 ```
 

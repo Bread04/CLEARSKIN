@@ -18,7 +18,7 @@ ClearLah is an AI-powered allergy and intolerance trigger detection agent for Si
 > *"Know your triggers. Live without limits, lah."*
 
 ### Problem Statement
-Singaporeans suffering from eczema, food allergies, IBS, and asthma spend months or years identifying their triggers through guesswork. Existing apps are Western-centric, track food only, and lack AI pattern detection. ClearLah solves this by capturing all five trigger pillars and letting AI do the correlation work — through a conversational interface that feels like talking to a personal health detective, not filling in a form.
+Singaporeans suffering from eczema, food allergies, IBS, and asthma spend months or years identifying their triggers through guesswork. Existing apps are Western-centric, track food only, and lack AI pattern detection. ClearLah solves this by capturing all five trigger pillars and letting AI do the correlation work — through a conversational interface that feels like talking to a personal health detective and care navigator, not filling in a form.
 
 ### Core Job To Be Done
 > *"Help me stop suffering without needing to become a medical expert."*
@@ -304,7 +304,7 @@ User requests report
 
 ## 13. v2 Features — The Detective's Sensors
 
-ClearLah v2 transforms the AI agent from retrospective (detecting triggers from past data) to interceptive (preventing triggers before exposure) and collective (mapping trigger patterns across the city). Each feature feeds the agent new data streams, making the detective smarter.
+ClearLah v2 transforms the AI agent from retrospective (detecting triggers from past data) to interceptive (preventing triggers before exposure) — and from a pure detective into a **care navigator** that measures skin severity and guides what to eat. Each feature feeds the agent new data streams, making the detective smarter.
 
 ### 13.1 HawkerScan — Snap-to-Log
 
@@ -333,22 +333,31 @@ ClearLah v2 transforms the AI agent from retrospective (detecting triggers from 
 | **AI role** | Pattern analysis of safe meals → shopping list generation → commerce API integration → real-time safe dish discovery near user's location |
 | **Pitch line** | "These 3 dishes near you are 92%+ safe for your profile. Order now." |
 
-### 13.4 FlarePrint — Location Trigger Map
+### 13.4 SkinCheck — Photo Skin Tracking & Triage
 
 | Attribute | Detail |
 |---|---|
-| **What** | Every logged flare gets GPS-tagged. ClearLah builds a personal heatmap of Singapore — where you flare, when, and under what conditions. Anonymously aggregated to publish the first-ever Singapore Eczema Trigger Map. |
-| **Data stream** | Geo + environmental + community cross-referencing. "Your flare pattern matches 47 other users in Geylang — here's the common thread." |
-| **AI role** | Geospatial clustering → environmental correlation → anonymised community pattern matching → public health insights |
-| **Pitch line** | "ClearLah doesn't just map your triggers — it maps the city's." |
+| **What** | Upload a photo of your skin. ClearLah returns a 0–10 flare tracking score and severity label, plus generic self-care steps — and if it looks severe or possibly infected, advises seeing a dermatologist. |
+| **Data stream** | Objective visual flare signal — replaces the noisy 1–10 self-report, feeding the pattern engine a sixth signal. |
+| **AI role** | Computer vision eczema assessment → severity classification → wellness-grade triage (a tracking score, never a diagnosis). |
+| **Pitch line** | "Watch your skin change over time — and know when to see a doctor." |
 
-### 13.5 The Evolution Arc
+### 13.5 EatClear — Foods to Eat
+
+| Attribute | Detail |
+|---|---|
+| **What** | ClearLah recommends anti-inflammatory, skin-supportive foods to eat — personalised to exclude your known allergens and triggers. Completes the "avoid → swap" loop: not just what to skip, but what to eat instead. |
+| **Data stream** | Positive nutrition guidance — evidence-tiered (strongly supported / moderate / emerging), never a trigger. |
+| **AI role** | Personalised, evidence-tiered food recommendations filtered against the user's allergen + trigger profile. |
+| **Pitch line** | "Don't just avoid laksa — swap it for grilled salmon and greens." |
+
+### 13.6 The Evolution Arc
 
 | Version | Mode | What the Detective Does |
 |---|---|---|
 | **v1 (now)** | Retrospective | Detects triggers from what you already ate. "Shellfish + humidity = flare." |
-| **v2** | Interceptive | Prevents triggers before exposure. "Don't eat at that stall today — 88% humidity + your shellfish profile." |
-| **v3** | Collective | Maps the entire city. NEA and dermatologists use ClearLah data. Public health infrastructure. |
+| **v2** | Interceptive + Care | Prevents triggers before exposure and guides care. "Don't eat at that stall today — 88% humidity + your shellfish profile." + "Your skin looks moderate — try these anti-inflammatory foods." |
+| **v3** | Clinical companion | Deepens clinic integration — doctor-ready reports, referral handoffs, and SEA expansion. |
 
 ---
 
@@ -359,10 +368,9 @@ ClearLah v2 transforms the AI agent from retrospective (detecting triggers from 
 | v1.1 | Multi-profile support (family accounts) | Month 1 |
 | v1.2 | Passive detection via wearable integration | Month 2–3 |
 | v2.0 | HawkerScan (camera-to-log) + Voice Log (ambient check-in) | Month 3–4 |
-| v2.1 | ClearCart (safe food commerce) + FlarePrint (location trigger map) | Month 4–6 |
+| v2.1 | ClearCart (safe food commerce) + SkinCheck (skin tracking) + EatClear (foods to eat) | Month 4–6 |
 | v2.2 | Clinic API — share reports directly with doctors | Month 6–9 |
 | v3.0 | SEA expansion — Malaysia, Indonesia hawker DB | Month 9–12 |
-| v3.1 | Community trigger map (anonymised crowd-sourcing) | Year 1 |
 
 ---
 

@@ -26,9 +26,9 @@ status: complete
 | E6  | Hawker Food Safety Checker               | 5       | P1       |
 | E7  | AI Agent Intelligence Showcase           | 3       | P0       |
 | E8  | Lifestyle Habits & Food Expansion        | 2       | P1       |
-| E9  | v2 — The Detective's Sensors             | 4       | P2       |
+| E9  | v2 — The Detective's Sensors             | 5       | P2       |
 
-**Total: 9 epics, 41 user stories**
+**Total: 9 epics, 42 user stories**
 
 ---
 
@@ -903,9 +903,9 @@ status: complete
 
 ## E9 — v2: The Detective's Sensors
 
-**Goal:** Transform ClearLah's AI agent from retrospective detection to interceptive prevention by adding four new data streams: camera-based food identification, frictionless voice logging, safe food commerce integration, and GPS-tagged flare mapping. Each sensor feeds the agent richer data, making the detective smarter.
+**Goal:** Transform ClearLah's AI agent from retrospective detection to interceptive prevention and care guidance by adding five new data streams: camera-based food identification, frictionless voice logging, safe food commerce integration, photo-based skin tracking, and personalised foods-to-eat guidance. Each sensor feeds the agent richer data, making the detective — and care navigator — smarter.
 
-**Definition of Done:** Camera identifies hawker dishes with risk score overlay; voice input works in under 15 seconds with tone inference; grocery list generates from safe meal history; GPS flare heatmap renders on map component.
+**Definition of Done:** Camera identifies hawker dishes with risk score overlay; voice input works in under 15 seconds with tone inference; grocery list generates from safe meal history; skin photo returns a 0–10 tracking score with triage; "foods to eat" list is personalised against the user's allergens.
 
 ---
 
@@ -968,22 +968,37 @@ status: complete
 
 ---
 
-### E9-S4 — FlarePrint: Location Trigger Map
+### E9-S4 — SkinCheck: Photo Skin Tracking & Triage
 
-**As a** user who has logged flares across multiple locations,
-**I want** to see my flares mapped across Singapore and understand how my trigger patterns compare to the community,
-**so that** I can identify location-specific triggers and contribute to Singapore's first eczema trigger map.
+**As a** user who wants an objective read on my skin,
+**I want** to upload a photo of my skin and get a flare tracking score with a severity label and, when severe, a recommendation to see a dermatologist,
+**so that** I can monitor changes over time and know when to escalate to professional care.
 
 **Acceptance Criteria:**
-- [ ] Every log entry with symptoms GPS-tagged at time of logging
-- [ ] Personal heatmap renders on interactive Singapore map (Leaflet/MapLibre)
-- [ ] Heatmap colour intensity = flare severity at that location
-- [ ] Tap a hotspot: "3 flares here. Common factors: Geylang Serai, evening, humidity >85%"
-- [ ] Opt-in anonymised aggregation: user's flare data contributes to community map
-- [ ] Community layer: "Your flare pattern matches 47 other users in this area"
-- [ ] "Export my FlarePrint" generates shareable PDF with personal + community overlay
-- [ ] All location data stored locally by default; community sharing requires explicit opt-in
-- [ ] Privacy-preserving: GPS coordinates fuzzed by 200m before community aggregation
+- [ ] "Skin check" button opens photo upload from the Log screen
+- [ ] AI returns a 0–10 flare tracking score and severity label (clear/mild/moderate/severe)
+- [ ] Severe scores (or urgent indicators like weeping/crusting) trigger a "consider seeing a dermatologist" nudge
+- [ ] Generic self-care tips shown; no medical diagnosis or treatment advice
+- [ ] "Log it" saves the skin score to today's log entry
+- [ ] Photos sent to the AI provider for analysis and never stored
+- [ ] Disclaimer shown: tracking score, not a diagnosis
+
+**FR Covered:** NEW
+
+---
+
+### E9-S5 — EatClear: Foods to Eat
+
+**As a** user tired of only hearing what to avoid,
+**I want** ClearLah to recommend anti-inflammatory, skin-supportive foods personalised to exclude my allergens,
+**so that** I have positive, actionable guidance — not just deprivation.
+
+**Acceptance Criteria:**
+- [ ] "Foods to eat" card shown on the dashboard
+- [ ] Recommendations are evidence-tiered (strongly supported / moderate / emerging)
+- [ ] Foods are filtered against the user's known allergens and confirmed triggers (plural/synonym-aware)
+- [ ] Each recommendation lists the nutrient, benefit, and concrete examples
+- [ ] Completes the "avoid → swap" loop alongside existing trigger detection
 
 **FR Covered:** NEW
 

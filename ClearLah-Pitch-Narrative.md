@@ -110,7 +110,7 @@
 
 > *"Today, ClearLah is a trigger detection agent. But here's where we're going — and this is the real vision.*
 >
-> *ClearLah v2 adds four new sensors to the detective.*
+> *ClearLah v2 adds five new sensors to the detective.*
 >
 > *First: HawkerScan. Point your camera at your food — ClearLah identifies the dish, cross-references your triggers, and shows the risk score before you take a bite. No typing. Just snap and know.*
 >
@@ -118,9 +118,11 @@
 >
 > *Third: ClearCart. ClearLah analyzes your safe meals and generates a weekly grocery list. Integrates with FairPrice. One tap: 'These 3 GrabFood dishes near you are 92%+ safe for your profile.' The agent intervenes BEFORE the trigger — not after the flare.*
 >
-> *Fourth: FlarePrint. Every flare gets GPS-tagged. ClearLah builds your personal heatmap of Singapore. Then, anonymously aggregated — the first-ever Singapore Eczema Trigger Map. 'Your flare pattern matches 47 other users in Geylang — here's the common thread.'*
+> *Fourth: SkinCheck. Upload a photo of your skin — ClearLah gives you a flare tracking score out of 10, and if it looks severe or infected, advises you to see a dermatologist. The detective becomes a care navigator: it doesn't just find what's wrong, it tells you what to do.*
 >
-> *The arc is clear: v1 detects what happened. v2 prevents what's coming. v3 maps the entire city.*
+> *Fifth: EatClear. ClearLah recommends foods to eat, not just avoid — anti-inflammatory, skin-supportive picks personalised to skip your allergens. 'Don't just avoid laksa — swap it for grilled salmon and greens.'*
+>
+> *The arc is clear: v1 detects what happened. v2 prevents what's coming and guides your care. v3 becomes your clinical companion.*
 >
 > *ClearLah isn't just an app. It's the first personalised health intelligence layer for Singapore's unique environment — and eventually, for every tropical city on Earth.*
 >
