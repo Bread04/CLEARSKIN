@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { requireOnboardedUserId } from "@/lib/utils/user-server";
 import { isHighRiskDay } from "@/lib/utils/trigger-match";
+import { getFoodsToEat } from "@/lib/eat-clear";
 import { cookies } from "next/headers";
 import DashboardClient from "@/components/dashboard/DashboardClient";
 
@@ -10,7 +11,7 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from("user_profiles")
-    .select("streak, streak_last_date, singlish_unlocked, trigger_cache")
+    .select("streak, streak_last_date, singlish_unlocked, trigger_cache, known_allergens")
     .eq("user_id", userId)
     .maybeSingle();
 
@@ -54,6 +55,11 @@ export default async function DashboardPage() {
     ? isHighRiskDay(triggers, weather)
     : { isHighRisk: false, matchedTriggers: [], summary: "" };
 
+  const foods = getFoodsToEat(
+    profile?.known_allergens ?? [],
+    triggers.map((t) => t.factor)
+  );
+
   return (
     <DashboardClient
       streak={streak}
@@ -61,6 +67,7 @@ export default async function DashboardPage() {
       singlishUnlocked={profile?.singlish_unlocked ?? false}
       highRiskActive={riskResult.isHighRisk}
       triggerSummary={riskResult.summary}
+      foods={foods}
     />
   );
 }

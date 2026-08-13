@@ -6,8 +6,10 @@ import WeatherWidget from "@/components/dashboard/WeatherWidget";
 import BuildingPicture from "@/components/dashboard/BuildingPicture";
 import HighRiskDayAlert from "@/components/dashboard/HighRiskDayAlert";
 import AskClearLah from "@/components/dashboard/AskClearLah";
+import EatClearCard from "@/components/dashboard/EatClearCard";
 import MilestoneModal from "@/components/ui/MilestoneModal";
 import { getDemoDayOffset, advanceDemoDay } from "@/lib/utils/demo";
+import type { EatClearFood } from "@/lib/eat-clear";
 
 interface DashboardClientProps {
   streak: number;
@@ -15,6 +17,7 @@ interface DashboardClientProps {
   singlishUnlocked: boolean;
   highRiskActive: boolean;
   triggerSummary: string;
+  foods: EatClearFood[];
 }
 
 const MILESTONES = [3, 7, 14, 21, 30];
@@ -25,6 +28,7 @@ export default function DashboardClient({
   singlishUnlocked,
   highRiskActive,
   triggerSummary,
+  foods,
 }: DashboardClientProps) {
   const dismissedToday = typeof window !== "undefined" && localStorage.getItem("highRiskDismissedDate") === new Date().toISOString().split("T")[0];
   const [milestone, setMilestone] = useState<number | null>(null);
@@ -160,6 +164,8 @@ export default function DashboardClient({
         </div>
 
         <AskClearLah />
+
+        <EatClearCard foods={foods} />
       </div>
     </main>
   );
