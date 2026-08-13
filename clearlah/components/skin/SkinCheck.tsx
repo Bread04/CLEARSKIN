@@ -185,12 +185,18 @@ export default function SkinCheck({ onClose }: SkinCheckProps) {
       });
 
       if (!res.ok) throw new Error("Could not save your log.");
-      onClose();
+
+      const score = assessment.score < 1 ? 0 : Math.max(1, Math.round(assessment.score));
+      sessionStorage.setItem(
+        "clearlah_saved_notice",
+        `Skin check ${score}/10 (${SEVERITY_LABELS[assessment.severity]}).`
+      );
+      window.location.reload();
     } catch {
       setError("Could not save your log. Please try again.");
       setSaving(false);
     }
-  }, [assessment, onClose]);
+  }, [assessment]);
 
   return (
     <div

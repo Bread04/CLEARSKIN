@@ -55,6 +55,12 @@ export default function LogScanButton() {
       });
 
       if (!res.ok) throw new Error("Could not save your log.");
+
+      sessionStorage.setItem(
+        "clearlah_saved_notice",
+        `Scanned ${dish.dish_name} (${dish.risk_label}).`
+      );
+      window.location.reload();
     } catch {
       throw new Error("Could not save your log.");
     } finally {

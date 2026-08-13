@@ -75,6 +75,20 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         }, 600);
       }
 
+      const savedNotice = sessionStorage.getItem("clearlah_saved_notice");
+      if (savedNotice) {
+        sessionStorage.removeItem("clearlah_saved_notice");
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            role: "ai",
+            content: `\u2713 Log saved — ${savedNotice}`,
+            timestamp: Date.now(),
+          },
+        ]);
+      }
+
       // Determine post-greeting bubbles
       if (!isDemoMode()) {
         if (props.logCount === 0) {
