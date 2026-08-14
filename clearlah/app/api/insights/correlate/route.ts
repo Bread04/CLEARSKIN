@@ -3,8 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { UnauthenticatedError } from "@/lib/utils/demo";
 import { resolveApiUserId } from "@/lib/utils/user-server";
 import { detectCorrelations } from "@/lib/pattern-engine";
-
-const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
+import type { CorrelationResult } from "@/lib/pattern-engine";
 
 export async function GET(request: Request) {
   try {
@@ -16,16 +15,17 @@ export async function GET(request: Request) {
 
     const { data: profile } = await supabase
       .from("user_profiles")
-      .select("trigger_cache, conditions")
+      .select("conditions")
       .eq("user_id", userId)
       .maybeSingle();
 
-    const { count: logCount } = await supabase
+    const { data: entries } = await supabase
       .from("log_entries")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", userId);
+      .select("*")
+      .eq("user_id", userId)
+      .order("logged_at", { ascending: false });
 
-    const entryCount = logCount ?? 0;
+    const entryCount = (entries ?? []).length;
 
     if (entryCount < 7) {
       return NextResponse.json({
@@ -34,36 +34,19 @@ export async function GET(request: Request) {
       });
     }
 
-    const cached = profile?.trigger_cache as Record<string, unknown> | null;
-    if (cached && typeof cached.computed_at === "string" && typeof cached.entry_count === "number") {
-      const age = Date.now() - new Date(cached.computed_at).getTime();
-      if (age < CACHE_TTL && cached.entry_count === entryCount) {
-        return NextResponse.json({
-          status: "ok",
-          correlations: cached.top_triggers ?? [],
-          lastUpdated: cached.computed_at,
-        });
-      }
-    }
-
-    const { data: entries } = await supabase
-      .from("log_entries")
-      .select("*")
-      .eq("user_id", userId)
-      .order("logged_at", { ascending: false });
-
     const result = detectCorrelations(entries ?? []);
 
     if ("status" in result && result.status === "insufficient_data") {
       return NextResponse.json(result);
     }
 
-    const correlations = result as import("@/lib/pattern-engine").CorrelationResult[];
+    const correlations = result as CorrelationResult[];
 
     // Store the canonical TriggerEntry shape (factor/correlation/occurrences)
     // so downstream consumers (identify-dish, clearcart, dashboard) don't hit
     // undefined fields. The pattern engine emits `trigger`, which consumers
-    // expect as `factor`.
+    // expect as `factor`. This cache is written for those consumers only —
+    // the response body below always returns the full CorrelationResult shape.
     const conditions = Array.isArray(profile?.conditions) ? profile.conditions : [];
     const condition = (conditions[0] as string) || "other";
 
