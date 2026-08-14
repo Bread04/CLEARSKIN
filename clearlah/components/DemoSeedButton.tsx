@@ -10,6 +10,7 @@ interface DemoSeedButtonProps {
 
 export default function DemoSeedButton({ className = "" }: DemoSeedButtonProps) {
   const [seeding, setSeeding] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const router = useRouter();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -76,6 +77,46 @@ export default function DemoSeedButton({ className = "" }: DemoSeedButtonProps) 
     }
   }, [router, clearTimeouts]);
 
+  const handleReplayOnboarding = useCallback(async () => {
+    setResetting(true);
+    setToast(null);
+    clearTimeouts();
+    controllerRef.current?.abort();
+    controllerRef.current = new AbortController();
+
+    try {
+      const res = await fetch("/api/demo/reset-onboarding", {
+        method: "POST",
+        signal: controllerRef.current.signal,
+      });
+      const json = (await res.json()) as { reset?: boolean; error?: string };
+
+      if (!mountedRef.current) return;
+
+      if (json.error || !json.reset) {
+        setToast(`Could not replay onboarding: ${json.error ?? "unknown error"}`);
+        return;
+      }
+
+      try {
+        localStorage.removeItem("clearlah_onboarding");
+      } catch {
+        // non-critical cache failure — server state already reset
+      }
+
+      router.push("/onboarding/step/1");
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
+      if (mountedRef.current) {
+        setToast("Network error — try again?");
+      }
+    } finally {
+      if (mountedRef.current) {
+        setResetting(false);
+      }
+    }
+  }, [router, clearTimeouts]);
+
   return (
     <div className={`flex flex-col items-center gap-3 ${className}`}>
       <button
@@ -86,6 +127,16 @@ export default function DemoSeedButton({ className = "" }: DemoSeedButtonProps) 
         aria-label="Load demo data"
       >
         {seeding ? "Loading demo data…" : "Load Demo Data"}
+      </button>
+
+      <button
+        type="button"
+        onClick={handleReplayOnboarding}
+        disabled={resetting || seeding}
+        className="btn-secondary text-body-md w-full max-w-sm py-3 rounded-lg min-h-[44px]"
+        aria-label="Replay onboarding"
+      >
+        {resetting ? "Resetting…" : "Replay Onboarding"}
       </button>
 
       {toast && (

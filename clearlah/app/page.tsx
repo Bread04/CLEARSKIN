@@ -1,32 +1,9 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { isDemoMode, DEMO_USER_ID } from "@/lib/utils/demo";
-import { createClient } from "@/lib/supabase/server";
+import { isDemoMode } from "@/lib/utils/demo";
 import DemoSeedButton from "@/components/DemoSeedButton";
 
 export default async function LandingPage() {
   const demo = isDemoMode();
-
-  if (demo) {
-    try {
-      const supabase = await createClient();
-      const { data: userRecord, error: queryError } = await supabase
-        .from("users")
-        .select("onboarding_complete")
-        .eq("id", DEMO_USER_ID)
-        .maybeSingle();
-
-      if (queryError) {
-        console.error("[ClearLah] Landing page Supabase query error:", queryError.message);
-      }
-
-      if (userRecord?.onboarding_complete) {
-        redirect("/dashboard");
-      }
-    } catch (err) {
-      console.error("[ClearLah] Landing page failed to query users table:", err);
-    }
-  }
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-gradient-to-b from-primary-sage-50 to-neutral-50">
