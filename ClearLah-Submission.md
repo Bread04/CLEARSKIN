@@ -159,8 +159,8 @@ The AI agent is not a feature of ClearLah — the AI agent IS ClearLah. Removing
 
 ---
 
-## Project Link *(optional — add before submission)*
-`https://clearlah.app` *(to be added once deployed)*
+## Project Link
+`https://clearlah.vercel.app`
 
 ---
 
@@ -177,7 +177,7 @@ The AI agent is not a feature of ClearLah — the AI agent IS ClearLah. Removing
 | Quantifiable metrics | ✅ Done |
 | Demo video outline | ✅ Done |
 | Product sharing (CodeBuddy usage) | ✅ Done |
-| Project link | ⏳ Add after deployment |
+| Project link | ✅ https://clearlah.vercel.app |
 
 ---
 
