@@ -6,6 +6,7 @@ import LocationPermissionBubble from "@/components/ui/LocationPermissionBubble";
 import ProgressiveQuestionBubble from "@/components/ui/ProgressiveQuestionBubble";
 import PreFillCard from "@/components/ui/PreFillCard";
 import { isDemoMode, getDemoDateForSave } from "@/lib/utils/demo";
+import { useRouter } from "next/navigation";
 
 interface ChatMessage {
   id: string;
@@ -52,6 +53,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
   const [lastUserMessage, setLastUserMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!initialized) {
@@ -210,11 +212,11 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         const confirmMessage: ChatMessage = {
           id: crypto.randomUUID(),
           role: "ai",
-          content: `\u2713 Log saved for today. <span class="inline-block motion-safe:animate-streak-pop">\uD83D\uDD25 ${streak} day streak!</span>`,
+          content: `\u2713 Log saved for today. \uD83D\uDD25 ${streak} day streak!`,
           timestamp: Date.now(),
         };
         setMessages((prev) => [...prev, confirmMessage]);
-        setTimeout(() => { window.location.href = "/dashboard"; }, 1500);
+        setTimeout(() => { router.push("/dashboard"); }, 2000);
       } else {
         sessionStorage.setItem(
           "clearlah_pending_save",

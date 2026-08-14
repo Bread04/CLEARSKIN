@@ -116,8 +116,7 @@ export default function DashboardClient({
           <StreakBadge streak={streak} aria-live="polite" />
         </div>
 
-        (
-          <div className="flex items-center justify-between bg-accent-sunshine/10 border border-accent-sunshine/30 rounded-lg px-4 py-2">
+        <div className="flex items-center justify-between bg-accent-sunshine/10 border border-accent-sunshine/30 rounded-lg px-4 py-2">
           <span className="text-body-sm text-neutral-600">
             {demoToday ? (
               <>Day: <span className="font-semibold text-neutral-800">{demoToday}</span>
